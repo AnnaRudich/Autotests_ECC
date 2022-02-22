@@ -18,39 +18,47 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitElementInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class SendSelfServiceRequestDialog extends BaseDialog {
+public class SendSelfServiceRequestDialog extends BaseDialogSelenide {
 
     private static final String OK_BUTTON_PATH = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]";
 
-    @FindBy(name = "email")
-    private WebElement email;
-
-    @FindBy(name = "mobileNumber")
-    private WebElement mobileNumber;
-
-    @FindBy(name = "password")
-    private WebElement password;
-
-    @FindBy(id = "sendPasswordSmsCheckbox-bodyEl")
-    private ExtCheckboxTypeDiv sendSms;
-
-    @FindBy(id = "closeAutomatically-bodyEl")
-    private ExtCheckboxTypeDiv closeAutomatically;
-
-    @FindBy(xpath = OK_BUTTON_PATH)
-    private Button ok;
-
-    @FindBy(name = "password")
-    private WebElement newPasswordCheckbox;
-
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        $(email).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        email.should(Condition.visible);
+        $(getOkButton()).should(Condition.visible);
+    }
+
+    @FindBy(name = "email")
+    private SelenideElement email;
+
+    @FindBy(name = "mobileNumber")
+    private SelenideElement mobileNumber;
+
+    @FindBy(name = "password")
+    private SelenideElement password;
+
+    @FindBy(name = "password")
+    private SelenideElement newPasswordCheckbox;
+
+    private ExtCheckboxTypeDiv getSendSms(){
+
+        return new ExtCheckboxTypeDiv($(By.id("sendPasswordSmsCheckbox-bodyEl")));
+    }
+
+    private ExtCheckboxTypeDiv getCloseAutomatically(){
+
+        return new ExtCheckboxTypeDiv($(By.id("closeAutomatically-bodyEl")));
+    }
+
+    private Button getOkButton(){
+
+        return new Button($(By.xpath(OK_BUTTON_PATH)));
     }
 
     public SendSelfServiceRequestDialog fill(Claim claim, String password) {
+
         return enterEmail(claim.getEmail())
                 .enterMobileNumber(claim.getCellNumber())
                 .enterPassword(password)
@@ -58,7 +66,9 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     public SendSelfServiceRequestDialog fill(ClaimRequest claimRequest, String password) {
+
         Customer customer = claimRequest.getCustomer();
+
         return enterEmail(customer.getEmail())
                 .enterMobileNumber(customer.getMobile())
                 .enterPassword(password)
@@ -66,22 +76,26 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     public SendSelfServiceRequestDialog fill(String password) {
+
         return enterPassword(password)
                 .disableSendSms();
     }
 
     public SendSelfServiceRequestDialog enterEmail(String email) {
-        $(this.email).setValue(email);
+
+        this.email.setValue(email);
         return this;
     }
 
     private SendSelfServiceRequestDialog enterPassword(String password) {
-        $(this.password).setValue(password);
+
+        this.password.setValue(password);
         return this;
     }
 
     private SendSelfServiceRequestDialog enterMobileNumber(String mobileNumber) {
-        $(this.mobileNumber).setValue(mobileNumber);
+
+        this.mobileNumber.setValue(mobileNumber);
         return this;
     }
 
@@ -93,33 +107,42 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     private SendSelfServiceRequestDialog disableSendSms() {
+
+        ExtCheckboxTypeDiv sendSms = getSendSms();
+
         if (sendSms.isChecked()) {
+
             sendSms.set(false);
         }
+
         return this;
     }
 
     public SendSelfServiceRequestDialog enableAutoClose() {
-        closeAutomatically.set(true);
+
+        getCloseAutomatically().set(true);
         return this;
     }
 
     public SendSelfServiceRequestDialog enableNewPassword(){
+
         newPasswordCheckbox.click();
         return this;
     }
 
     public SettlementPage send() {
-        SelenideElement element = $(By.xpath(OK_BUTTON_PATH));
+
+        SelenideElement element = $(getOkButton());
         element.click();
-        at(GdprConfirmationDialog.class)
+        BaseDialog.at(GdprConfirmationDialog.class)
                 .confirm();
         waitElementInvisible(element);
         return Page.at(SettlementPage.class);
     }
 
     public SettlementPage sendWithoutGdpr() {
-        SelenideElement element = $(ok);
+
+        SelenideElement element = $(getOkButton());
         element.click();
         waitElementInvisible(element);
         return Page.at(SettlementPage.class);

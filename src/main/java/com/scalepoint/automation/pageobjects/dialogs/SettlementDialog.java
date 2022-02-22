@@ -575,11 +575,11 @@ public class SettlementDialog extends BaseDialog {
         return closeSidWithOk(pageClass, OK_BUTTON);
     }
 
-    public <T extends BaseDialog> T tryToCloseSidWithOkButExpectDialog(Class<T> dialogClass) {
+    public <T extends BaseDialogSelenide> T tryToCloseSidWithOkButExpectDialog(Class<T> dialogClass) {
         WebElement button = driver.findElement(OK_BUTTON);
         verifyElementVisible($(button));
         button.click();
-        return BaseDialog.at(dialogClass);
+        return BaseDialogSelenide.at(dialogClass);
     }
 
     public TextSearchPage closeSidWithAdd() {
@@ -679,7 +679,7 @@ public class SettlementDialog extends BaseDialog {
 
     public AddValuationDialog openAddValuationForm() {
         addValuation.click();
-        return at(AddValuationDialog.class);
+        return BaseDialogSelenide.at(AddValuationDialog.class);
     }
 
     public String getNotCheapestChoiceReason() {
@@ -703,7 +703,7 @@ public class SettlementDialog extends BaseDialog {
 
     public VoucherTermsAndConditionsDialog openVoucherTermAndConditions() {
         $(voucherTermAndConditions).click();
-        return at(VoucherTermsAndConditionsDialog.class);
+        return BaseDialogSelenide.at(VoucherTermsAndConditionsDialog.class);
     }
 
     public FindShopDialog openFindShopDialog() {
@@ -847,7 +847,7 @@ public class SettlementDialog extends BaseDialog {
         verifyElementVisible($(notCheapestReasonEdit));
         notCheapestReasonEdit.click();
 
-        return at(NotCheapestChoiceDialog.class);
+        return BaseDialogSelenide.at(NotCheapestChoiceDialog.class);
     }
 
     public SettlementDialog selectOtherCategoryIfNotChosen() {

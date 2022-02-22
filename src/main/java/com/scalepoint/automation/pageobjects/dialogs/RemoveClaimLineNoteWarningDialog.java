@@ -22,12 +22,12 @@ public class RemoveClaimLineNoteWarningDialog extends BaseDialog{
     public ClaimLineNotesDialog confirm(){
 
         clickButton(DialogButton.YES);
-        return BaseDialog.at(ClaimLineNotesDialog.class);
+        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog cancel(){
 
         clickButton(DialogButton.NO);
-        return BaseDialog.at(ClaimLineNotesDialog.class);
+        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
     }
 }

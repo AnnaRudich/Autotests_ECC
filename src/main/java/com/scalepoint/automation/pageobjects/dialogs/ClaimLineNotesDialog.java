@@ -9,6 +9,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -21,29 +22,33 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClaimLineNotesDialog extends BaseDialog {
+public class ClaimLineNotesDialog extends BaseDialogSelenide {
 
     @FindBy(id = "closeNotesButton")
-    private WebElement closeNotesButton;
+    private SelenideElement closeNotesButton;
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        $(closeNotesButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        closeNotesButton.should(Condition.visible);
     }
 
     public SettlementPage clickCloseWindow() {
-        hoverAndClick($(closeNotesButton));
+
+        closeNotesButton.click();
         return Page.at(SettlementPage.class);
     }
 
     public ClaimLineNotesDialog clickAddNoteButton() {
+
         new AddNotePanel()
                 .clickAddNoteButton();
         return this;
     }
 
     public ClaimLineNotesDialog clickClaimLine(String name) {
+
         new NotesTreePanel()
                 .getNotesTreeLeafByName(name)
                 .click();
@@ -51,6 +56,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
     }
 
     public ClaimLineNotesDialog clickCopyNoteTextButton(String noteText) {
+
         new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickCopyNoteTextButton();
@@ -58,6 +64,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
     }
 
     public ClaimLineNotesDialog pasteClipboardInNoteWindow() {
+
         new AddNotePanel()
                 .clickNoteText()
                 .pasteText();
@@ -71,21 +78,26 @@ public class ClaimLineNotesDialog extends BaseDialog {
     }
 
     public ClaimLineNotesDialog enterVisibleClaimLineNote(String note){
+
         enterNote(note);
+
         new AddNotePanel()
+
                 .clickVisibleNoteButton();
         clickAddNoteButton();
         return this;
     }
 
     public EditClaimLineNoteDialog editClaimLineNote(String noteText){
+
         new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickEditNoteButtonElement();
-        return at(EditClaimLineNoteDialog.class);
+        return BaseDialog.at(EditClaimLineNoteDialog.class);
     }
 
     public ClaimLineNotesDialog enterNote(String note) {
+
         new AddNotePanel()
                 .clickNoteText()
                 .setText(note);
@@ -93,12 +105,14 @@ public class ClaimLineNotesDialog extends BaseDialog {
     }
 
     public RemoveClaimLineNoteWarningDialog removeNote(String noteText){
+
         return new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .removeNote();
     }
 
     public ClaimLineNotesDialog doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return ClaimLineNotesDialog.this;
     }
@@ -110,6 +124,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         AddNotePanel addNotePanel = new AddNotePanel();
 
         public Asserts assertNoteText(String originalNoteText) {
+
             String noteText = claimLineNotesGrid.getClaimLineNotesGridRowByName(originalNoteText).getNoteText();
             assertThat(originalNoteText).
                     as("Note text is: " + noteText + "but should be the same as original note text: " + originalNoteText).isEqualTo(noteText);
@@ -117,6 +132,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         public Asserts assertNoteVisible(String noteText) {
+
             boolean noteVisible = claimLineNotesGrid.getClaimLineNotesGridRowByName(noteText).isNoteVisible();
             assertThat(noteVisible).
                     as("Note visible icon is not displayed").isTrue();
@@ -124,6 +140,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         public Asserts assertNoteInvisible(String noteText) {
+
             boolean noteVisible = claimLineNotesGrid.getClaimLineNotesGridRowByName(noteText).isNoteVisible();
             assertThat(noteVisible).
                     as("Note visible icon is not displayed").isFalse();
@@ -131,6 +148,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         public Asserts assertClaimLineNotesGridRowsSize(int expectedSize) {
+
             int actualSize = claimLineNotesGrid.getClaimLineNotesGridRows().size();
             assertThat(expectedSize ).
                     as("ClaimLine grid rows size is: " + actualSize + "but should be :" + expectedSize).isEqualTo(expectedSize);
@@ -138,6 +156,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         public Asserts assertNoteIsCopied(String originalNoteText) {
+
             String textFromClipboard = addNotePanel.getNoteText();
             assertThat(originalNoteText).
                     as("Pasted text is: " + textFromClipboard + "but should be the same as original note text: " + originalNoteText).isEqualTo((textFromClipboard));
@@ -145,6 +164,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         public Asserts assertClaimLineNotesIconPresent(String lineName) {
+
             assertThat(notesTreePanel
                     .getNotesTreeLeafByName(lineName)
                     .claimLineNotesIconElementShouldBe(Condition.visible)
@@ -154,6 +174,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         public Asserts assertClaimLineNotesIconMissing(String lineName) {
+
             assertThat(notesTreePanel
                     .getNotesTreeLeafByName(lineName)
                     .claimLineNotesIconElementShouldBe(not(Condition.visible))
@@ -232,18 +253,21 @@ public class ClaimLineNotesDialog extends BaseDialog {
             }
 
             ClaimLineNotesGridRow clickCopyNoteTextButton(){
+
                 hoverAndClick(copyNoteTextButtonElement);
                 return this;
             }
 
             ClaimLineNotesGridRow clickEditNoteButtonElement(){
+
                 hoverAndClick(editNoteButtonElement);
                 return this;
             }
 
             RemoveClaimLineNoteWarningDialog removeNote(){
+
                 hoverAndClick(removeNoteButtonElement);
-                return at(RemoveClaimLineNoteWarningDialog.class);
+                return BaseDialog.at(RemoveClaimLineNoteWarningDialog.class);
             }
         }
     }
@@ -263,6 +287,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         private SelenideElement visibleNoteButton;
 
         AddNotePanel() {
+
             addNotePanelElement = $(addNotePanelPath);
             noteText = addNotePanelElement.find(noteTextPath);
             addNoteButton = addNotePanelElement.find(addNoteButtonPath);
@@ -271,29 +296,35 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         AddNotePanel pasteText(){
+
             noteText.sendKeys(Keys.CONTROL + "v");
             return this;
         }
 
         AddNotePanel setText(String text){
+
             noteText.setValue(text);
             return this;
         }
         AddNotePanel clickNoteText(){
+
             hoverAndClick(noteText);
             return this;
         }
         AddNotePanel clickAddNoteButton(){
+
             hoverAndClick(addNoteButton);
             return this;
         }
 
         AddNotePanel clickVisibleNoteButton(){
+
             hoverAndClick(visibleNoteButton);
             return this;
         }
 
         AddNotePanel clearNoteButton(){
+
             hoverAndClick(clearNoteButton);
             return this;
         }
@@ -316,6 +347,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         private List<NotesTreeLeaf> notesTreeLeaves;
 
         public NotesTreeLeaf getNotesTreeLeafByName(String name){
+
             return notesTreeLeaves.stream()
                     .filter(notesTreeLeaf -> notesTreeLeaf.getName().equals(name))
                     .findFirst()
@@ -323,6 +355,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
         }
 
         NotesTreePanel() {
+
             notesTreePanelElement = $(notesTreePanelPath);
             notesTreeRoot = notesTreePanelElement.find(notesTreeRootPath);
             notesTreeLeaves = notesTreePanelElement
@@ -351,6 +384,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
             private String name;
 
             NotesTreeLeaf(SelenideElement element){
+
                 notesTreeLeafElement = element;
                 name = notesTreeLeafElement.find(namePath).getText();
             }
@@ -360,14 +394,16 @@ public class ClaimLineNotesDialog extends BaseDialog {
             }
 
             NotesTreeLeaf click(){
+
                 hoverAndClick(notesTreeLeafElement);
                 return this;
             }
 
             SelenideElement claimLineNotesIconElementShouldBe(Condition condition){
+
                 return notesTreeLeafElement
                         .find(claimLineNotesIconPath)
-                        .waitUntil(condition, 6000);
+                        .should(condition, Duration.ofSeconds(6));
             }
         }
     }

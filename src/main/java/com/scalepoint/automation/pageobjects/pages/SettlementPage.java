@@ -165,6 +165,7 @@ public class SettlementPage extends BaseClaimPage {
                 .sendWithoutGdpr();
     }
 
+
     public SettlementPage addGenericItemToClaim(GenericItem genericItem) {
         return claimOperationsMenu.addGenericItem().
                 chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
@@ -292,7 +293,7 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementGroupDialog openGroupCreationDialog() {
         $$(groupButton).get(0).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
                 .waitUntil(Condition.enabled, TIME_OUT_IN_MILISECONDS).click();
-        return BaseDialog.at(SettlementGroupDialog.class);
+        return BaseDialogSelenide.at(SettlementGroupDialog.class);
     }
 
     public SettlementPage rejectLines() {
@@ -539,7 +540,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public SettlementGroupDialog editGroup() {
             doubleClickGroupLine();
-            return BaseDialog.at(SettlementGroupDialog.class);
+            return BaseDialogSelenide.at(SettlementGroupDialog.class);
         }
 
         public SettlementDialog editLine() {
@@ -561,7 +562,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public ClaimLineNotesDialog toClaimLineNote(){
             hoverAndClick(claimLineNotesIconElement);
-            return BaseDialog.at(ClaimLineNotesDialog.class);
+            return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
         }
 
         private void doubleClickGroupLine() {

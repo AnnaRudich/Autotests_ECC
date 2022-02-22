@@ -1,8 +1,11 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
+import com.codeborne.selenide.Condition;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public abstract class ExtElement extends TypifiedElement {
     public ExtElement(WebElement wrappedElement) {
@@ -24,4 +27,9 @@ public abstract class ExtElement extends TypifiedElement {
         return inputElement != null && inputElement.isEnabled();
     }
 
+    public ExtElement should(Condition...condition){
+
+        $(getWrappedElement()).should(condition);
+        return this;
+    }
 }
