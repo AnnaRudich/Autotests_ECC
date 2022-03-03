@@ -45,6 +45,7 @@ DECLARE @IcAllowCreateOwn BIT = 1
 DECLARE @SMSDISPLAYNAME VARCHAR(11) = ''
 DECLARE @icFlagOverride INT  = 0
 DECLARE @ICFTNBR INT = @ICRFNBR
+DECLARE @changedByUser INT = (SELECT [UserID] FROM [User] where [UserName] = 'autotest-system')
 
 IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICRFNBR = @ICRFNBR)
     RETURN
@@ -337,7 +338,7 @@ INSERT INTO [INSCOMP]
            ,lower(@ICNAME)
            ,lower(@ICNAME) + '.scalepoint.com'
            ,''
-           ,'2090310')
+           ,@changedByUser)
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
