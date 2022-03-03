@@ -108,6 +108,11 @@ public class Wait {
         }
     }
 
+    public static SelenideElement waitNumberParseable(SelenideElement element){
+
+        return element.should(Condition.not(Condition.exactText("")));
+    }
+
     public static WebElement waitForVisibleAndEnabled(SelenideElement element) {
 
         return verifyElementCondition(element, Condition.and("wait for element to be visible and enabled", Condition.visible, Condition.enabled));

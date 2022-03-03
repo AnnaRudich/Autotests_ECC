@@ -181,6 +181,9 @@
         <entry>
             <key>ENABLE_SHOW_SETTLEMENT_PAGE</key><value>ENABLE</value>
         </entry>
+        <entry>
+            <key>SELF_SERVICE_EXCEL_CHOICE</key><value>DISABLE</value>
+        </entry>
     </defaultSettings>
 </defaultFTSettings>
 

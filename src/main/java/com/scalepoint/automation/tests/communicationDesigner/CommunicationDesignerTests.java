@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
-import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -212,8 +211,11 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
-        new SettlementSummary()
-                .editSelfRisk(selfRisk)
+        Page.at(SettlementPage.class)
+                .getSettlementSummary()
+                .editSelfRisk()
+                .setSelfRisk(selfRisk)
+                .clickOkButton()
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
                 .openRecentClaim()

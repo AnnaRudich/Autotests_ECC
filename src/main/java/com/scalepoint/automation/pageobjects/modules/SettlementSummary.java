@@ -2,34 +2,35 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SelfRiskDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
+import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
-import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {
 
+    private static final String FRAUDULENT_TEXT = "CentralScore ej ok";
+    private static final String NOT_FRAUDULENT_TEXT = "CentralScore ok";
     private static final int FRAUD_ALERT_WAIT_TIMEOUT_MS = 30000;
 
     @FindBy(xpath = "//div[@id='settlementSummaryTotalTable-targetEl']//table")
@@ -50,7 +51,7 @@ public class SettlementSummary extends Module {
     @FindBy(id="sendToAuditBtn-btnInnerEl")
     private WebElement sentToAudit;
 
-    @FindBy(xpath = "//div[contains(@class, 'x-tool-expand-top')]")
+    @FindBy(css = "#appContainer-body .x-region-collapsed-placeholder .x-tool-expand-top")
     private WebElement expand;
 
     @FindBy(id = "total_indemnity_replacement_amount-inputEl")
@@ -78,134 +79,115 @@ public class SettlementSummary extends Module {
     private WebElement closeClaimViewMode;
 
     public void cancel() {
+
         hoverAndClick($(cancel));
     }
 
     public void saveClaim() {
-        SelenideElement element = $(saveClaim);
-        if (!element.isDisplayed()) {
-            expand();
-        }
-        element.click();
+
+        expand();
+        hoverAndClick($(saveClaim));
+    }
+
+    private boolean isExpanded(){
+
+        return $("[aria-label='Collapse panel']")
+                .has(visible);
     }
 
     public SettlementPage reopenClaimFromViewMode(){
-        SelenideElement element = $(reopenClaimViewMode);
-        if (!element.isDisplayed()) {
-            expand();
-        }
-        element.click();
+
+        expand();
+        $(reopenClaimViewMode).click();
         getAlertTextAndAccept();
         return Page.at(SettlementPage.class);
     }
 
     public CustomerDetailsPage closeClaimFromViewMode(){
-        SelenideElement element = $(closeClaimViewMode);
-        if (!element.isDisplayed()) {
-            expand();
-        }
-        element.click();
+
+        expand();
+        hoverAndClick($(closeClaimViewMode));
         return Page.at(CustomerDetailsPage.class);
 
     }
 
     public void completeClaim() {
-        if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         jsIfClickDoesNotWork($(completeClaim));
     }
 
     public void completeClaimWithoutMail() {
-        if (!completeClaimExternally.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         hoverAndClick($(completeClaimExternally));
     }
 
-    private void expand() {
-        $(expand).waitUntil(Condition.visible, Constants.WAIT_UNTIL_MS).click();
+    public SettlementSummary expand() {
+
+        if (!isExpanded()) {
+
+            $(expand)
+                    .should(Condition.visible)
+                    .click();
+        }
+
+        Wait.waitForAjaxCompletedAndJsRecalculation();
+        return this;
     }
 
     private String getClaimSumValue() {
-        if (!claimSumValue.isDisplayed()) {
-            expand();
-        }
-        $(claimSumValue).waitUntil(not(exactText("")), Constants.WAIT_UNTIL_MS);
+
+        expand();
+        $(claimSumValue).should(not(exactText("")));
         return claimSumValue.getText();
     }
 
     private String getSubtotalSumValue() {
-        if (!subtotalValue.isDisplayed()) {
-            expand();
-        }
-        $(subtotalValue).waitUntil(not(exactText("")), Constants.WAIT_UNTIL_MS);
+
+        expand();
+        $(subtotalValue).should(not(exactText("")));
         return subtotalValue.getText();
     }
 
     private boolean isCompleteClaimEnabled() {
-        if (!completeClaim.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         return completeClaim.isEnabled();
     }
 
     public RepairPanel getRepairPanel(){
-        if (RepairPanel.isDisplayed()) {
-            expand();
-        }
+
         return new RepairPanel();
     }
 
     private boolean isFraudulent(){
 
-        String text = "CentralScore ej ok";
-        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
-            expand();
-        }
         return $(fraudStatus)
-                .waitUntil(Condition.text(text), FRAUD_ALERT_WAIT_TIMEOUT_MS).getText().equals(text);
-    }
-
-    private boolean isNotFraudulent(){
-
-        String text = "CentralScore ok";
-        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
-            expand();
-        }
-
-        return $(fraudStatus)
-                .waitUntil(Condition.text(text), FRAUD_ALERT_WAIT_TIMEOUT_MS).getText().equals(text);
+                .should(Condition.or("fraudStatus", Condition.text(FRAUDULENT_TEXT), Condition.text(NOT_FRAUDULENT_TEXT)),
+                        Duration.ofMillis(FRAUD_ALERT_WAIT_TIMEOUT_MS))
+                .has(Condition.exactText(FRAUDULENT_TEXT));
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
+
         expand();
         verifyElementVisible($(auditInfoPanel));
         return this;
     }
 
     public SettlementSummary checkStatusFromAudit(String status) {
+
         ExpectedConditions.textToBePresentInElement(auditStatus, status);
         return this;
     }
 
-    public SettlementPage editSelfRisk(String newValue){
-        if($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).is(not(visible))){
-            expand();
-        }
+    public SelfRiskDialog editSelfRisk(){
 
-        $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"))
-                .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
-                .click();
-
-        $(By.xpath("//input[@role='textbox']"))
-                .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
-                .setValue(newValue);
-
-        $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
-        waitForLoaded();
-        return at(SettlementPage.class);
+        hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
+        return BaseDialog.at(SelfRiskDialog.class);
     }
+
     @Getter
     static public class RepairPanel{
 
@@ -221,12 +203,12 @@ public class SettlementSummary extends Module {
 
         RepairPanel(){
             ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
-            repairPrice = OperationalUtils.toBigDecimal(repairPanelItems.get(0).getText());
-            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(repairPanelItems.get(1).getText());
-            subtractedFromStatement = OperationalUtils.toBigDecimal(repairPanelItems.get(2).getText());
-            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(repairPanelItems.get(3).getText());
-            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(4).getText());
-            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(5).getText());
+            repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(0)).getText());
+            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(1)).getText());
+            subtractedFromStatement = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(2)).getText());
+            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(3)).getText());
+            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(4)).getText());
+            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(5)).getText());
         }
 
         static boolean isDisplayed(){
@@ -298,27 +280,41 @@ public class SettlementSummary extends Module {
     public class Asserts {
         public Asserts assertClaimSumValueIs(double value) {
 
-            Assert.assertEquals(toNumber(getClaimSumValue()), formatDoubleToHaveTwoDigits(value), "Claim sum must be: " + value);
+            assertThat(toNumber(getClaimSumValue()))
+                    .as("Claim sum must be: " + value)
+                    .isEqualTo(formatDoubleToHaveTwoDigits(value));
             return this;
         }
 
         public Asserts assertSubtotalSumValueIs(double value) {
-            Assert.assertEquals(toNumber(getSubtotalSumValue()), formatDoubleToHaveTwoDigits(value), "Subtotal sum must be: " + value);
+
+            assertThat(toNumber(getSubtotalSumValue()))
+                    .as("Subtotal sum must be: " + value)
+                    .isEqualTo(formatDoubleToHaveTwoDigits(value));
             return this;
         }
 
         public Asserts assertCompleteClaimEnabled() {
-            Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
+
+            assertThat(isCompleteClaimEnabled())
+                    .as("Complete Claim button is disabled")
+                    .isTrue();
             return this;
         }
 
         public Asserts assertFraudulent(){
-            Assert.assertTrue(isFraudulent(), "Claim is not fraudulent");
+
+            assertThat(isFraudulent())
+                    .as("Claim is not fraudulent")
+                    .isTrue();
             return this;
         }
 
         public Asserts assertNotFraudulent(){
-            Assert.assertTrue(isNotFraudulent(), "Claim is fraudulent");
+
+            assertThat(isFraudulent())
+                    .as("Claim is fraudulent")
+                    .isFalse();
             return this;
         }
 
