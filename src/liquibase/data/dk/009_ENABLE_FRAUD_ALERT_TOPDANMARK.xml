@@ -11,7 +11,8 @@
 
         <sql>
 
-            EXEC autotests_enable_fraud_alert 'Topdanmark'
+            EXEC autotests_enable_fraud_alert 'TOPDANMARK'
+            EXEC autotests_enable_fraud_alert 'DANSKEFORSIKRING'
 
         </sql>
     </changeSet>
