@@ -322,7 +322,6 @@ INSERT INTO [INSCOMP]
 		   ,lower(@ICNAME)
 		   ,lower(@ICNAME)
 		   ,1
-		   ,0
 		   ,5
 		   ,2
 		   ,1
