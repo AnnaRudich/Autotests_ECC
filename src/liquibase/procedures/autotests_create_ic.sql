@@ -1,11 +1,11 @@
---liquibase formatted sql
---changeset ipo:1 runOnChange:true endDelimiter:GO
-
-IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_create_ic]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
-  DROP PROCEDURE [dbo].[autotests_create_ic]
+USE [QA14_ECC_DK]
 GO
-
-CREATE PROCEDURE [dbo].[autotests_create_ic]
+/****** Object:  StoredProcedure [dbo].[autotests_create_ic]    Script Date: 03/03/2022 09:22:28 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[autotests_create_ic]
 	  @ICRFNBR int,
     @ICNAME nvarchar(254),
 	  @ICCOMMAIL nvarchar(254) = 'ecc_auto@scalepoint.com',
@@ -293,7 +293,9 @@ INSERT INTO [INSCOMP]
        ,[cwaTenant]
        ,[mailserviceAlias]
        ,[scalepointIdDomains]
-       ,[enabledOMTemplates])
+       ,[enabledOMTemplates]
+	   ,[ChangedBy]
+	   ,[ChangeUser])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@IcAllowCreateOwn
@@ -335,7 +337,9 @@ INSERT INTO [INSCOMP]
            ,lower(@ICNAME)
            ,lower(@ICNAME)
            ,lower(@ICNAME) + '.scalepoint.com'
-           ,'')
+           ,''
+		   ,'2090310'
+		   ,'INSCOMP')
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
