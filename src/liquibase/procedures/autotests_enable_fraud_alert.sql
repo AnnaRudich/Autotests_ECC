@@ -14,10 +14,10 @@ AS
 
 	UPDATE [INSCOMP]
 	SET [eventsConfiguration] = @eventsConfiguration
-    WHERE [ICNAME] = @NAME
+    WHERE [CompanyCode] = @NAME
 
     UPDATE [INSCOMP_Audit]
     SET [eventsConfiguration] = @eventsConfiguration
-    WHERE [ICNAME] = @NAME
+    WHERE [CompanyCode] = @NAME
 
 	SET NOCOUNT OFF
