@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -172,7 +172,7 @@ public class MailsPage extends BaseClaimPage {
             $(viewMailButton)
                     .hover()
                     .click();
-            return BaseDialog.at(MailViewDialog.class);
+            return BaseDialogSelenide.at(MailViewDialog.class);
         }
 
         public MailType getMailType() {

@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementta
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.EditCategoryMappingsDialog;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.openqa.selenium.By;
@@ -55,7 +56,7 @@ public class VoucherAgreementCategoriesTab extends BaseDialog implements Voucher
 
     public EditCategoryMappingsDialog openEditMappingsDialog() {
         hoverAndClick($(editMappingsBtn));
-        return BaseDialog.at(EditCategoryMappingsDialog.class);
+        return BaseDialogSelenide.at(EditCategoryMappingsDialog.class);
     }
 
     public VoucherAgreementCategoriesTab mapToCategory(PseudoCategory pseudoCategory) {

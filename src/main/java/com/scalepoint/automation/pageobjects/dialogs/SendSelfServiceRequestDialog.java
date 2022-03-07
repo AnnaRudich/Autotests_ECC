@@ -10,7 +10,6 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.Customer;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -134,7 +133,7 @@ public class SendSelfServiceRequestDialog extends BaseDialogSelenide {
 
         SelenideElement element = $(getOkButton());
         element.click();
-        BaseDialog.at(GdprConfirmationDialog.class)
+        BaseDialogSelenide.at(GdprConfirmationDialog.class)
                 .confirm();
         waitElementInvisible(element);
         return Page.at(SettlementPage.class);

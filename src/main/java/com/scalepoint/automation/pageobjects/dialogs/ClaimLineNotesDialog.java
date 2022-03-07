@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.Duration;
@@ -93,7 +92,7 @@ public class ClaimLineNotesDialog extends BaseDialogSelenide {
         new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickEditNoteButtonElement();
-        return BaseDialog.at(EditClaimLineNoteDialog.class);
+        return BaseDialogSelenide.at(EditClaimLineNoteDialog.class);
     }
 
     public ClaimLineNotesDialog enterNote(String note) {
@@ -267,7 +266,7 @@ public class ClaimLineNotesDialog extends BaseDialogSelenide {
             RemoveClaimLineNoteWarningDialog removeNote(){
 
                 hoverAndClick(removeNoteButtonElement);
-                return BaseDialog.at(RemoveClaimLineNoteWarningDialog.class);
+                return BaseDialogSelenide.at(RemoveClaimLineNoteWarningDialog.class);
             }
         }
     }

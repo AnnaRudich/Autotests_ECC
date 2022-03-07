@@ -5,7 +5,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.pageobjects.dialogs.*;
-import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
+import com.scalepoint.automation.pageobjects.modules.MainMenu;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
 import com.scalepoint.automation.pageobjects.pages.rnv.TaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
@@ -287,7 +290,7 @@ public class SettlementPage extends BaseClaimPage {
     public DeductibleWarningDialog toDeductibleWarning(){
 
         completeClaim();
-        return BaseDialog.at(DeductibleWarningDialog.class);
+        return BaseDialogSelenide.at(DeductibleWarningDialog.class);
     }
 
     public SettlementGroupDialog openGroupCreationDialog() {
@@ -459,7 +462,7 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public Asserts assertEditPolicyTypeDialogIsNotPresent(){
-            assertFalse(BaseDialog.isOn(EditPolicyTypeDialog.class));
+            assertFalse(BaseDialogSelenide.isOn(EditPolicyTypeDialog.class));
             return this;
         }
     }

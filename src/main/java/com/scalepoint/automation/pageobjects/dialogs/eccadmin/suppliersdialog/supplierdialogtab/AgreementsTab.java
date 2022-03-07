@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab;
 
 import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
@@ -38,7 +40,7 @@ public class AgreementsTab extends SupplierDialog {
 
     public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
         $(createNewVoucherAgreementBtn).click();
-        return at(CreateVoucherAgreementDialog.class);
+        return BaseDialogSelenide.at(CreateVoucherAgreementDialog.class);
     }
 
     public VoucherAgreementGeneralTab editVoucherAgreement(String agreementName) {
