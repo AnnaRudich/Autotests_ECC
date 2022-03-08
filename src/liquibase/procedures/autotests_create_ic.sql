@@ -45,6 +45,7 @@ DECLARE @IcAllowCreateOwn BIT = 1
 DECLARE @SMSDISPLAYNAME VARCHAR(11) = ''
 DECLARE @icFlagOverride INT  = 0
 DECLARE @ICFTNBR INT = @ICRFNBR
+DECLARE @changedByUser INT = (SELECT [UserID] FROM [User] where [UserName] = 'autotest-system')
 
 IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICRFNBR = @ICRFNBR)
     RETURN
@@ -279,7 +280,6 @@ INSERT INTO [INSCOMP]
        ,[Tenant]
        ,[UnifiedCompanyCode]
        ,[selfriskByInsuranceCompany]
-       ,[invoicePaymentByInsuranceCompany]
        ,[reminderDays]
        ,[autoApproveDays]
        ,[icReceiveCancelClaimNotification]
@@ -294,7 +294,8 @@ INSERT INTO [INSCOMP]
        ,[cwaTenant]
        ,[mailserviceAlias]
        ,[scalepointIdDomains]
-       ,[enabledOMTemplates])
+       ,[enabledOMTemplates]
+       ,[ChangedBy])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@IcAllowCreateOwn
@@ -322,7 +323,6 @@ INSERT INTO [INSCOMP]
 		   ,lower(@ICNAME)
 		   ,lower(@ICNAME)
 		   ,1
-		   ,0
 		   ,5
 		   ,2
 		   ,1
@@ -337,7 +337,8 @@ INSERT INTO [INSCOMP]
            ,lower(@ICNAME)
            ,lower(@ICNAME)
            ,lower(@ICNAME) + '.scalepoint.com'
-           ,'')
+           ,''
+           ,@changedByUser)
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
