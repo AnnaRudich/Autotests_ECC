@@ -749,6 +749,8 @@ public class ReductionRulesTest extends BaseTest {
     }
 
     private AddEditReductionRulePage toNewReductionRulePage() {
-        return loginFlow.login(getSystemUser(), AdminPage.class).to(AddEditReductionRulePage.class);
+        return loginFlow
+                .login(getSystemUser(), AdminPage.class)
+                .to(AddEditReductionRulePage.class);
     }
 }

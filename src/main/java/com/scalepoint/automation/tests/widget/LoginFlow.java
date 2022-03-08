@@ -161,8 +161,11 @@ public class LoginFlow {
                     .loginViaScalepointId()
                     .login(user.getLogin(), user.getPassword(), returnPageClass);
         } else{
-
-            page = AuthenticationApi.createServerApi().login(user, returnPageClass);
+            
+            Page.to(LoginPage.class);
+            page = AuthenticationApi
+                    .createServerApi()
+                    .login(user, returnPageClass);
         }
 
         return (T) page;
