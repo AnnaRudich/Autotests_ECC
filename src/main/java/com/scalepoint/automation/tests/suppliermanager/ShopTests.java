@@ -59,7 +59,8 @@ public class ShopTests extends BaseTest {
     }
 
     private ShopsTab createRetailShop(Shop shop) {
-        return loginFlow.login(getSystemUser())
+        return loginFlow
+                .login(getSystemUser())
                 .getMainMenu()
                 .toEccAdminPage()
                 .openFirstSupplier()
