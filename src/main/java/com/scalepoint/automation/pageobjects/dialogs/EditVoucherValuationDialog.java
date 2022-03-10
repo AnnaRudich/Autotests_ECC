@@ -87,7 +87,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
 
     public VoucherTermsAndConditionsDialog openTermsAndConditions() {
         termsAndConditions.click();
-        return at(VoucherTermsAndConditionsDialog.class);
+        return BaseDialogSelenide.at(VoucherTermsAndConditionsDialog.class);
     }
 
     public EditVoucherValuationDialog discountDistribution(String discountDistributionValue) {

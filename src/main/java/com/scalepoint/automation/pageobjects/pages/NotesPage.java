@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.EditCustomerNoteDialog;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -56,7 +57,7 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
     public NotesPage addInternalNote(String note) {
         verifyElementVisible($(addInternalNote));
         $(addInternalNote).click();
-        return BaseDialog.at(AddInternalNoteDialog.class).addInternalNote(note, NotesPage.class);
+        return BaseDialogSelenide.at(AddInternalNoteDialog.class).addInternalNote(note, NotesPage.class);
     }
 
     public NotesPage addCustomerNote(String customerNote) {

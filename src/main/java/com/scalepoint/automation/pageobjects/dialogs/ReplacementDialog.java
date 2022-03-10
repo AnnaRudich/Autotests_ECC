@@ -9,10 +9,9 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
-import java.util.List;
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -23,44 +22,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.Keys.CONTROL;
 import static org.openqa.selenium.Keys.DELETE;
 
-public class ReplacementDialog extends BaseDialog {
-
-    @FindBy(id = "replacement-button-cancel-btnInnerEl")
-    private WebElement cancelButton;
-
-    @FindBy(xpath = "//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]")
-    private List<WebElement> replacementOptionsList;
-
-    @FindBy(xpath = "//td[contains(@class,'grid-cell-row-checker')]")
-    private Radio selectItemCheckbox;
-
-    @FindBy(css = ".x-grid-cell-faceValue div")
-    private WebElement voucherFaceValue;
-
-    @FindBy(css = ".x-grid-cell-cashValue")
-    private WebElement itemPrice;
-
-    @FindBy(css = ".x-form-radio")
-    private WebElement payCompleteAmountRadio;
-
-    @FindBy(id = "replacementType3")
-    private Button sendChequeButton;
-
-    @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
-    private WebElement goToShopButton;
-
-    private By selectAllItemsCheckbox = By.xpath("//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//div[@data-ref='textEl']");
-
-    @FindBy(xpath = "//span[contains(text(), 'OK')]/ancestor::a")
-    private Button alertOk;
+public class ReplacementDialog extends BaseDialogSelenide {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
         switchToLast();
-        $(cancelButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        cancelButton.should(Condition.visible);
     }
 
+    @FindBy(id = "replacement-button-cancel-btnInnerEl")
+    private SelenideElement cancelButton;
+
+    @FindBy(css = ".x-grid-cell-faceValue div")
+    private SelenideElement voucherFaceValue;
+
+    @FindBy(css = ".x-grid-cell-cashValue")
+    private SelenideElement itemPrice;
+
+    @FindBy(css = ".x-form-radio")
+    private SelenideElement payCompleteAmountRadio;
+
+    @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
+    private SelenideElement goToShopButton;
+
+    @FindBy(xpath = "//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]")
+    private ElementsCollection replacementOptionsList;
+
+    @FindBy(xpath = "//span[contains(text(), 'OK')]/ancestor::a")
+    private SelenideElement alertOk;
+
+    @FindBy(id = "replacementType3")
+    private SelenideElement sendChequeButton;
+
+    private Radio getSelectItemCheckbox(){
+
+        return new Radio($(By.xpath("//td[contains(@class,'grid-cell-row-checker')]")));
+    }
+
+    private By selectAllItemsCheckbox = By.xpath("//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//div[@data-ref='textEl']");
     private By nextButtonPath = By.id("replacement-button-next-btnInnerEl");
     private By finishButtonByXpath = By.id("replacement-button-finish-btnInnerEl");
     private By itemsListByXpath = By.cssSelector("#replacement-first-step-body [role=button]");
@@ -74,21 +75,25 @@ public class ReplacementDialog extends BaseDialog {
 
 
     public void closeReplacementDialog() {
-        verifyElementVisible($(cancelButton));
+
+        cancelButton.should(Condition.visible);
         cancelButton.click();
     }
 
     private Double getVoucherFaceValue() {
+
         return OperationalUtils.toNumber(voucherFaceValue.getText());
     }
 
 
     private Double getItemPriceValue() {
+
         return OperationalUtils.toNumber(itemPrice.getText().replaceAll("[^\\.,0123456789]", ""));
     }
 
     public ReplacementDialog editVoucherFaceValue(Double newPrice) {
-        SelenideElement element = $(voucherFaceValue);
+
+        SelenideElement element = voucherFaceValue;
         hoverAndClick(element);
         SelenideElement subElement = $(voucherFaceValueInputByXpath);
         subElement
@@ -103,6 +108,7 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     private void selectBankSectionAndFill(String regNumber, String accountNumber){
+
         ElementsCollection elements = $$(bankSection);
         SelenideElement element = elements.get(0);
 
@@ -126,10 +132,10 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     public CustomerDetailsPage replaceAllItems() {
-        $(selectAllItemsCheckbox).waitUntil(Condition.visible, 15L).click();
+        $(selectAllItemsCheckbox).should(Condition.visible, Duration.ofSeconds(15)).click();
         $(nextButtonPath).click();
         $(finishButtonByXpath).click();
-        waitElementVisible($(alertOk)).click();
+        alertOk.should(Condition.visible).click();
         return Page.at(CustomerDetailsPage.class);
     }
 

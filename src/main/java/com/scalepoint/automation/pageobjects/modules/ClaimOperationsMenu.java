@@ -1,11 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.dialogs.AddGenericItemDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
-import com.scalepoint.automation.pageobjects.dialogs.SendSelfServiceRequestDialog;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.*;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -33,12 +29,12 @@ public class ClaimOperationsMenu extends Module {
 
     public SendSelfServiceRequestDialog requestSelfService() {
         hoverAndClick($(requestSelfServiceBtn));
-        return BaseDialog.at(SendSelfServiceRequestDialog.class);
+        return BaseDialogSelenide.at(SendSelfServiceRequestDialog.class);
     }
 
     public AddGenericItemDialog addGenericItem() {
         hoverAndClick($(addGenericItemBtn));
-        return BaseDialog.at(AddGenericItemDialog.class);
+        return BaseDialogSelenide.at(AddGenericItemDialog.class);
     }
 
     public LossImportDialog openImportExcelDialog() {

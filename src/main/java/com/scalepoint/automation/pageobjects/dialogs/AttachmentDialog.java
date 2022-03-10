@@ -28,7 +28,6 @@ public class AttachmentDialog extends BaseDialog implements Actions {
     @FindBy(id = ".x-toolbar-footer a[role=button]")
     private WebElement button;
 
-
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();

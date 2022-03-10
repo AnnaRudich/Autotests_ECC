@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
@@ -231,7 +232,7 @@ public class CompleteClaimPage extends Page {
                     .at(GdprConfirmationDialog.class)
                     .confirm();
         }
-        return BaseDialog.at(ReplacementDialog.class);
+        return BaseDialogSelenide.at(ReplacementDialog.class);
     }
 
     public CompleteClaimPage doAssert(Consumer<Asserts> assertFunc) {

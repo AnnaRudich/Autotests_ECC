@@ -7,58 +7,70 @@ import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 
-public class UpdateCategoriesDialog extends BaseDialog {
-
-    @FindBy(id = "bulk-group-combobox")
-    private ExtComboBoxBoundView category;
-
-    @FindBy(id = "bulk-pseudocategory-combobox")
-    private ExtComboBoxBoundView subcategory;
-
-    @FindBy(id = "bulk-ok-button")
-    private WebElement okButton;
+public class UpdateCategoriesDialog extends BaseDialogSelenide {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompleted();
-        $(category).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        getCategory().should(Condition.visible);
+    }
+
+    @FindBy(id = "bulk-ok-button")
+    private SelenideElement okButton;
+
+    private ExtComboBoxBoundView getCategory(){
+
+        return new ExtComboBoxBoundView($(By.id("bulk-group-combobox")));
+    }
+
+    private ExtComboBoxBoundView getSubcategory(){
+
+        return new ExtComboBoxBoundView($(By.id("bulk-pseudocategory-combobox")));
     }
 
     public UpdateCategoriesDialog selectCategory(String categoryText) {
-        category.select(categoryText);
+
+        getCategory().select(categoryText);
         return this;
     }
 
     public UpdateCategoriesDialog selectSubcategory(String subcategoryText) {
-        subcategory.select(subcategoryText);
+
+        getSubcategory().select(subcategoryText);
         loadVouchersList();
         return this;
     }
-/*
-voucher list would be loaded only when we trigger open list, voucher data loaded at this point is needed for the voucher handling in SID later
- */
+    /*
+    voucher list would be loaded only when we trigger open list, voucher data loaded at this point is needed for the voucher handling in SID later
+     */
     private void loadVouchersList(){
+
         $("#bulk-vouchers-combobox-trigger-picker").click();
         $("#bulk-vouchers-combobox-picker-listEl")
                 .$$(By.tagName("li")).shouldHave(CollectionCondition.sizeGreaterThan(0));
     }
 
     public SettlementPage closeUpdateCategoriesDialog() {
-        SelenideElement button = $(okButton);
-        button.click();
+
+        okButton.click();
         SelenideElement loadingIndicator = $("#loadmask-1104-msgTextEl");
+
         try {
-            loadingIndicator.waitUntil(Condition.appears, 3000);
+
+            loadingIndicator.should(Condition.appear, Duration.ofSeconds(3));
         }catch (Throwable t){
         }finally {
-            loadingIndicator.should(Condition.disappears);
+
+            loadingIndicator.should(Condition.disappear);
         }
         return Page.at(SettlementPage.class);
     }

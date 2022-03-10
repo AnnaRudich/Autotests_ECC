@@ -27,13 +27,13 @@ public class EditClaimLineNoteDialog extends BaseDialog {
     public ClaimLineNotesDialog confirm(){
 
         clickButton(DialogButton.SAVE);
-        return BaseDialog.at(ClaimLineNotesDialog.class);
+        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog cancel(){
 
         clickButton(DialogButton.ABORT);
-        return BaseDialog.at(ClaimLineNotesDialog.class);
+        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
     }
 
     public EditClaimLineNoteDialog enterNote(String text){
