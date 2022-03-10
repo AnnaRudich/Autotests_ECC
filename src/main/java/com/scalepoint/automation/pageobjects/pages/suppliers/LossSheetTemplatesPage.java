@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CompaniesMappingDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.NewTemplateDialog;

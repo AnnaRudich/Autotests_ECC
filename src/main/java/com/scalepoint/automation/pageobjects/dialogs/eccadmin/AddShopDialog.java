@@ -17,6 +17,7 @@ import static org.testng.Assert.assertTrue;
 public class AddShopDialog extends BaseDialogSelenide {
 
     public enum ShopType {
+
         RETAIL,
         RNV
     }
