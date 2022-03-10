@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.SelfRiskDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;

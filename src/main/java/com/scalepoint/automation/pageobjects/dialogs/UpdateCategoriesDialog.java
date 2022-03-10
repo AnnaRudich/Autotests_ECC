@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.Duration;
@@ -50,9 +49,9 @@ public class UpdateCategoriesDialog extends BaseDialogSelenide {
         loadVouchersList();
         return this;
     }
-/*
-voucher list would be loaded only when we trigger open list, voucher data loaded at this point is needed for the voucher handling in SID later
- */
+    /*
+    voucher list would be loaded only when we trigger open list, voucher data loaded at this point is needed for the voucher handling in SID later
+     */
     private void loadVouchersList(){
 
         $("#bulk-vouchers-combobox-trigger-picker").click();

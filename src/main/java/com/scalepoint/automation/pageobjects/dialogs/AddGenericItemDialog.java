@@ -11,7 +11,6 @@ import com.scalepoint.automation.utils.Wait;
 import lombok.Data;
 import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
