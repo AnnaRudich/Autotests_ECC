@@ -5,7 +5,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.pageobjects.dialogs.*;
-import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
+import com.scalepoint.automation.pageobjects.modules.MainMenu;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
 import com.scalepoint.automation.pageobjects.pages.rnv.TaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
@@ -165,6 +168,7 @@ public class SettlementPage extends BaseClaimPage {
                 .sendWithoutGdpr();
     }
 
+
     public SettlementPage addGenericItemToClaim(GenericItem genericItem) {
         return claimOperationsMenu.addGenericItem().
                 chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
@@ -286,13 +290,13 @@ public class SettlementPage extends BaseClaimPage {
     public DeductibleWarningDialog toDeductibleWarning(){
 
         completeClaim();
-        return BaseDialog.at(DeductibleWarningDialog.class);
+        return BaseDialogSelenide.at(DeductibleWarningDialog.class);
     }
 
     public SettlementGroupDialog openGroupCreationDialog() {
         $$(groupButton).get(0).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
                 .waitUntil(Condition.enabled, TIME_OUT_IN_MILISECONDS).click();
-        return BaseDialog.at(SettlementGroupDialog.class);
+        return BaseDialogSelenide.at(SettlementGroupDialog.class);
     }
 
     public SettlementPage rejectLines() {
@@ -458,7 +462,7 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public Asserts assertEditPolicyTypeDialogIsNotPresent(){
-            assertFalse(BaseDialog.isOn(EditPolicyTypeDialog.class));
+            assertFalse(BaseDialogSelenide.isOn(EditPolicyTypeDialog.class));
             return this;
         }
     }
@@ -539,7 +543,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public SettlementGroupDialog editGroup() {
             doubleClickGroupLine();
-            return BaseDialog.at(SettlementGroupDialog.class);
+            return BaseDialogSelenide.at(SettlementGroupDialog.class);
         }
 
         public SettlementDialog editLine() {
@@ -561,7 +565,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public ClaimLineNotesDialog toClaimLineNote(){
             hoverAndClick(claimLineNotesIconElement);
-            return BaseDialog.at(ClaimLineNotesDialog.class);
+            return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
         }
 
         private void doubleClickGroupLine() {

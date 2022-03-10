@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.s
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialogViewMode;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
@@ -45,7 +45,7 @@ public class ShopsTab extends SupplierDialog {
 
     public AddShopDialog openAddShopDialog() {
         addShopButton.click();
-        return BaseDialog.at(AddShopDialog.class);
+        return BaseDialogSelenide.at(AddShopDialog.class);
     }
 
     boolean isNewShopExists(Shop shop) {
@@ -71,7 +71,7 @@ public class ShopsTab extends SupplierDialog {
         element
                 .scrollTo()
                 .doubleClick();
-        return at(AddShopDialogViewMode.class);
+        return BaseDialogSelenide.at(AddShopDialogViewMode.class);
     }
 
     public AddShopDialog openEditShopDialog(String shopName) {
@@ -80,7 +80,7 @@ public class ShopsTab extends SupplierDialog {
                 .scrollTo()
                 .doubleClick();
         waitForVisibleAndEnabled($(By.name("shopName")));
-        return at(AddShopDialog.class);
+        return BaseDialogSelenide.at(AddShopDialog.class);
     }
 
     public ShopsTab deleteShop(Shop shop) {

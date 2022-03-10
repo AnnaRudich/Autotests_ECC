@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
@@ -63,7 +63,7 @@ public class CustomerOrderEditPage extends BaseClaimPage {
         $(cancelButton).click();
         getAlertTextAndAccept();
         Window.get().switchToLast();
-        return BaseDialog.at(AddInternalNoteDialog.class);
+        return BaseDialogSelenide.at(AddInternalNoteDialog.class);
     }
 
     public class Suborders{

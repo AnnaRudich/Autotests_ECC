@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.SelfRiskDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -185,7 +185,7 @@ public class SettlementSummary extends Module {
     public SelfRiskDialog editSelfRisk(){
 
         hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
-        return BaseDialog.at(SelfRiskDialog.class);
+        return BaseDialogSelenide.at(SelfRiskDialog.class);
     }
 
     @Getter

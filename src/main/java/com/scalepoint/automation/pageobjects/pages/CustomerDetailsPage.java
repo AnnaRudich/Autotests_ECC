@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.DateUtils;
@@ -112,7 +113,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
 
     public SelfServicePasswordDialog newSelfServicePassword() {
         newPasswordButton.click();
-        return BaseDialog.at(SelfServicePasswordDialog.class);
+        return BaseDialogSelenide.at(SelfServicePasswordDialog.class);
     }
 
     public CustomerDetailsPage selectDamageDate(LocalDate date) {

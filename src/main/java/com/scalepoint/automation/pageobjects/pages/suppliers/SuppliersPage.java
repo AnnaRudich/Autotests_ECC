@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
@@ -81,7 +82,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
      */
     public CreateSupplierDialog selectCreateSupplier() {
         createSupplierButton.click();
-        return BaseDialog.at(CreateSupplierDialog.class);
+        return BaseDialogSelenide.at(CreateSupplierDialog.class);
     }
 
     public LoginPage signOut() {

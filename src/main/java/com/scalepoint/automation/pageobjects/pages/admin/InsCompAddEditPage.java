@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
@@ -96,7 +96,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public void selectSaveOption(boolean gdpr) {
         $("#btnOk").click();
         if(gdpr) {
-            BaseDialog
+            BaseDialogSelenide
                     .at(GdprConfirmationDialog.class)
                     .confirm();
         }
