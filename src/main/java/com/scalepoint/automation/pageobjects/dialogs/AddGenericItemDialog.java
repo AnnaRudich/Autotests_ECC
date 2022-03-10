@@ -24,6 +24,7 @@ public class AddGenericItemDialog extends BaseDialogSelenide {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
         getCategory().should(Condition.visible);
         ok.should(Condition.visible);

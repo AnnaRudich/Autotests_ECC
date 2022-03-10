@@ -5,10 +5,8 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
-import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -20,18 +18,18 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.*;
 
-public class AttachmentDialog extends BaseDialog implements Actions {
+public class AttachmentDialog extends BaseDialogSelenide {
 
     @FindBy(id = "window-attachment-view_header-title-textEl")
-    private WebElement dialogHeader;
+    private SelenideElement dialogHeader;
 
     @FindBy(id = ".x-toolbar-footer a[role=button]")
-    private WebElement button;
+    private SelenideElement button;
 
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
-        $(dialogHeader).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        dialogHeader.should(Condition.visible);
     }
 
     public TreepanelAttachmentView getTreepanelAttachmentView(){

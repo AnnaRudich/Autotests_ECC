@@ -92,7 +92,7 @@ public class ClaimLineNotesDialog extends BaseDialogSelenide {
         new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickEditNoteButtonElement();
-        return BaseDialog.at(EditClaimLineNoteDialog.class);
+        return BaseDialogSelenide.at(EditClaimLineNoteDialog.class);
     }
 
     public ClaimLineNotesDialog enterNote(String note) {
@@ -266,7 +266,7 @@ public class ClaimLineNotesDialog extends BaseDialogSelenide {
             RemoveClaimLineNoteWarningDialog removeNote(){
 
                 hoverAndClick(removeNoteButtonElement);
-                return BaseDialog.at(RemoveClaimLineNoteWarningDialog.class);
+                return BaseDialogSelenide.at(RemoveClaimLineNoteWarningDialog.class);
             }
         }
     }

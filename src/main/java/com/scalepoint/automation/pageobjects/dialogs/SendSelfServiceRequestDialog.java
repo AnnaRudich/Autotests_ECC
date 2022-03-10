@@ -133,7 +133,7 @@ public class SendSelfServiceRequestDialog extends BaseDialogSelenide {
 
         SelenideElement element = $(getOkButton());
         element.click();
-        BaseDialog.at(GdprConfirmationDialog.class)
+        BaseDialogSelenide.at(GdprConfirmationDialog.class)
                 .confirm();
         waitElementInvisible(element);
         return Page.at(SettlementPage.class);

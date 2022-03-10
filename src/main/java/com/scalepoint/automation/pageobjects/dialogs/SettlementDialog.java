@@ -698,7 +698,7 @@ public class SettlementDialog extends BaseDialog {
 
     public EditVoucherValuationDialog openVoucherValuationCard() {
         $(voucherValuationCard).click();
-        return BaseDialog.at(EditVoucherValuationDialog.class);
+        return BaseDialogSelenide.at(EditVoucherValuationDialog.class);
     }
 
     public VoucherTermsAndConditionsDialog openVoucherTermAndConditions() {
@@ -708,7 +708,7 @@ public class SettlementDialog extends BaseDialog {
 
     public FindShopDialog openFindShopDialog() {
         findShopButton.click();
-        return at(FindShopDialog.class);
+        return BaseDialogSelenide.at(FindShopDialog.class);
     }
 
     public SettlementDialog applyReductionRuleByValue(Integer reductionRuleValue) {
@@ -908,7 +908,7 @@ public class SettlementDialog extends BaseDialog {
         $(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))
                 .hover()
                 .doubleClick();
-        return at(EditVoucherValuationDialog.class);
+        return BaseDialogSelenide.at(EditVoucherValuationDialog.class);
     }
 
     public boolean isDiscountDistributionDisplayed() {

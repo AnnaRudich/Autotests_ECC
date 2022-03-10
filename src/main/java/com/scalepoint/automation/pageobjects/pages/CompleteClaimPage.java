@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
@@ -188,7 +187,7 @@ public class CompleteClaimPage extends Page {
     public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi, boolean gdpr) {
         compWthMailButton.click();
         if(gdpr) {
-            BaseDialog.
+            BaseDialogSelenide.
                     at(GdprConfirmationDialog.class)
                     .confirm();
         }
@@ -198,7 +197,7 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
-        BaseDialog.
+        BaseDialogSelenide.
                 at(GdprConfirmationDialog.class)
                 .confirm();
         return at(MyPage.class);
@@ -206,7 +205,7 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeExternally(Claim claim, DatabaseApi databaseApi) {
         compExternallyButton.click();
-        BaseDialog
+        BaseDialogSelenide
                 .at(GdprConfirmationDialog.class)
                 .confirm();
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
@@ -216,7 +215,7 @@ public class CompleteClaimPage extends Page {
     public MyPage saveClaim(boolean gdpr) {
         saveClaim.click();
         if(gdpr) {
-            BaseDialog
+            BaseDialogSelenide
                     .at(GdprConfirmationDialog.class)
                     .confirm();
         }
@@ -228,7 +227,7 @@ public class CompleteClaimPage extends Page {
         Wait.waitForJavascriptRecalculation();
         hoverAndClick($(replace));
         if(gdpr) {
-            BaseDialog
+            BaseDialogSelenide
                     .at(GdprConfirmationDialog.class)
                     .confirm();
         }

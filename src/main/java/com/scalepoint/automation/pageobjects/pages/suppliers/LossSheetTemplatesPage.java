@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CompaniesMappingDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.NewTemplateDialog;
 import com.scalepoint.automation.utils.Wait;
@@ -60,7 +60,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
     public NewTemplateDialog uploadNewTemplate(){
 
         buttons.find(Condition.exactText("Upload new template")).click();
-        return BaseDialog.at(NewTemplateDialog.class);
+        return BaseDialogSelenide.at(NewTemplateDialog.class);
     }
 
     public LossSheetTemplatesPage uploadTemplate(String templateName, File templateFile) {
@@ -74,7 +74,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
     public CompaniesMappingDialog reassignTemplate(){
 
         buttons.find(Condition.exactText("Reassign template")).click();
-        return BaseDialog.at(CompaniesMappingDialog.class);
+        return BaseDialogSelenide.at(CompaniesMappingDialog.class);
     }
 
     public TemplateRow reassignTemplate(String companyName, String templateName){

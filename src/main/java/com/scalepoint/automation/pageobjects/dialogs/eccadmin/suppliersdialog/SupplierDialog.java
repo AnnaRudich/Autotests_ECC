@@ -3,13 +3,13 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.Arrays;
@@ -57,6 +57,7 @@ public class SupplierDialog extends BaseDialog {
     }
 
     public <T extends SupplierDialog> T selectTab(SuppliersTab.TabType tabType) {
+
         tabs.stream()
                 .filter(tab -> tab.getTabType().equals(tabType))
                 .findFirst()
@@ -153,23 +154,27 @@ public class SupplierDialog extends BaseDialog {
         }
     }
 
-    public static class GeneralTabReadMode extends BaseDialog {
+    public static class GeneralTabReadMode extends BaseDialogSelenide {
 
         @FindBy(xpath = "//label[contains(text(),'Supplier name:')]")
-        private WebElement name;
+        private SelenideElement name;
 
         @Override
         protected boolean areWeAt() {
+
             Wait.waitForAjaxCompleted();
             try {
+
                 return this.name.isDisplayed() && driver.findElements(By.name("name")).isEmpty();
             } catch (Exception e) {
+
                 logger.error(e.getMessage());
                 return false;
             }
         }
 
         public GeneralTabReadMode setName(String name) {
+
             this.name.clear();
             this.name.sendKeys(name);
             return this;

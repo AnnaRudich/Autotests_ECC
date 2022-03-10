@@ -40,7 +40,7 @@ public class ClaimOperationsMenu extends Module {
     public LossImportDialog openImportExcelDialog() {
         logger.info("Main: {}", driver.getWindowHandle());
         $(excelImportBtn).click();
-        return BaseDialog.at(LossImportDialog.class);
+        return BaseDialogSelenide.at(LossImportDialog.class);
     }
 
 

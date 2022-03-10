@@ -30,6 +30,7 @@ public class LoginSelfServicePage extends Page {
 
     @Override
     public void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         verifyElementVisible($(passwordField));
         verifyElementVisible($(login));

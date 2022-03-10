@@ -1,6 +1,9 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.scalepoint.automation.pageobjects.dialogs.*;
+import com.scalepoint.automation.pageobjects.dialogs.AttachmentDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
+import com.scalepoint.automation.pageobjects.dialogs.ClaimLineNotesDialog;
+import com.scalepoint.automation.pageobjects.dialogs.UpdateCategoriesDialog;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -96,7 +99,7 @@ public class ToolBarMenu extends Module {
 
     public AttachmentDialog openAttachmentsDialog(){
         attachments.click();
-        return BaseDialog.at(AttachmentDialog.class);
+        return BaseDialogSelenide.at(AttachmentDialog.class);
     }
 
     public ClaimLineNotesDialog toClaimLineNotesPage() {

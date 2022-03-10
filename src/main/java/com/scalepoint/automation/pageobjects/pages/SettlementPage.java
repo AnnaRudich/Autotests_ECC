@@ -290,7 +290,7 @@ public class SettlementPage extends BaseClaimPage {
     public DeductibleWarningDialog toDeductibleWarning(){
 
         completeClaim();
-        return BaseDialog.at(DeductibleWarningDialog.class);
+        return BaseDialogSelenide.at(DeductibleWarningDialog.class);
     }
 
     public SettlementGroupDialog openGroupCreationDialog() {
@@ -462,7 +462,7 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public Asserts assertEditPolicyTypeDialogIsNotPresent(){
-            assertFalse(BaseDialog.isOn(EditPolicyTypeDialog.class));
+            assertFalse(BaseDialogSelenide.isOn(EditPolicyTypeDialog.class));
             return this;
         }
     }
