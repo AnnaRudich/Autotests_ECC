@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.widget;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.EditPolicyTypeDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
@@ -70,7 +71,7 @@ public class LoginFlow {
     public EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim, null);
-        return BaseDialog.at(EditPolicyTypeDialog.class);
+        return BaseDialogSelenide.at(EditPolicyTypeDialog.class);
     }
 
     public String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
