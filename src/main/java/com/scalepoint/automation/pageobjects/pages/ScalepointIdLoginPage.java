@@ -51,7 +51,7 @@ public class ScalepointIdLoginPage extends Page {
 
     public <T extends Page> T login(String userLogin, String userPassword, Class<T> pageClass) {
         loginWithoutExpectedPage(userLogin, userPassword);
-        return at(pageClass);
+        return to(pageClass);
     }
 
     public void loginWithoutExpectedPage(String userLogin, String userPassword) {

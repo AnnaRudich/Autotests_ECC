@@ -193,8 +193,21 @@ public class LoginFlow {
                 .assertEditReasonsFormVisible();
     }
 
+    public EditReasonsPage openEditReasonPage(User user, InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
+
+        return login(user, AdminPage.class)
+                .to(EditReasonsPage.class)
+                .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
+                .assertEditReasonsFormVisible();
+    }
+
     public EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
 
         return openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
+    }
+
+    public EditReasonsPage openEditReasonPage(User user, InsuranceCompany insuranceCompany, boolean showDisabled) {
+
+        return openEditReasonPage(user, insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
     }
 }
