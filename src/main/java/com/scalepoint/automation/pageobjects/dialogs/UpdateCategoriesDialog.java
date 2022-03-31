@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.Duration;
@@ -16,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 
-public class UpdateCategoriesDialog extends BaseDialogSelenide {
+public class UpdateCategoriesDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

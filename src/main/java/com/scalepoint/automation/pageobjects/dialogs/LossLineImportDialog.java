@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class LossLineImportDialog extends BaseDialogSelenide {
+public class LossLineImportDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
@@ -29,7 +29,7 @@ public class LossLineImportDialog extends BaseDialogSelenide {
 
         SelenideElement okButton = $("#loss-line-import-button-btnInnerEl");
         okButton.shouldBe(Condition.enabled).click();
-        return BaseDialogSelenide.at(ExcelImportSummaryDialog.class);
+        return BaseDialog.at(ExcelImportSummaryDialog.class);
     }
 
     public SettlementPage cancelImport() {

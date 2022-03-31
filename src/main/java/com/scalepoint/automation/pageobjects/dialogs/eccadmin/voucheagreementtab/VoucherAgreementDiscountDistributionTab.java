@@ -14,20 +14,21 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class VoucherAgreementDiscountDistributionTab extends BaseDialog implements VoucherAgreementTabs {
 
     @FindBy(name = "discountToIC")
-    private WebElement discountToICInput;
-
+    private SelenideElement discountToICInput;
     @FindBy(name = "discountToClaimant")
-    private WebElement discountToClaimantInput;
+    private SelenideElement discountToClaimantInput;
 
     public VoucherAgreementDiscountDistributionTab setDiscountToIc(Integer discount) {
-        SelenideElement element = $(discountToICInput);
+
+        SelenideElement element = discountToICInput;
         element.clear();
         element.setValue(discount.toString());
         return this;
     }
 
     public VoucherAgreementDiscountDistributionTab setDiscountToClaimant(Integer discount) {
-        SelenideElement element = $(discountToClaimantInput);
+
+        SelenideElement element = discountToClaimantInput;
         element.clear();
         element.setValue(discount.toString());
         return this;
@@ -35,10 +36,12 @@ public class VoucherAgreementDiscountDistributionTab extends BaseDialog implemen
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
     }
 
     public VoucherAgreementDiscountDistributionTab doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return VoucherAgreementDiscountDistributionTab.this;
     }
@@ -46,12 +49,14 @@ public class VoucherAgreementDiscountDistributionTab extends BaseDialog implemen
     public class Asserts {
 
         public Asserts assertDiscountToIc(Integer discount) {
-            Assert.assertEquals($(discountToICInput).getValue(), discount.toString());
+
+            Assert.assertEquals(discountToICInput.getValue(), discount.toString());
             return this;
         }
 
         public Asserts assertDiscountToClaimant(Integer discount) {
-            Assert.assertEquals($(discountToClaimantInput).getValue(), discount.toString());
+
+            Assert.assertEquals(discountToClaimantInput.getValue(), discount.toString());
             return this;
         }
     }

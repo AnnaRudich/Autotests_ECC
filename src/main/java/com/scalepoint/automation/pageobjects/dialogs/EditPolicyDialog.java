@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @EccPage
-public class EditPolicyDialog extends BaseDialogSelenide {
+public class EditPolicyDialog extends BaseDialog {
 
     @FindBy(id = "edit-policy-ok-button")
     private SelenideElement ok;

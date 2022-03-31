@@ -20,7 +20,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SettlementGroupDialog extends BaseDialogSelenide {
+public class SettlementGroupDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

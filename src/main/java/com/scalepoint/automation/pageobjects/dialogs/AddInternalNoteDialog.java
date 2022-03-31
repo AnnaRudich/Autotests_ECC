@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
-public class AddInternalNoteDialog extends BaseDialogSelenide {
+public class AddInternalNoteDialog extends BaseDialog {
 
     @FindBy(name = "addNoteTextArea-inputEl")
     private SelenideElement internalNote;

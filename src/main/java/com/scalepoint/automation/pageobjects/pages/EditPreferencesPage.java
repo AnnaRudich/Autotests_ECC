@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,41 +19,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EditPreferencesPage extends Page {
 
     @FindBy(id = "btnGenerate")
-    private WebElement buttonGenerate;
-
+    private SelenideElement buttonGenerate;
     @FindBy(id = "cancel")
-    private WebElement buttonCancel;
+    private SelenideElement buttonCancel;
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(buttonGenerate).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        buttonGenerate.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/preferences.jsp";
     }
 
     public String generateNewPassword() {
+
         $(buttonGenerate)
-                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .should(and("can be clickable", visible, enabled))
                 .hover()
                 .click();
         return getAlertTextAndAccept().split(" ")[1];
     }
 
     public boolean checkGeneratePasswordButton() {
+
         return isDisplayed(buttonGenerate);
     }
 
     public MyPage cancel() {
+
         buttonCancel.click();
         return Page.at(MyPage.class);
     }
 
     public EditPreferencesPage doAssert(Consumer<Asserts> assertsFunc) {
+
         assertsFunc.accept(new Asserts());
         return EditPreferencesPage.this;
     }
@@ -60,11 +66,13 @@ public class EditPreferencesPage extends Page {
     public class Asserts {
 
         public Asserts assertIsGenerateButtonVisible() {
+
             assertThat(checkGeneratePasswordButton()).isTrue();
             return this;
         }
 
         public Asserts assertsIsGeneratedPasswordCorrect(String generatedPassword) {
+
             OperationalUtils.assertStringMatchingPattern("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?!.*[&%$]#).{6,}", generatedPassword);
             return this;
         }

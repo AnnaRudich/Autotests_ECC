@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
@@ -21,34 +23,40 @@ import static org.testng.Assert.assertTrue;
 public class GenericItemsAdminPage extends AdminBasePage {
 
     @FindBy(id = "btnNew")
-    private WebElement newButton;
-
+    private SelenideElement newButton;
     @FindBy(id = "btnEdit")
-    private WebElement editButton;
-
+    private SelenideElement editButton;
     @FindBy(id = "btnDelete")
-    private WebElement deleteButton;
-
+    private SelenideElement deleteButton;
     @FindBy(id = "btnRefresh")
-    private WebElement refreshButton;
+    private SelenideElement refreshButton;
 
-    @FindBy(name = "genericItemsList")
-    private Select genericItemsList;
+    private Select getGenericItemsList(){
 
-    @FindBy(name = "company")
-    private Select companies;
+        return new Select($(By.name("genericItemsList")));
+    }
 
-    @FindBy(name = "categorygroup")
-    private Select categoryGroups;
+    private Select getCompanies(){
 
-    @FindBy(name = "category")
-    private Select categories;
+        return new Select($(By.name("company")));
+    }
+
+    private Select getCategoryGroups(){
+
+        return new Select($(By.name("categorygroup")));
+    }
+
+    private Select getCategories(){
+
+        return new Select($(By.name("category")));
+    }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        newButton.should(Condition.visible);
     }
 
     @Override
@@ -58,33 +66,39 @@ public class GenericItemsAdminPage extends AdminBasePage {
 
 
     public GenericItemsEditAdminPage clickCreateNewItem() {
-        hoverAndClick($(newButton));
+
+        hoverAndClick(newButton);
         return at(GenericItemsEditAdminPage.class);
     }
 
     private GenericItemsAdminPage selectCompany(String company) {
-        companies.selectByVisibleText(company);
+
+        getCompanies().selectByVisibleText(company);
         return this;
     }
 
     private GenericItemsAdminPage selectGroup(String group) {
-        categoryGroups.selectByVisibleText(group);
-        verifyElementVisible($(categories));
+
+        getCategoryGroups().selectByVisibleText(group);
+        $(getCategories()).should(Condition.visible);
         return this;
     }
 
     private GenericItemsAdminPage selectCategory(String category) {
-        categories.selectByVisibleText(category);
+
+        getCategories().selectByVisibleText(category);
         return this;
     }
 
     public GenericItemsAdminPage refreshList() {
-        hoverAndClick($(refreshButton));
-        $(By.id("btnNew")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+
+        hoverAndClick(refreshButton);
+        $(By.id("btnNew")).should(Condition.visible);
         return this;
     }
 
     public GenericItemsAdminPage filterItems(GenericItem genericItem, String company) {
+
         return selectCompany(company).
                 selectGroup(genericItem.getGroup()).
                 selectCategory(genericItem.getCategory()).
@@ -92,24 +106,28 @@ public class GenericItemsAdminPage extends AdminBasePage {
     }
 
     private GenericItemsAdminPage selectGenericItem(String description, String companyName) {
-        genericItemsList.selectByVisibleText(description + " (" + companyName + ")");
+
+        getGenericItemsList().selectByVisibleText(description + " (" + companyName + ")");
         return this;
     }
 
     private GenericItemsAdminPage selectDeleteOptionAndAccept() {
+
         deleteButton.click();
         acceptAlert();
-        verifyElementVisible($(By.id("btnEdit")));
+        $(By.id("btnEdit")).should(Condition.visible);
         return this;
     }
 
     public GenericItemsAdminPage deleteItem(GenericItem genericItem, String company) {
+
         return filterItems(genericItem, company).
                 selectGenericItem(genericItem.getName(), company).
                 selectDeleteOptionAndAccept();
     }
 
     public GenericItemsEditAdminPage editItem(GenericItem genericItem, String company) {
+
         filterItems(genericItem, company);
         selectGenericItem(genericItem.getName(), company);
         editButton.click();
@@ -117,34 +135,42 @@ public class GenericItemsAdminPage extends AdminBasePage {
     }
 
     private int genericItemsListSize() {
-        return genericItemsList.getOptions().size();
+        return getGenericItemsList().getOptions().size();
     }
 
     public GenericItemsAdminPage doAssert(Consumer<Asserts> assertsFunc) {
+
         assertsFunc.accept(new Asserts());
         return GenericItemsAdminPage.this;
     }
 
     public class Asserts {
+
         public Asserts assertItemsListIsNotEmpty() {
+
             assertTrue(genericItemsListSize() > 0, "List of generic items is empty");
             return this;
         }
 
         public Asserts assertGenericItemInList(String genericItem) {
+
             try {
-                genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
+
+                getGenericItemsList().findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
             } catch (Exception e) {
+
                 throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
             }
             return this;
         }
 
         public Asserts assertGenericItemNotInList(String genericItem) {
+
             try {
-                genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
+
+                getGenericItemsList().findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
                 throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
-            } catch (NoSuchElementException ignored) {
+            } catch (ElementNotFound ignored) {
             }
             return this;
         }

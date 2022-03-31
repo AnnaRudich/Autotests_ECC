@@ -3,11 +3,10 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -22,27 +21,30 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class CustomerOrderEditPage extends BaseClaimPage {
 
     @FindBy(name = "cancelButton")
-    private WebElement cancelButton;
+    private SelenideElement cancelButton;
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(cancelButton).shouldHave(Condition.attribute("disabled", "true"));
+        cancelButton.shouldHave(Condition.attribute("disabled", "true"));
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/customer_order_edit.jsp";
     }
 
     private AddInternalNoteDialog cancelItem(Suborders.Suborder suborder){
-        suborder
-                .setCheckBox(true);
+
+        suborder.setCheckBox(true);
         return cancel();
     }
 
     public AddInternalNoteDialog cancelItemByDescription(String itemDescription){
+
         return cancelItem(new Suborders().getSuborderByDescription(itemDescription));
     }
 
@@ -52,6 +54,7 @@ public class CustomerOrderEditPage extends BaseClaimPage {
     }
 
     public AddInternalNoteDialog cancelAllItems(){
+
         new Suborders()
                 .subordersList
                 .forEach(suborder -> suborder.setCheckBox(true));
@@ -60,10 +63,10 @@ public class CustomerOrderEditPage extends BaseClaimPage {
 
     private AddInternalNoteDialog cancel(){
 
-        $(cancelButton).click();
+        cancelButton.click();
         getAlertTextAndAccept();
         Window.get().switchToLast();
-        return BaseDialogSelenide.at(AddInternalNoteDialog.class);
+        return BaseDialog.at(AddInternalNoteDialog.class);
     }
 
     public class Suborders{

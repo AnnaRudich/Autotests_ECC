@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForAllElementsVisible;
 
-public class FindShopDialog extends BaseDialogSelenide {
+public class FindShopDialog extends BaseDialog {
 
     @FindBy(id = "search-voucher-search-button")
     private SelenideElement searchVoucherButton;

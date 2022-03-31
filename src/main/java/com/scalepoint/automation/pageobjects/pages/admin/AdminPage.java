@@ -2,52 +2,76 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.Category;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.By;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class AdminPage extends AdminBasePage {
 
-    @FindBy(xpath = "//a[contains(@href, 'matching_engine/start.jsp')]")
-    private Link matchingEngine;
+    private Link getMatchingEngine(){
 
-    @FindBy(xpath = "//a")
-    private List<Link> adminLinks;
+        return new Link($(By.xpath("//a[contains(@href, 'matching_engine/start.jsp')]")));
+    }
 
-    @FindBy(xpath = "//a[text()='Generic Items']")
-    private Link genericItems;
+    private  List<Link> getAdminLinks(){
 
-    @FindBy(xpath = "//a[text()='Function Templates']")
-    private Link functionalTemplateLink;
+        return $$(By.xpath("//a")).stream()
+                .map(Link::new)
+                .collect(Collectors.toList());
+    }
 
-    @FindBy(xpath = "//a[contains(@href, 'matching_engine')]")
-    private Link matchingEngineLink;
+    private Link getGenericItems(){
 
-    @FindBy(xpath = "//a[text()='Users']")
-    private Link usersLink;
+        return new Link($(By.xpath("//a[text()='Generic Items']")));
+    }
 
-    @FindBy(xpath = "//a[contains(@href, 'pseudocategory_model')]")
-    private Link pseudoCategoryModels;
+    private Link getFunctionalTemplateLink(){
 
-    @FindBy(xpath = "//a[contains(@href, 'pseudocategory_group')]")
-    private Link pseudoCategoryGroup;
+        return new Link($(By.xpath("//a[text()='Function Templates']")));
+    }
 
-    @FindBy(xpath = "//a[contains(@href,'edit_reasons')]")
-    private Link editReasons;
+    private Link getMatchingEngineLink(){
+
+        return new Link($(By.xpath("//a[contains(@href, 'matching_engine')]")));
+    }
+
+    private Link getUsersLink(){
+
+        return new Link($(By.xpath("//a[text()='Users']")));
+    }
+
+    private Link getPseudoCategoryModels(){
+
+        return new Link($(By.xpath("//a[contains(@href, 'pseudocategory_model')]")));
+    }
+
+    private Link getPseudoCategoryGroup(){
+
+        return new Link($(By.xpath("//a[contains(@href, 'pseudocategory_group')]")));
+    }
+
+    private Link getEditReasons(){
+
+        return new Link($(By.xpath("//a[contains(@href,'edit_reasons')]")));
+    }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(matchingEngine).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(getMatchingEngine()).should(Condition.visible);
     }
 
     @Override
@@ -56,42 +80,43 @@ public class AdminPage extends AdminBasePage {
     }
 
     public SettlementPage toSettlement() {
-        matchingEngine.click();
-        return at(SettlementPage.class);
+
+        getMatchingEngine().click();
+        return Page.at(SettlementPage.class);
     }
 
     public FunctionalTemplatesPage toFunctionalTemplatesPage() {
-        functionalTemplateLink.click();
+        getFunctionalTemplateLink().click();
         return at(FunctionalTemplatesPage.class);
     }
 
     public GenericItemsAdminPage toGenericItemsPage() {
-        genericItems.click();
+        getGenericItems().click();
         return at(GenericItemsAdminPage.class);
     }
 
     public MyPage toMatchingEngine() {
-        matchingEngineLink.click();
-        return at(MyPage.class);
+        getMatchingEngine().click();
+        return Page.at(MyPage.class);
     }
 
     public UsersPage toUsersPage() {
-        usersLink.click();
+        getUsersLink().click();
         return at(UsersPage.class);
     }
 
     public PseudoCategoryModelPage toPseudoCategoryModelPage() {
-        pseudoCategoryModels.click();
+        getPseudoCategoryModels().click();
         return at(PseudoCategoryModelPage.class);
     }
 
     public PseudoCategoryGroupPage toPseudoCategoryGroupPage() {
-        pseudoCategoryGroup.click();
+        getPseudoCategoryGroup().click();
         return at(PseudoCategoryGroupPage.class);
     }
 
     public EditReasonsPage toEditReasonsPage() {
-        editReasons.click();
+        getEditReasons().click();
         return at(EditReasonsPage.class);
     }
 

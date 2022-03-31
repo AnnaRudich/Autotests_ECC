@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class AddGenericItemDialog extends BaseDialogSelenide {
+public class AddGenericItemDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
@@ -33,7 +33,6 @@ public class AddGenericItemDialog extends BaseDialogSelenide {
 
     @FindBy(id = "generic-item-dialog-add-button")
     private SelenideElement ok;
-
     @FindBy(id = "generic-item-dialog-close-button")
     private SelenideElement cancel;
 
@@ -46,6 +45,7 @@ public class AddGenericItemDialog extends BaseDialogSelenide {
     private GenericItemDialogGrid genericItemDialogGrid;
 
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {
+
         selectCategory(categoryGroup, category);
         genericItemDialogGrid
                 .findRowByDescription(itemName)
@@ -56,6 +56,7 @@ public class AddGenericItemDialog extends BaseDialogSelenide {
     }
 
     private AddGenericItemDialog selectCategory(String categoryGroup, String category) {
+
         getCategory().select(categoryGroup + " - " + category);
         Wait.waitForAjaxCompleted();
         genericItemDialogGrid = new GenericItemDialogGrid();
@@ -63,10 +64,13 @@ public class AddGenericItemDialog extends BaseDialogSelenide {
     }
 
     public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
+
         try {
+
             selectCategory(categoryGroup, category);
             genericItemDialogGrid.findRowByDescription(itemName);
         }catch (ElementNotFound|NoSuchElementException e){
+
             return false;
         }
         return true;
@@ -78,6 +82,7 @@ public class AddGenericItemDialog extends BaseDialogSelenide {
         List<GenericItemDialogGridRow> list;
 
         public GenericItemDialogGrid(){
+
             list = element.findAll(".generic-item-row").stream()
                     .map(GenericItemDialogGridRow::new)
                     .collect(Collectors.toList());

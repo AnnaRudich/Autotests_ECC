@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertEquals;
 
-public class EditVoucherValuationDialog extends BaseDialogSelenide {
+public class EditVoucherValuationDialog extends BaseDialog {
 
     @FindBy(id = "edit-voucher-tags-text-inputEl")
     private SelenideElement tags;
@@ -88,7 +88,7 @@ public class EditVoucherValuationDialog extends BaseDialogSelenide {
     public EditDiscountDistributionDialog updatePercentageFromDialog(DistributeTo distributeTo, Integer percentage) {
 
         editDistributionButton.click();
-        return BaseDialogSelenide.at(EditDiscountDistributionDialog.class).updatePercentage(distributeTo, percentage);
+        return BaseDialog.at(EditDiscountDistributionDialog.class).updatePercentage(distributeTo, percentage);
     }
 
     public String getBrands() {
@@ -109,7 +109,7 @@ public class EditVoucherValuationDialog extends BaseDialogSelenide {
     public VoucherTermsAndConditionsDialog openTermsAndConditions() {
 
         getTermsAndConditions().click();
-        return BaseDialogSelenide.at(VoucherTermsAndConditionsDialog.class);
+        return BaseDialog.at(VoucherTermsAndConditionsDialog.class);
     }
 
     public EditVoucherValuationDialog discountDistribution(String discountDistributionValue) {

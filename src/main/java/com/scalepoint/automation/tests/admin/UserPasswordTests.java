@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.EditPreferencesPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.testGroups.TestGroups;
@@ -72,7 +73,7 @@ public class UserPasswordTests extends BaseTest {
             description = "CHARLIE-534 generate password from prefs")
     public void generatePasswordFromPreferencesTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        EditPreferencesPage editPreferencesPage = at(UserAddEditPage.class)
+        EditPreferencesPage editPreferencesPage = Page.at(UserAddEditPage.class)
                 .createUser(user, userTypes)
                 .toMatchingEngine()
                 .openEditPreferences();
@@ -98,7 +99,7 @@ public class UserPasswordTests extends BaseTest {
 
         systemUser.setPassword(password);
 
-        at(UserAddEditPage.class).createUser(systemUser, userTypes)
+        Page.at(UserAddEditPage.class).createUser(systemUser, userTypes)
                 .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
                 .logout()
                 .login(User.builder()

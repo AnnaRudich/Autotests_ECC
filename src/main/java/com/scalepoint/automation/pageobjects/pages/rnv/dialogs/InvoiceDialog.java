@@ -18,8 +18,9 @@ public class InvoiceDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompleted();
-        $("#panel-invoice-view-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $("#panel-invoice-view-body").should(Condition.visible);
     }
 
     public InvoiceDialog doAssert(Consumer<InvoiceDialog.Asserts> assertFunc) {
@@ -43,7 +44,7 @@ public class InvoiceDialog extends BaseDialog {
         }
 
         public InvoiceDialog.Asserts assertRepairPriceForTheFirstTaskIs(Double expectedRepairPrice) {
-            Double actualRepairPrice = new Double($(By.xpath("//td[@id = 'repairPrice0']/div/span[1]")).getText());
+            Double actualRepairPrice = Double.valueOf($(By.xpath("//td[@id = 'repairPrice0']/div/span[1]")).getText());
             assertThat(actualRepairPrice).as("Repair price should be: " + expectedRepairPrice + "but was: " + actualRepairPrice)
                     .isEqualTo(expectedRepairPrice);
             return this;

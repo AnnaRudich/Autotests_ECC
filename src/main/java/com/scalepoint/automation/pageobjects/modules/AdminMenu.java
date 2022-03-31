@@ -5,59 +5,79 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 
 public class AdminMenu extends Module {
 
-    @FindBy(xpath = "//a[contains(@href, 'matching_engine/start.jsp')]")
-    private Link matchingEngine;
 
-    @FindBy(xpath = "//a")
-    private List<Link> adminLinks;
+    private Link getMatchingEngine(){
 
-    @FindBy(xpath = "//a[text()='Generic Items']")
-    private Link genericItems;
+        return new Link($(By.xpath("//a[contains(@href, 'matching_engine/start.jsp')]")));
+    }
 
-    @FindBy(xpath = "//a[text()='Function Templates']")
-    private Link functionalTemplateLink;
+    private List<Link> getAdminLinks(){
 
-    @FindBy(xpath = "//a[contains(@href, 'matching_engine')]")
-    private Link matchingEngineLink;
+        return $$(By.xpath("//a")).stream()
+                .map(Link::new)
+                .collect(Collectors.toList());
+    }
 
-    @FindBy(xpath = "//a[text()='Users']")
-    private Link usersLink;
+    private Link getGenericItems(){
+
+        return new Link($(By.xpath("//a[text()='Generic Items']")));
+    }
+
+    private Link getFunctionalTemplateLink(){
+
+        return new Link($(By.xpath("//a[text()='Function Templates']")));
+    }
+
+    private Link getMatchingEngineLink(){
+
+        return new Link($(By.xpath("//a[contains(@href, 'matching_engine')]")));
+    }
+
+    private Link getUsersLink(){
+
+        return new Link($(By.xpath("//a[text()='Users']")));
+    }
 
     public SettlementPage toSettlement() {
-        matchingEngine.click();
+
+        getMatchingEngine().click();
         return at(SettlementPage.class);
     }
 
     public FunctionalTemplatesPage toFunctionalTemplatesPage() {
-        functionalTemplateLink.click();
+
+        getFunctionalTemplateLink().click();
         return at(FunctionalTemplatesPage.class);
     }
 
     public GenericItemsAdminPage toGenericItemsPage() {
-        genericItems.click();
+
+        getGenericItems().click();
         return at(GenericItemsAdminPage.class);
     }
 
     public MyPage toMatchingEngine() {
-        matchingEngineLink.click();
+
+        getMatchingEngineLink().click();
         return at(MyPage.class);
     }
 
     public UsersPage toUsers() {
-        usersLink.click();
-        return at(UsersPage.class);
-    }
 
-    public Link getMatchingEngine() {
-        return matchingEngine;
+        getUsersLink().click();
+        return at(UsersPage.class);
     }
 }

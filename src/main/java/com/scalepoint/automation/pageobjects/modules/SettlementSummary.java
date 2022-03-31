@@ -2,8 +2,8 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.SelfRiskDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -12,7 +12,6 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Table;
@@ -34,60 +33,49 @@ public class SettlementSummary extends Module {
     private static final String NOT_FRAUDULENT_TEXT = "CentralScore ok";
     private static final int FRAUD_ALERT_WAIT_TIMEOUT_MS = 30000;
 
-    @FindBy(xpath = "//div[@id='settlementSummaryTotalTable-targetEl']//table")
-    private Table claimsResult;
-
     @FindBy(id = "cancelCaseBtn")
-    private WebElement cancel;
-
+    private SelenideElement cancel;
     @FindBy(id = "saveCaseBtn")
-    private WebElement saveClaim;
-
+    private SelenideElement saveClaim;
     @FindBy(id = "finishCaseBtn")
-    private WebElement completeClaim;
-
+    private SelenideElement completeClaim;
     @FindBy(id = "settleExternallyBtn")
-    private WebElement completeClaimExternally;
-
+    private SelenideElement completeClaimExternally;
     @FindBy(id="sendToAuditBtn-btnInnerEl")
-    private WebElement sentToAudit;
-
+    private SelenideElement sentToAudit;
     @FindBy(css = "#appContainer-body .x-region-collapsed-placeholder .x-tool-expand-top")
-    private WebElement expand;
-
+    private SelenideElement expand;
     @FindBy(id = "total_indemnity_replacement_amount-inputEl")
-    private WebElement claimSumValue;
-
+    private SelenideElement claimSumValue;
     @FindBy(id = "subtotal_cash_payout-inputEl")
-    private WebElement subtotalValue;
-
+    private SelenideElement subtotalValue;
     @FindBy(id = "draft-status-inputEl")
-    private WebElement auditStatus;
-
+    private SelenideElement auditStatus;
     @FindBy(id = "auditInfoPanel")
-    private WebElement auditInfoPanel;
-
+    private SelenideElement auditInfoPanel;
     @FindBy(css = "[id^=fraudStatus] [role=textbox]")
-    private WebElement fraudStatus;
-
+    private SelenideElement fraudStatus;
     @FindBy(id = "settlementSummaryTotalsPanel")
-    private WebElement settlementSummaryTotalsPanel;
-
+    private SelenideElement settlementSummaryTotalsPanel;
     @FindBy(id="reopenClaimBtn")
-    private WebElement reopenClaimViewMode;
-
+    private SelenideElement reopenClaimViewMode;
     @FindBy(id = "closeClaimPreviewBtn")
-    private WebElement closeClaimViewMode;
+    private SelenideElement closeClaimViewMode;
+
+    private Table getClaimsResult(){
+
+        return new Table($(By.xpath("//div[@id='settlementSummaryTotalTable-targetEl']//table")));
+    }
 
     public void cancel() {
 
-        hoverAndClick($(cancel));
+        hoverAndClick(cancel);
     }
 
     public void saveClaim() {
 
         expand();
-        hoverAndClick($(saveClaim));
+        hoverAndClick(saveClaim);
     }
 
     private boolean isExpanded(){
@@ -99,7 +87,7 @@ public class SettlementSummary extends Module {
     public SettlementPage reopenClaimFromViewMode(){
 
         expand();
-        $(reopenClaimViewMode).click();
+        reopenClaimViewMode.click();
         getAlertTextAndAccept();
         return Page.at(SettlementPage.class);
     }
@@ -107,7 +95,7 @@ public class SettlementSummary extends Module {
     public CustomerDetailsPage closeClaimFromViewMode(){
 
         expand();
-        hoverAndClick($(closeClaimViewMode));
+        hoverAndClick(closeClaimViewMode);
         return Page.at(CustomerDetailsPage.class);
 
     }
@@ -115,21 +103,20 @@ public class SettlementSummary extends Module {
     public void completeClaim() {
 
         expand();
-        jsIfClickDoesNotWork($(completeClaim));
+        jsIfClickDoesNotWork(completeClaim);
     }
 
     public void completeClaimWithoutMail() {
 
         expand();
-        hoverAndClick($(completeClaimExternally));
+        hoverAndClick(completeClaimExternally);
     }
 
     public SettlementSummary expand() {
 
         if (!isExpanded()) {
 
-            $(expand)
-                    .should(Condition.visible)
+            expand.should(Condition.visible)
                     .click();
         }
 
@@ -140,14 +127,14 @@ public class SettlementSummary extends Module {
     private String getClaimSumValue() {
 
         expand();
-        $(claimSumValue).should(not(exactText("")));
+        claimSumValue.should(not(exactText("")));
         return claimSumValue.getText();
     }
 
     private String getSubtotalSumValue() {
 
         expand();
-        $(subtotalValue).should(not(exactText("")));
+        subtotalValue.should(not(exactText("")));
         return subtotalValue.getText();
     }
 
@@ -164,7 +151,7 @@ public class SettlementSummary extends Module {
 
     private boolean isFraudulent(){
 
-        return $(fraudStatus)
+        return fraudStatus
                 .should(Condition.or("fraudStatus", Condition.text(FRAUDULENT_TEXT), Condition.text(NOT_FRAUDULENT_TEXT)),
                         Duration.ofMillis(FRAUD_ALERT_WAIT_TIMEOUT_MS))
                 .has(Condition.exactText(FRAUDULENT_TEXT));
@@ -173,7 +160,7 @@ public class SettlementSummary extends Module {
     public SettlementSummary ensureAuditInfoPanelVisible() {
 
         expand();
-        verifyElementVisible($(auditInfoPanel));
+        verifyElementVisible(auditInfoPanel);
         return this;
     }
 
@@ -186,7 +173,7 @@ public class SettlementSummary extends Module {
     public SelfRiskDialog editSelfRisk(){
 
         hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
-        return BaseDialogSelenide.at(SelfRiskDialog.class);
+        return BaseDialog.at(SelfRiskDialog.class);
     }
 
     @Getter
@@ -203,6 +190,7 @@ public class SettlementSummary extends Module {
         private BigDecimal outstandingSelfRiskTakenByInsureanceCompany;
 
         RepairPanel(){
+
             ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
             repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(0)).getText());
             selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(1)).getText());
@@ -218,11 +206,13 @@ public class SettlementSummary extends Module {
         }
 
         public RepairPanel doAssert(Consumer<Asserts> assertFunc) {
+
             assertFunc.accept(new Asserts());
             return RepairPanel.this;
         }
 
         public class Asserts {
+
             public Asserts assertRepairPrice(BigDecimal expectedValue) {
 
                 assertThat(getRepairPrice())
@@ -274,11 +264,13 @@ public class SettlementSummary extends Module {
     }
 
     public SettlementSummary doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return SettlementSummary.this;
     }
 
     public class Asserts {
+
         public Asserts assertClaimSumValueIs(double value) {
 
             assertThat(toNumber(getClaimSumValue()))
@@ -318,6 +310,5 @@ public class SettlementSummary extends Module {
                     .isFalse();
             return this;
         }
-
     }
 }

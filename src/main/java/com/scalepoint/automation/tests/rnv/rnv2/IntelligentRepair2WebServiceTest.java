@@ -17,6 +17,7 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -24,6 +25,7 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -111,12 +113,14 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .getAssertion()
                 .assertEvaluateTaskButtonIsDisabled();
 
-        new ProjectsPage().expandTopTaskDetails()
+        Page.at(ProjectsPage.class)
+                .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasCompletedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
 
-        new ProjectsPage().toInvoiceTab()
+        Page.at(ProjectsPage.class)
+                .toInvoiceTab()
                 .openInvoiceDialogForLineWithIndex(0)
                 .findInvoiceLineByIndex(1)
                 .assertTotalForTheLineWithIndex(1, repairPrice.doubleValue());
@@ -156,16 +160,19 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim().toMailsPage();
 
-        new CustomerDetailsPage().toRepairValuationProjectsPage()
+        new CustomerDetailsPage()
+                .toRepairValuationProjectsPage()
                 .getAssertion()
                 .assertEvaluateTaskButtonIsDisabled();
 
-        new ProjectsPage().expandTopTaskDetails()
+        Page.at(ProjectsPage.class)
+                .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasCompletedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
 
-        new ProjectsPage().toInvoiceTab()
+        Page.at(ProjectsPage.class)
+                .toInvoiceTab()
                 .doAssert(InvoiceTab.Asserts::assertThereIsNoInvoiceGrid);
 
     }
@@ -203,7 +210,9 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .assertEvaluateTaskButtonIsDisabled()
                 .assertTaskHasCompletedStatus(agreement);
 
-        new ProjectsPage().getAssertion().assertAuditResponseText(REJECT);
+        Page.at(ProjectsPage.class)
+                .getAssertion()
+                .assertAuditResponseText(REJECT);
     }
     /*
      * send line to RnV
@@ -234,7 +243,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         new RnvService()
                 .sendFeedbackWithInvoiceWithRepairPrice(repairPrice, claim, rnvStub);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+        new ClaimNavigationMenu()
+                .toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement)
@@ -301,7 +311,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsNotSentToRepair);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+        new ClaimNavigationMenu()
+                .toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFailStatus(agreement);

@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,25 +18,27 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class InsCompaniesPage extends AdminBasePage {
 
     @FindBy(id = "btnAdd")
-    private WebElement addButton;
-
+    private SelenideElement addButton;
     @FindBy(id = "btnEdit")
-    private WebElement editButton;
+    private SelenideElement editButton;
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        addButton.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/insurance_companies.jsp";
     }
 
     public InsCompAddEditPage toAddNewCompanyPage() {
-        hoverAndClick($(addButton));
+
+        hoverAndClick(addButton);
         return at(InsCompAddEditPage.class);
     }
 
@@ -49,22 +52,28 @@ public class InsCompaniesPage extends AdminBasePage {
 
             getCompanies().findBy(Condition.text(insuranceCompany.getIcName()));
         } catch (NoSuchElementException e) {
+
             return false;
         }
         return true;
     }
 
     private void selectEditOption() {
-        hoverAndClick($(editButton));
+
+        hoverAndClick(editButton);
     }
 
     public InsCompAddEditPage editCompany(String icName) {
-        getCompanies().findBy(Condition.text(icName)).click();
+
+        getCompanies()
+                .findBy(Condition.text(icName))
+                .click();
         selectEditOption();
         return at(InsCompAddEditPage.class);
     }
 
     public InsCompaniesPage enableAuditForIc(String icName) {
+
         to(InsCompaniesPage.class)
                 .editCompany(icName)
                 .enableAuditOptionAndSave();
@@ -72,6 +81,7 @@ public class InsCompaniesPage extends AdminBasePage {
     }
 
     public InsCompaniesPage assertCompanyDisplayed(InsuranceCompany insuranceCompany) {
+
         Assert.assertTrue(isCompanyDisplayed(insuranceCompany));
         return this;
     }

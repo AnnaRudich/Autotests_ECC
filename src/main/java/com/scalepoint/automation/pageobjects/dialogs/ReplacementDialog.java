@@ -9,11 +9,9 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -24,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.openqa.selenium.Keys.CONTROL;
 import static org.openqa.selenium.Keys.DELETE;
 
-public class ReplacementDialog extends BaseDialogSelenide {
+public class ReplacementDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

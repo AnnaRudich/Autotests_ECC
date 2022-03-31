@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -14,52 +15,67 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 @EccPage
 public class PseudoCategoryGroupPage extends AdminBasePage {
 
-    @FindBy(name = "pseudoCategoryGroupList")
-    private Select pseudoCategoryGroupList;
+    private Select getPseudoCategoryGroupList(){
 
-    @FindBy(id = "btnEdit")
-    private Button edit;
+        return new Select($(By.name("pseudoCategoryGroupList")));
+    }
 
-    @FindBy(id = "btnAdd")
-    private Button add;
+    private Button getEdit(){
 
-    @FindBy(name = "pseudoCategoryGroupList")
-    private Select groups;
+        return new Button($(By.id("btnEdit")));
+    }
+
+    private Button getAdd(){
+
+        return new Button($(By.id("btnAdd")));
+    }
+
+    private Select getGroups(){
+
+        return new Select($(By.name("pseudoCategoryGroupList")));
+    }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/pseudocategory_group.jsp";
     }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(edit).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(getEdit()).should(Condition.visible);
     }
 
     private boolean isGroupDisplayed(String groupName) {
+
         try {
-            groups.selectByVisibleText(groupName);
+
+            getGroups().selectByVisibleText(groupName);
         } catch (NoSuchElementException e) {
+
             return false;
         }
         return true;
     }
 
     public PseudoCategoryGroupAddEditPage editGroup(String pseudoCategory) {
-        pseudoCategoryGroupList.selectByVisibleText(pseudoCategory);
-        edit.click();
+
+        getPseudoCategoryGroupList().selectByVisibleText(pseudoCategory);
+        getEdit().click();
         return at(PseudoCategoryGroupAddEditPage.class);
     }
 
     public PseudoCategoryGroupAddEditPage toAddGroupPage() {
-        add.click();
+
+        getAdd().click();
         return at(PseudoCategoryGroupAddEditPage.class);
     }
 
-
     public PseudoCategoryGroupPage assertGroupDisplayed(String groupName) {
+
         Assert.assertTrue(isGroupDisplayed(groupName));
         return this;
     }

@@ -1,8 +1,10 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,71 +23,94 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
 
     @FindBy(xpath = "//input[contains(@id, 'pcgroupname')]")
-    private WebElement groupNameField;
+    private SelenideElement groupNameField;
 
-    @FindBy(name = "pseudoCategoryList")
-    private Select pseudoCategoryList;
+    private Select getPseudoCategoryList(){
 
-    @FindBy(id = "btnEdit")
-    private Button editButton;
+        return new Select($(By.name("pseudoCategoryList")));
+    }
 
-    @FindBy(id = "btnOk")
-    private Button saveButton;
+    private Button getEditButton(){
 
-    @FindBy(id = "btnMove")
-    private Button moveCategoryButton;
+        return new Button($(By.id("btnEdit")));
+    }
+
+    private Button getSaveButton(){
+
+        return new Button($(By.id("btnOk")));
+    }
+
+    private Button getMoveCategoryButton(){
+
+        return new Button($(By.id("btnMove")));
+    }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(groupNameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        groupNameField.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/pseudocategory_group_edit.jsp";
     }
 
     public List<String> getAllPseudoCategories() {
+
         List<String> stringList = new ArrayList<>();
-        List<WebElement> allCategories = pseudoCategoryList.getOptions();
+        List<WebElement> allCategories = getPseudoCategoryList().getOptions();
+
         for (WebElement allCategory : allCategories) {
-            String normalizedString = allCategory.getText().replaceAll("[\\s\\.:,%]", "").replaceAll("(\\[)?(.+?)(\\])?", "$2").trim();
+
+            String normalizedString = allCategory.getText()
+                    .replaceAll("[\\s\\.:,%]", "")
+                    .replaceAll("(\\[)?(.+?)(\\])?", "$2")
+                    .trim();
             stringList.add(normalizedString);
         }
         return stringList;
     }
 
     public PseudoCategoryGroupPage addGroup(String groupName) {
+
         groupNameField.sendKeys(groupName);
-        saveButton.click();
+        getSaveButton().click();
         return at(PseudoCategoryGroupPage.class);
     }
 
     public PseudoCategoryGroupPage updateNameAndSave(String groupName) {
+
         groupNameField.clear();
         groupNameField.sendKeys(groupName);
-        saveButton.click();
+        getSaveButton().click();
         return at(PseudoCategoryGroupPage.class);
     }
 
     public PseudoCategoryGroupMovePage toMoveToGroupPage(String categoryName) {
-        pseudoCategoryList.selectByVisibleText(categoryName);
-        moveCategoryButton.click();
+
+        getPseudoCategoryList().selectByVisibleText(categoryName);
+        getMoveCategoryButton().click();
         return at(PseudoCategoryGroupMovePage.class);
     }
 
     public boolean isCategoryDisplayed(String categoryName) {
+
         try {
-            pseudoCategoryList.selectByVisibleText(categoryName);
+
+            getPseudoCategoryList().selectByVisibleText(categoryName);
         } catch (NoSuchElementException e) {
+
             return false;
         }
         return true;
     }
 
     public PseudoCategoryGroupAddEditPage assertGroupDisplayed(String categoryName) {
+
         Assert.assertTrue(isCategoryDisplayed(categoryName));
         return this;
     }

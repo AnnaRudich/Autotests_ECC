@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -24,16 +25,19 @@ public class ClaimMenu extends Module {
      * This method selects Admin menu item and waits for Matching Engine link in Admin part
      */
     public AdminPage selectAdminItem() {
+
         $(By.xpath("//a[contains(@href, 'webshop/jsp/Admin')]")).click();
-        return at(AdminPage.class);
+        return Page.at(AdminPage.class);
     }
 
     public LoginPage logout() {
+
         Wait.forCondition(ExpectedConditions.elementToBeClickable(By.id("signOutButton")));
         $(By.id("signOutButton")).click();
         acceptLogoutAlert();
         int i = 0;
         while (!isOn(LoginPage.class) && i < 3) {
+
             i++;
             logger.info("Trying logout, attempt: " + i);
             $(By.id("signOutButton")).click();
@@ -43,35 +47,44 @@ public class ClaimMenu extends Module {
     }
 
     private void acceptLogoutAlert() {
+
         if (Window.get().isAlertPresent()) {
+
             try {
+
                 Window.get().acceptAlert();
             } catch (Exception e) {
+
                 SelenideElement gemaktive = $(By.id("gemaktive"));
                 if (gemaktive.isDisplayed()) {
                     gemaktive.click();
                 }
             }
         } else {
+
             hoverAndClick($(By.xpath("//div[contains(@id, 'messagebox')]//span[text()='Yes']/parent::span")));
         }
     }
 
     public boolean isAdminLinkDisplayed() {
+
         return $(By.id("topMenuAdminButton")).isDisplayed();
     }
 
     public boolean isLogoutLinkDisplayed() {
+
         return $(By.xpath("//a[@id='signOutButton']")).isDisplayed();
     }
 
     public void selectMyPageItem() {
+
         if ($(By.xpath("//button[@onclick='onEditPreferencesClick()']")).isDisplayed()) return;
         $(By.xpath("//a[@id='myPageButton']")).click();
         Wait.waitForStaleElement(By.xpath("//button[@onclick='onEditPreferencesClick()']"));
     }
 
     public void selectTextSearchItem() {
+
         $(By.xpath("//span[contains(@style, 'findInCatalogIcon')]/ancestor::a")).click();
         Wait.waitForAjaxCompleted();
     }

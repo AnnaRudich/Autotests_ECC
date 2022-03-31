@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitElementInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class SendSelfServiceRequestDialog extends BaseDialogSelenide {
+public class SendSelfServiceRequestDialog extends BaseDialog {
 
     private static final String OK_BUTTON_PATH = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]";
 
@@ -133,7 +133,7 @@ public class SendSelfServiceRequestDialog extends BaseDialogSelenide {
 
         SelenideElement element = $(getOkButton());
         element.click();
-        BaseDialogSelenide.at(GdprConfirmationDialog.class)
+        BaseDialog.at(GdprConfirmationDialog.class)
                 .confirm();
         waitElementInvisible(element);
         return Page.at(SettlementPage.class);

@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
@@ -14,9 +13,10 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertTrue;
 
-public class AddShopDialog extends BaseDialogSelenide {
+public class AddShopDialog extends BaseDialog {
 
     public enum ShopType {
+
         RETAIL,
         RNV
     }
@@ -67,7 +67,7 @@ public class AddShopDialog extends BaseDialogSelenide {
 
         if(gdpr){
 
-            BaseDialogSelenide
+            BaseDialog
                     .at(GdprConfirmationDialog.class)
                     .confirm();
         }

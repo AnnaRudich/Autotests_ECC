@@ -32,38 +32,27 @@ public class SelfService2Page extends Page {
     protected final String ACCEPTANCE_CHECKBOX_PATH = "[class*='acceptance'] input";
 
     @FindBy(xpath = "//input[@type='submit']")
-    private WebElement logout;
-
+    private SelenideElement logout;
     @FindBy(id = "description-text")
-    private WebElement descriptionField;
-
+    private SelenideElement descriptionField;
     @FindBy(xpath = "//div[@data-for='category-group-combo-tooltip']")
-    private WebElement categoryCombo;
-
+    private SelenideElement categoryCombo;
     @FindBy(xpath = "//div[@data-for='category-combo-tooltip']")
-    private WebElement subCategoryCombo;
-
+    private SelenideElement subCategoryCombo;
     @FindBy(xpath = "//div[@data-for='purchase-date-select-year-tooltip']")
-    private WebElement yearCombo;
-
+    private SelenideElement yearCombo;
     @FindBy(xpath = "//div[@data-for='purchase-date-select-month-tooltip']")
-    private WebElement monthCombo;
-
+    private SelenideElement monthCombo;
     @FindBy(xpath = "//div[@data-for='age-select-tooltip']")
-    private WebElement ageComb;
-
+    private SelenideElement ageComb;
     @FindBy(id = "save-button")
-    private WebElement save;
-
+    private SelenideElement save;
     @FindBy(css = "#save-item-button")
-    protected WebElement saveItem;
-
+    protected SelenideElement saveItem;
     @FindBy(id = "react-autowhatever-1")
-    private WebElement suggestions;
-
-
+    private SelenideElement suggestions;
     @FindBy(name = "RepairLossTypeRadioGroup")
-    private List<WebElement> lossTypeRadioGroup;
+    private ElementsCollection lossTypeRadioGroup;
 
     By logOutButtonXpath = By.xpath(".//div[@class='log-out']//input[@value='Log ud']");
 
@@ -71,25 +60,29 @@ public class SelfService2Page extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(saveItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        saveItem.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "self-service/dk";
     }
 
     public LoginSelfService2Page logOut() {
+
         $(logOutButtonXpath).click();
         Wait.waitForLoaded();
-        return at(LoginSelfService2Page.class);
+        return Page.at(LoginSelfService2Page.class);
     }
 
     private void waitForValidationMark(WebElement element) {
-        verifyElementVisible($(element.findElement(By.xpath("./ancestor::div[contains(@class,'row')][1]//span[contains(@class,'validation-mark')]"))));
+
+        $(element.findElement(By.xpath("./ancestor::div[contains(@class,'row')][1]//span[contains(@class,'validation-mark')]"))).should(Condition.visible);
     }
 
     public SelfService2Page addDescription(String text) {
+
         Wait.waitForStaleElement(By.id("description-text"));
         $("#description-text").setValue(text);
         verifyElementVisible($(suggestions));
@@ -100,12 +93,14 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addDescriptionWithOutSuggestions(String text) {
+
         $("#description-text").setValue(text).pressTab();
         waitForValidationMark(descriptionField);
         return this;
     }
 
     public SelfService2Page addNewPrice(Double newPrice) {
+
         SelenideElement newPriceField = $("#new-price-text");
 
         newPriceField.setValue(newPrice.toString());
@@ -114,6 +109,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addCustomerDemandPrice(Double customerDemandPrice) {
+
         SelenideElement customerDemandField = $("#customer-demand-text");
 
         customerDemandField.setValue(customerDemandPrice.toString());
@@ -122,6 +118,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addRepairPrice(Double repairPrice){
+
         SelenideElement repairPriceField = $("#repair-price-text");
 
         repairPriceField.setValue(repairPrice.toString());
@@ -130,6 +127,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addPurchasePrice(Double purchasePrice) {
+
         SelenideElement purchasePriceField = $("#purchase-price-text");
 
         purchasePriceField.setValue(purchasePrice.toString());
@@ -138,7 +136,8 @@ public class SelfService2Page extends Page {
     }
 
     private void selectItem(WebElement element, String text) {
-        WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
+
+        WebElement selectElement = $(element.findElement(By.xpath(".//span//span"))).should(Condition.visible);
         hoverAndClick($(selectElement));
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         verifyElementVisible($(element.findElement(By.xpath(menuLocator))));
@@ -155,9 +154,12 @@ public class SelfService2Page extends Page {
     }
 
     private void trySelectItem(WebElement element, String text) {
+
         WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
+
         int count = 0;
         while (!selectElement.getText().equals(text) && count < 5) {
+
             selectItem(element, text);
             count++;
             logger.info("\nCount: " + count);
@@ -165,26 +167,29 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page selectCategory(PseudoCategory pseudoCategory) {
+
         trySelectItem(categoryCombo, pseudoCategory.getGroupName());
         waitForValidationMark(categoryCombo);
-
         trySelectItem(subCategoryCombo, pseudoCategory.getCategoryName());
         waitForValidationMark(subCategoryCombo);
         return this;
     }
 
     public SelfService2Page selectSubCategory(String categoryName) {
+
         trySelectItem(subCategoryCombo, categoryName);
         waitForValidationMark(subCategoryCombo);
         return this;
     }
 
     public SelfService2Page selectPurchaseYear(String year) {
+
         selectItem(yearCombo, year);
         return this;
     }
 
     public SelfService2Page selectPurchaseMonth(String month) {
+
         selectItem(monthCombo, month);
         return this;
     }
@@ -193,19 +198,21 @@ public class SelfService2Page extends Page {
      * only for the case when FT Self Service 2.0 Defined age by year and month is OFF
      */
     public SelfService2Page selectAge(String age) {
+
         selectItem(ageComb, age);
         return this;
     }
 
     public SelfService2Page addItemCustomerNote(String text) {
-        SelenideElement itemCustomerNoteField = $(By.xpath("//textarea[contains(@id, 'item-customer-note')]"));
 
+        SelenideElement itemCustomerNoteField = $(By.xpath("//textarea[contains(@id, 'item-customer-note')]"));
         itemCustomerNoteField.click();
         itemCustomerNoteField.setValue(text);
         return this;
     }
 
     public SelfService2Page addClaimNote(String text) {
+
         SelenideElement itemCustomerNoteField = $(By.xpath("//textarea[contains(@data-for,'list-panel-customer-note')]"));
         itemCustomerNoteField.click();
         itemCustomerNoteField.setValue(text);
@@ -213,12 +220,14 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addDocumentation() {
+
         SelenideElement uploadDocBtn = $(By.xpath("//input[contains(@data-for, 'attachment')]"));
         $(uploadDocBtn).uploadFile(new File(TestData.getAttachmentFiles().getJpgFile2Loc()));
         return this;
     }
 
     public SelfService2Page selectAcquired(String acquired) {
+
         SelenideElement acquiredOption = $$(By.xpath("//input[@name='acquiredRadioGroup']"))
                 .findBy(Condition.attribute("value", acquired));
         acquiredOption.click();
@@ -226,12 +235,13 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page saveItem() {
-        $(saveItem).click();
-//        Wait.waitForSpinnerToDisappear();
+
+        saveItem.click();
         return at(SelfService2Page.class);
     }
 
     public SelfService2Page startEditItem() {
+
         SelenideElement editItemButton = $(By.xpath("//span[@title='Rediger']"));
         editItemButton.click();
         Wait.waitForSpinnerToDisappear();
@@ -239,6 +249,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page finishEditItem() {
+
         SelenideElement updateButton = $("#save-item-button");
         updateButton.shouldHave(Condition.text("Opdater genstand"));//could be also moved to xml. What should be the name of the object?
         updateButton.click();
@@ -247,6 +258,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page deleteItem() {
+
         SelenideElement deleteItem = $(By.xpath("//span[@title='Slet']"));
         deleteItem.shouldBe(Condition.visible).click();
 //        Wait.waitForSpinnerToDisappear();
@@ -254,6 +266,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page undoDelete() {
+
         SelenideElement undoDeleteButton = $(By.xpath("//span[contains(@class, 'undo-remove-button')]"));
         undoDeleteButton.click();
         Wait.waitForSpinnerToDisappear();
@@ -261,29 +274,34 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page acceptStatement(){
+
         $(ACCEPTANCE_CHECKBOX_PATH).setSelected(true);
         return this;
     }
 
     public SelfService2Page sendResponseToEcc() {
+
         $(SEND_BUTTON_PATH).shouldBe(Condition.enabled).click();
         waitForUrl("self-service/dk/send-confirmation");
         return this;
     }
 
     public SaveConfirmationPage saveResponse() {
+
         $(save).shouldBe(Condition.enabled).click();
         waitForUrl("self-service/dk/save-confirmation");
         return Page.at(SaveConfirmationPage.class);
     }
 
     public String getProductMatchDescription() {
+
         String s = $$(By.xpath("//div[contains(@class,'product-match-description')]")).get(1).getAttribute("title");
         System.out.println(s);
         return s;
     }
 
     public SelfService2Page doAssert(Consumer<SelfService2Page.Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return this;
     }
@@ -316,16 +334,19 @@ public class SelfService2Page extends Page {
     public class Asserts {
 
         private Boolean assertSsLineIsVisible(String description) {
+
             SelenideElement line = $(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description + "']"));
             return line.is(Condition.visible);
         }
 
         public Asserts assertAlertIsDisplayed() {
+
             assertThat(verifyElementVisible($("div[class^=alert]"))).as("alert should be displayed").isTrue();
             return this;
         }
 
         public Asserts assertAlertIsMissing() {
+
             assertThat(verifyElementVisible($("div[class^=alert]"))).as("alert should not be displayed").isTrue();
             return this;
         }
@@ -333,41 +354,49 @@ public class SelfService2Page extends Page {
 
 
         public Asserts assertLogOutIsDisplayed() {
+
             assertThat(isDisplayed(logout)).as("logout button should be displayed").isTrue();
             return this;
         }
 
         public Asserts assertLineIsPresent(String description) {
+
             assertTrue(assertSsLineIsVisible(description));
             return this;
         }
 
         public Asserts assertLineIsNotPresent(String description) {
+
             assertTrue(driver.findElements(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description + "']")).isEmpty());
             return this;
         }
 
         private int getSsItemsListSize() {
+
             ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')]/div[contains(@class, 'list-item')]"));
             return itemsList.size();
         }
 
         public Asserts assertThereIsNoItems() {
+
             assertEquals(getSsItemsListSize(), 0);
             return this;
         }
 
         public Asserts assertItemsListSizeIs(int expectedSize) {
+
             assertEquals(getSsItemsListSize(), expectedSize);
             return this;
         }
 
         public Asserts assertLogOutIsNotDisplayed() {
+
             assertTrue(driver.findElements(By.xpath("//input[@type='submit']")).isEmpty(), "logout button should not be displayed");
             return this;
         }
 
         public Asserts assertSendButtonDisabled(){
+
             assertThat($(SEND_BUTTON_PATH).is(Condition.disabled))
                     .as("Send button should be disabled")
                     .isTrue();
@@ -375,6 +404,7 @@ public class SelfService2Page extends Page {
         }
 
         public Asserts assertSendButtonEnabled(){
+
             assertThat(Wait.waitForVisibleAndEnabled($(SEND_BUTTON_PATH)).isEnabled())
                     .as("Send button should be enabled")
                     .isTrue();
@@ -387,9 +417,12 @@ public class SelfService2Page extends Page {
     public SelfService2Page setLossType(LossType lossType) {
 
         for (WebElement lossTypeRadio : lossTypeRadioGroup) {
+
             if (lossTypeRadio.getAttribute("value").equals(lossType.name())) {
+
                 lossTypeRadio.click();
             } else {
+
                 logger.info("there is no " + lossType.name() + "radio");
             }
         }
@@ -397,13 +430,18 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page isRepaired(Boolean isRepaired) {
+
         List<WebElement> isRepairedRadioGroup = driver.findElements(By.name("repairIsRepairedRadioGroup"));
+
         for (WebElement isRepairedRadio : isRepairedRadioGroup) {
+
             if (isRepairedRadio.getAttribute("value").equals(String.valueOf(isRepaired))) {
+
                 System.out.println(isRepairedRadio.getText());
                 isRepairedRadio.click();
                 break;
             } else {
+
                 logger.info("there is no " + isRepaired + " radio");
             }
         }

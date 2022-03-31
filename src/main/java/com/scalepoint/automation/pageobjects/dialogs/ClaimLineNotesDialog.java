@@ -21,7 +21,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClaimLineNotesDialog extends BaseDialogSelenide {
+public class ClaimLineNotesDialog extends BaseDialog {
 
     @FindBy(id = "closeNotesButton")
     private SelenideElement closeNotesButton;
@@ -92,7 +92,7 @@ public class ClaimLineNotesDialog extends BaseDialogSelenide {
         new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickEditNoteButtonElement();
-        return BaseDialogSelenide.at(EditClaimLineNoteDialog.class);
+        return BaseDialog.at(EditClaimLineNoteDialog.class);
     }
 
     public ClaimLineNotesDialog enterNote(String note) {
@@ -266,7 +266,7 @@ public class ClaimLineNotesDialog extends BaseDialogSelenide {
             RemoveClaimLineNoteWarningDialog removeNote(){
 
                 hoverAndClick(removeNoteButtonElement);
-                return BaseDialogSelenide.at(RemoveClaimLineNoteWarningDialog.class);
+                return BaseDialog.at(RemoveClaimLineNoteWarningDialog.class);
             }
         }
     }

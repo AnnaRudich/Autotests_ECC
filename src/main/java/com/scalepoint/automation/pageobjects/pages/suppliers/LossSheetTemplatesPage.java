@@ -4,7 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CompaniesMappingDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.NewTemplateDialog;
 import com.scalepoint.automation.utils.Wait;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,11 +31,12 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
 
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitElementVisible($("#lossSheetGridId-body"));
+        $("#lossSheetGridId-body").should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "#lossSheetTemplates";
     }
 
@@ -61,7 +60,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
     public NewTemplateDialog uploadNewTemplate(){
 
         buttons.find(Condition.exactText("Upload new template")).click();
-        return BaseDialogSelenide.at(NewTemplateDialog.class);
+        return BaseDialog.at(NewTemplateDialog.class);
     }
 
     public LossSheetTemplatesPage uploadTemplate(String templateName, File templateFile) {
@@ -75,7 +74,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
     public CompaniesMappingDialog reassignTemplate(){
 
         buttons.find(Condition.exactText("Reassign template")).click();
-        return BaseDialogSelenide.at(CompaniesMappingDialog.class);
+        return BaseDialog.at(CompaniesMappingDialog.class);
     }
 
     public TemplateRow reassignTemplate(String companyName, String templateName){

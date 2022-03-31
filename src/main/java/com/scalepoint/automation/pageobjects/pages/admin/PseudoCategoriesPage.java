@@ -1,7 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,50 +17,58 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class PseudoCategoriesPage extends AdminBasePage {
 
     @FindBy(name = "searchField")
-    private WebElement quickSearchField;
-
+    private SelenideElement quickSearchField;
     @FindBy(id = "btnAdd")
-    private WebElement addButton;
-
+    private SelenideElement addButton;
     @FindBy(id = "btnEdit")
-    private WebElement editButton;
+    private SelenideElement editButton;
 
-    @FindBy(id = "pseudoCategoryList")
-    private Select pseudoCategoryList;
+    private Select getPseudoCategoryList(){
+
+        return new Select($(By.id("pseudoCategoryList")));
+    }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(quickSearchField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        quickSearchField.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/pseudo_categories.jsp";
     }
 
     public PseudoCategoryAddEditPage toAddCategoryPage() {
-        hoverAndClick($(addButton));
+
+        hoverAndClick(addButton);
         return at(PseudoCategoryAddEditPage.class);
     }
 
     public boolean isCategoryDisplayed(String categoryName) {
+
         try {
-            pseudoCategoryList.selectByVisibleText(categoryName);
+
+            getPseudoCategoryList().selectByVisibleText(categoryName);
         } catch (NoSuchElementException e) {
+
             return false;
         }
         return true;
     }
 
     public PseudoCategoryAddEditPage editCategory(String categoryName) {
-        pseudoCategoryList.selectByVisibleText(categoryName);
-        hoverAndClick($(editButton));
+
+        getPseudoCategoryList().selectByVisibleText(categoryName);
+        hoverAndClick(editButton);
         return at(PseudoCategoryAddEditPage.class);
     }
 
     public PseudoCategoriesPage assertCategoryDisplayed(String categoryName) {
+
         Assert.assertTrue(isCategoryDisplayed(categoryName));
         return this;
     }

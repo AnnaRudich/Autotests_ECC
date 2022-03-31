@@ -24,32 +24,37 @@ public class OverviewTab extends BaseClaimPage {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $("#panel-overview-list-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+        $("#panel-overview-list-body").should(visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/projects.jsp";
     }
 
     public OverviewTab doAssert(Consumer<OverviewTab.Asserts> assertFunc) {
+
         assertFunc.accept(new OverviewTab.Asserts());
         return OverviewTab.this;
     }
 
-    public class Asserts {
-    }
+    public class Asserts { }
 
     public PanelViewGrid toPanelViewGrid(){
+
         return new PanelViewGrid();
     }
 
     public class PanelViewGrid{
+
         private List<PanelViewGridLine> panelViewGridLines;
 
         PanelViewGrid(){
+
             panelViewGridLines = $$("#panel-overview-list-body > div > table")
                     .stream()
                     .map(PanelViewGridLine::new)
@@ -57,10 +62,12 @@ public class OverviewTab extends BaseClaimPage {
         }
 
         public PanelViewGridLine getPanelViewGridLine(int index){
+
             return panelViewGridLines.get(index);
         }
 
         public int gridSize(){
+
             return panelViewGridLines.size();
         }
 
@@ -83,6 +90,7 @@ public class OverviewTab extends BaseClaimPage {
             private SelenideElement evaluateAssignment;
 
             PanelViewGridLine(SelenideElement panelViewGridLine){
+
                 this.panelViewGridLine = panelViewGridLine;
                 ElementsCollection panelViewGridLineCells= panelViewGridLine.findAll("[role=gridcell]");
                 expander = panelViewGridLineCells.get(0).find(".x-grid-row-expander");
@@ -100,7 +108,7 @@ public class OverviewTab extends BaseClaimPage {
             public PanelViewGridLine clickExpander(){
 
                 expander.click();
-                $("div#taskNestedGrid-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+                $("div#taskNestedGrid-body").should(Condition.visible);
                 return new PanelViewGridLine(panelViewGridLine);
             }
 
@@ -111,12 +119,15 @@ public class OverviewTab extends BaseClaimPage {
             }
 
             public PanelViewGridLine doAssert(Consumer<Asserts> assertFunc) {
+
                 assertFunc.accept(new PanelViewGridLine.Asserts());
                 return PanelViewGridLine.this;
             }
 
             public class Asserts {
+
                 public PanelViewGridLine.Asserts assertInvoicePrice(BigDecimal invoicePrice) {
+
                     assertThat(getInvoicePrice())
                             .as(String.format("Invoice price value should be %s", invoicePrice))
                             .isEqualTo(invoicePrice);
@@ -124,6 +135,7 @@ public class OverviewTab extends BaseClaimPage {
                 }
 
                 public PanelViewGridLine.Asserts assertTaskStatus(String taskStatus) {
+
                     assertThat(getTaskStatus())
                             .as(String.format("Task status should be %s", taskStatus))
                             .isEqualTo(taskStatus);
@@ -131,6 +143,7 @@ public class OverviewTab extends BaseClaimPage {
                 }
 
                 public PanelViewGridLine.Asserts assertSelfriskByServicePartner(BigDecimal selfriskByServicePartner) {
+
                     assertThat(getSelfriskByServicePartner())
                             .as(String.format("Self risk by service partner value should be %s", selfriskByServicePartner))
                             .isEqualTo(selfriskByServicePartner);

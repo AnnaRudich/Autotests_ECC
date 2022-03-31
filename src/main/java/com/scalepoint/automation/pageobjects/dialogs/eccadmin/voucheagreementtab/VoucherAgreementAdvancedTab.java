@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioButton;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -16,55 +17,74 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 
 public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAgreementTabs {
 
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-general-order-email-radio')]")
-    private ExtRadioButton useSupplierOrderEmailRadio;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-other-email-radio')]")
-    private ExtRadioButton useOtherEmailRadio;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-scalepoint-handles-voucher-radio')]")
-    private ExtRadioButton scalepointHandlesEvouchersRadio;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-delivery-cost-checkbox')]")
-    private ExtCheckboxTypeDiv useDeliveryCostCheckbox;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-electronic-voucher-checkbox')]")
-    private ExtCheckboxTypeDiv useElectronicVoucherCheckbox;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-email-checkbox')]")
-    private ExtCheckboxTypeDiv eVoucherEmailRequired;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-phone-checkbox')]")
-    private ExtCheckboxTypeDiv eVoucherPhoneRequired;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-code-checkbox')]")
-    private ExtCheckboxTypeDiv eVoucherPersonalCodeRequired;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-portal-checkbox')]")
-    private ExtCheckboxTypeDiv useEVoucherPortal;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-add-delivery-cost-in-email-checkbox')]")
-    private ExtCheckboxTypeDiv addDeliveryCostImSupplierMailCheckBox;
-
     @FindBy(name = "otherEmail")
-    private WebElement otherEmailInput;
-
+    private SelenideElement otherEmailInput;
     @FindBy(name = "deliveryCost")
-    private WebElement deliveryCostInput;
-
+    private SelenideElement deliveryCostInput;
     @FindBy(name = "deliveryType")
-    private WebElement deliveryTypeInput;
-
+    private SelenideElement deliveryTypeInput;
     @FindBy(name = "popularity")
-    private WebElement popularityInput;
+    private SelenideElement popularityInput;
+
+    private ExtRadioButton getUseSupplierOrderEmailRadio(){
+
+        return new ExtRadioButton($(By.xpath("//table[contains(@class, 'supplier-voucher-general-order-email-radio')]")));
+    }
+
+    private ExtRadioButton getUseOtherEmailRadio(){
+
+        return new ExtRadioButton($(By.xpath("//table[contains(@class, 'supplier-voucher-other-email-radio')]")));
+    }
+
+    private ExtRadioButton getScalepointHandlesEvouchersRadio(){
+
+        return new ExtRadioButton($(By.xpath("//table[contains(@class, 'supplier-voucher-scalepoint-handles-voucher-radio')]")));
+    }
+
+    private ExtCheckboxTypeDiv getUseDeliveryCostCheckbox(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-voucher-delivery-cost-checkbox')]")));
+    }
+
+    private ExtCheckboxTypeDiv getUseElectronicVoucherCheckbox(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-electronic-voucher-checkbox')]")));
+    }
+
+    private ExtCheckboxTypeDiv geteVoucherEmailRequired(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-voucher-evoucher-email-checkbox')]")));
+    }
+
+    private ExtCheckboxTypeDiv geteVoucherPhoneRequired(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-voucher-evoucher-phone-checkbox')]")));
+    }
+
+    private ExtCheckboxTypeDiv geteVoucherPersonalCodeRequired(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-voucher-evoucher-code-checkbox')]")));
+    }
+
+    private ExtCheckboxTypeDiv getUseEVoucherPortal(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-voucher-evoucher-portal-checkbox')]")));
+    }
+
+    private ExtCheckboxTypeDiv getAddDeliveryCostImSupplierMailCheckBox(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//table[contains(@class, 'supplier-voucher-add-delivery-cost-in-email-checkbox')]")));
+    }
 
     public enum OrderMailType {
+
         SUPPLIER,
         OTHER,
         SCALEPOINT_HANDLES
     }
 
     public enum EVoucherOptions {
+
         EMAIL_REQUIRED,
         PHONE_REQUIRED,
         PERSONAL_CODE_REQUIRED,
@@ -76,66 +96,88 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
         private VoucherAgreementAdvancedTab dialog;
 
         public FormFiller(VoucherAgreementAdvancedTab dialog) {
+
             this.dialog = dialog;
         }
 
         public FormFiller useOrderEmail(OrderMailType orderMailType) {
+
             return useOrderEmail(orderMailType, null);
         }
 
         public FormFiller useOrderEmail(OrderMailType orderMailType, String otherEmail) {
+
             switch (orderMailType) {
+
                 case OTHER:
-                    dialog.useOtherEmailRadio.set(true);
+
+                    dialog.getUseOtherEmailRadio().set(true);
                     SelenideElement element = $(dialog.otherEmailInput);
                     element.clear();
                     element.setValue(otherEmail);
                     break;
+
                 case SCALEPOINT_HANDLES:
-                    dialog.scalepointHandlesEvouchersRadio.set(true);
+
+                    dialog.getScalepointHandlesEvouchersRadio().set(true);
                     break;
+
                 case SUPPLIER:
-                    dialog.useSupplierOrderEmailRadio.set(true);
+
+                    dialog.getUseSupplierOrderEmailRadio().set(true);
                     break;
             }
             return this;
         }
 
         public FormFiller withDeliveryCost(Integer deliveryCost) {
-            dialog.useDeliveryCostCheckbox.set(true);
-            $(dialog.deliveryCostInput).setValue(deliveryCost.toString());
+
+            dialog.getUseDeliveryCostCheckbox().set(true);
+            dialog.deliveryCostInput.setValue(deliveryCost.toString());
             return this;
         }
 
         public FormFiller withDeliveryType(String deliveryType) {
-            SelenideElement element = $(dialog.deliveryTypeInput);
+
+            SelenideElement element = dialog.deliveryTypeInput;
             element.clear();
             element.setValue(deliveryType);
             return this;
         }
 
         public FormFiller withPopularity(Integer popularity) {
-            SelenideElement element = $(dialog.popularityInput);
+
+            SelenideElement element = dialog.popularityInput;
             element.clear();
             element.setValue(popularity.toString());
             return this;
         }
 
         public void useAsEVoucher(EVoucherOptions... eVoucherOptions) {
-            dialog.useElectronicVoucherCheckbox.set(true);
+
+            dialog.getUseElectronicVoucherCheckbox().set(true);
             for (EVoucherOptions eVoucherOption : eVoucherOptions) {
+
                 switch (eVoucherOption) {
+
                     case EMAIL_REQUIRED:
-                        dialog.eVoucherEmailRequired.set(true);
+
+                        dialog.geteVoucherEmailRequired().set(true);
                         break;
+
                     case PERSONAL_CODE_REQUIRED:
-                        dialog.eVoucherPersonalCodeRequired.set(true);
+
+                        dialog.geteVoucherPersonalCodeRequired().set(true);
                         break;
+
                     case PHONE_REQUIRED:
-                        dialog.eVoucherPhoneRequired.set(true);
+
+                        dialog.geteVoucherPhoneRequired().set(true);
                         break;
+
                     case USE_PORTAL_REQUIRED:
-                        dialog.useEVoucherPortal.set(true);
+
+                        dialog.getUseEVoucherPortal().set(true);
                         break;
                 }
             }
@@ -143,29 +185,34 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
     }
 
     public VoucherAgreementAdvancedTab fill(Consumer<VoucherAgreementAdvancedTab> fillFunc) {
+
         fillFunc.accept(this);
         return this;
     }
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
     }
 
     public VoucherAgreementAdvancedTab createShopOnlyVoucher(){
+
         $("a[data-qtip='Create-button'] span").click();
         confirmShopVoucherCreation();
         return VoucherAgreementAdvancedTab.this;
     }
 
     private void confirmShopVoucherCreation(){
+
         $(".x-message-box")
                 .find("span[class='x-btn-button']")
-                .waitUntil(Condition.appear, TIME_OUT_IN_MILISECONDS)
+                .should(Condition.appear)
                 .click();
     }
 
     public VoucherAgreementAdvancedTab doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return VoucherAgreementAdvancedTab.this;
     }
@@ -173,56 +220,75 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
     public class Asserts {
 
         public Asserts assertOrderType(OrderMailType orderMailType) {
+
             switch (orderMailType) {
+
                 case OTHER:
-                    Assert.assertTrue(useOtherEmailRadio.isChecked());
+
+                    Assert.assertTrue(getUseOtherEmailRadio().isChecked());
                     break;
+
                 case SCALEPOINT_HANDLES:
-                    Assert.assertTrue(scalepointHandlesEvouchersRadio.isChecked());
+
+                    Assert.assertTrue(getScalepointHandlesEvouchersRadio().isChecked());
                     break;
+
                 case SUPPLIER:
-                    Assert.assertTrue(useSupplierOrderEmailRadio.isChecked());
+
+                    Assert.assertTrue(getUseSupplierOrderEmailRadio().isChecked());
                     break;
             }
             return this;
         }
 
         public Asserts assertOtherEmail(String email) {
-            Assert.assertEquals($(otherEmailInput).getValue(), email);
+
+            Assert.assertEquals(otherEmailInput.getValue(), email);
             return this;
         }
 
         public Asserts assertDeliveryType(String deliveryType) {
-            Assert.assertEquals($(deliveryTypeInput).getValue(), deliveryType);
+
+            Assert.assertEquals(deliveryTypeInput.getValue(), deliveryType);
             return this;
         }
 
         public Asserts assertPopularity(Integer popularity) {
-            Assert.assertEquals($(popularityInput).getValue(), popularity.toString());
+
+            Assert.assertEquals(popularityInput.getValue(), popularity.toString());
             return this;
         }
 
         public Asserts assertUsedAsEVoucher(EVoucherOptions... eVoucherOptions) {
-            Assert.assertTrue(useElectronicVoucherCheckbox.isChecked());
+
+            Assert.assertTrue(getUseElectronicVoucherCheckbox().isChecked());
+
             for (EVoucherOptions eVoucherOption : eVoucherOptions) {
+
                 switch (eVoucherOption) {
+
                     case EMAIL_REQUIRED:
-                        Assert.assertTrue(eVoucherEmailRequired.isChecked());
+
+                        Assert.assertTrue(geteVoucherEmailRequired().isChecked());
                         break;
+
                     case PERSONAL_CODE_REQUIRED:
-                        Assert.assertTrue(eVoucherPersonalCodeRequired.isChecked());
+
+                        Assert.assertTrue(geteVoucherPersonalCodeRequired().isChecked());
                         break;
+
                     case PHONE_REQUIRED:
-                        Assert.assertTrue(eVoucherPhoneRequired.isChecked());
+
+                        Assert.assertTrue(geteVoucherPhoneRequired().isChecked());
                         break;
+
                     case USE_PORTAL_REQUIRED:
-                        Assert.assertTrue(useEVoucherPortal.isChecked());
+
+                        Assert.assertTrue(getUseEVoucherPortal().isChecked());
                         break;
                 }
             }
             return this;
         }
-
     }
-
 }

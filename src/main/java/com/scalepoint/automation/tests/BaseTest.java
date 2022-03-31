@@ -5,12 +5,9 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.EditPolicyTypeDialog;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage;
@@ -355,7 +352,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
         loginAndCreateClaim(user, claim, null);
-        return BaseDialogSelenide.at(EditPolicyTypeDialog.class);
+        return BaseDialog.at(EditPolicyTypeDialog.class);
     }
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {

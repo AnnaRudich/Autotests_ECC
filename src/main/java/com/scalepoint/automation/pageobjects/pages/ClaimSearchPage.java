@@ -1,10 +1,13 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
+import lombok.Data;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,79 +26,76 @@ public class ClaimSearchPage extends Page {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(searchButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        searchButton.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/claim_search.jsp";
     }
 
     @FindBy(id = "namefield")
-    private WebElement namefieldInput;
-
+    private SelenideElement namefieldInput;
     @FindBy(id = "customernumberfield")
-    private WebElement customernumberfieldInput;
-
+    private SelenideElement customernumberfieldInput;
     @FindBy(id = "claimnofield")
-    private WebElement claimnofieldInput;
-
+    private SelenideElement claimnofieldInput;
     @FindBy(id = "phonefield")
-    private WebElement phonefieldInput;
-
+    private SelenideElement phonefieldInput;
     @FindBy(id = "settlementdatefield")
-    private WebElement settlementdatefieldInput;
-
+    private SelenideElement settlementdatefieldInput;
     @FindBy(id = "claimhandler")
-    private WebElement claimhandlerInput;
-
+    private SelenideElement claimhandlerInput;
     @FindBy(id = "addressfield")
-    private WebElement addressfieldInput;
-
+    private SelenideElement addressfieldInput;
     @FindBy(id = "company")
-    private WebElement companySelect;
-
+    private SelenideElement companySelect;
     @FindBy(id = "claimstate")
-    private WebElement claimstateSelect;
-
+    private SelenideElement claimstateSelect;
     @FindBy(id = "postalfield")
-    private WebElement postalfieldInput;
-
+    private SelenideElement postalfieldInput;
     @FindBy(id = "soeg")
-    private WebElement searchButton;
-
+    private SelenideElement searchButton;
 
     public List<ClaimRow> getClaimRows() {
+
         return $(".claim-search-table").findAll("tr")
                 .stream().skip(1).map(ClaimRow::new).collect(Collectors.toList());
     }
 
     public ClaimSearchPage fillClaimNumber(String claimNumber) {
+
         claimnofieldInput.clear();
         claimnofieldInput.sendKeys(claimNumber);
         return this;
     }
 
     public ClaimSearchPage fillCustomerNumber(String customerNumber) {
+
         customernumberfieldInput.clear();
         customernumberfieldInput.sendKeys(customerNumber);
         return this;
     }
 
     public ClaimSearchPage fillCompany(String company) {
+
         new Select(companySelect).selectByVisibleText(company);
         return this;
     }
 
     public ClaimSearchPage fillCustomerName(String customerName) {
+
         namefieldInput.clear();
         namefieldInput.sendKeys(customerName);
         return this;
     }
 
     public ClaimSearchPage search() {
+
         searchButton.click();
         Wait.waitForAjaxCompleted();
         return this;
@@ -108,6 +108,7 @@ public class ClaimSearchPage extends Page {
         return this;
     }
 
+    @Getter
     public static class ClaimRow implements Actions {
 
         private WebElement element;
@@ -131,34 +132,6 @@ public class ClaimSearchPage extends Page {
             this.activeDate = element.findElement(By.xpath("./td[7]")).getText();
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public String getClaimNumber() {
-            return claimNumber;
-        }
-
-        public String getClaimHandler() {
-            return claimHandler;
-        }
-
-        public String getCompany() {
-            return company;
-        }
-
-        public String getClaimState() {
-            return claimState;
-        }
-
-        public String getSettlementDate() {
-            return settlementDate;
-        }
-
-        public String getActiveDate() {
-            return activeDate;
-        }
-
         public CustomerDetailsPage2 openClaim(){
 
             element.findElement(By.cssSelector("a")).click();
@@ -168,11 +141,13 @@ public class ClaimSearchPage extends Page {
     }
 
     public ClaimSearchPage doAssert(Claim claim, Consumer<ClaimSearchPage.Asserts> assertsFunc) {
+
         assertsFunc.accept(new ClaimSearchPage.Asserts(claim));
         return ClaimSearchPage.this;
     }
 
     public ClaimSearchPage doAssert(Consumer<ClaimSearchPage.Asserts> assertsFunc) {
+
         return doAssert(null, assertsFunc);
     }
 
@@ -182,16 +157,19 @@ public class ClaimSearchPage extends Page {
         private List<ClaimRow> claimRows;
 
         public Asserts(Claim claim) {
+
             this.claim = claim;
             this.claimRows = getClaimRows();
         }
 
         public Asserts isOnlyOnList() {
+
             assertThat(claimRows.stream().allMatch(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber()))).isTrue();
             return this;
         }
 
         public Asserts isClaimState(ClaimStatus state) {
+
             assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber()))
                     .getClaimState())
                     .isEqualToIgnoringCase(state.getText());
@@ -199,22 +177,26 @@ public class ClaimSearchPage extends Page {
         }
 
         public Asserts isClaimCompany(String companyName) {
+
             assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber())).getCompany())
                     .isEqualToIgnoringCase(companyName);
             return this;
         }
 
         public Asserts areClaimsMatchingCompany(String companyName) {
+
             assertThat(claimRows.stream().map(ClaimRow::getCompany)).allMatch(row -> row.equals(companyName));
             return this;
         }
 
         public Asserts areClaimsMatchingName() {
+
             assertThat(claimRows.stream().map(ClaimRow::getName)).allMatch(row -> row.contains(claim.getFirstName()));
             return this;
         }
 
         public Asserts areClaimsMatchingClaimHandler(String claimHandler) {
+
             assertThat(claimRows.stream().map(ClaimRow::getClaimHandler)).allMatch(row -> row.equals(claimHandler));
             return this;
         }

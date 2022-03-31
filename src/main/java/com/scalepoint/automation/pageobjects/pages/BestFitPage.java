@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertTrue;
 
@@ -17,24 +18,29 @@ public class BestFitPage extends Page {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(By.id("table1")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(By.id("table1")).should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "BestFit2";
     }
 
     public BestFitPage doAssert(Consumer<Asserts> assertsFunc) {
+
         assertsFunc.accept(new Asserts());
         return BestFitPage.this;
     }
 
     public class Asserts {
+
         public Asserts assertMarketPriceInvisible() {
-            assertTrue(driver.findElements(By.id(MARKET_PRICE_XPATH)).isEmpty(), "Market Price must be hidden");
+
+            assertTrue($$(By.id(MARKET_PRICE_XPATH)).isEmpty(), "Market Price must be hidden");
             return this;
         }
     }

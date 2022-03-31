@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class AddValuationDialog extends BaseDialogSelenide {
+public class AddValuationDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

@@ -106,7 +106,7 @@ public class OrderDetailsTests extends BaseTest {
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct();
-        Double price = settlementDialog.getCashCompensationValue();
+        Double price = settlementDialog.getCashCompensation();
 
         OrderDetailsPage ordersPage = settlementDialog.closeSidWithOk()
                 .toCompleteClaimPage()
@@ -150,7 +150,7 @@ public class OrderDetailsTests extends BaseTest {
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct();
-        Double price = settlementDialog.getCashCompensationValue();
+        Double price = settlementDialog.getCashCompensation();
 
         OrderDetailsPage ordersPage = settlementDialog.closeSidWithOk()
                 .toCompleteClaimPage()

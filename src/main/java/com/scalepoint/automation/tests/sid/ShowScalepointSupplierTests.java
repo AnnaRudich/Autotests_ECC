@@ -8,10 +8,12 @@ import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-589")
@@ -35,7 +37,8 @@ public class ShowScalepointSupplierTests extends BaseTest {
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .doAssert(SettlementDialog.Asserts::assertScalepointSupplierNotVisible);
+                .doAssert(sid ->
+                        sid.assertScalepointSupplierNotVisible());
     }
 
     /**
@@ -56,7 +59,8 @@ public class ShowScalepointSupplierTests extends BaseTest {
                 .sortOrderableFirst();
         ProductInfo product = SolrApi.findProduct(textSearchPage.getFirstProductId());
 
-        textSearchPage.openSidForFirstProduct()
+        textSearchPage
+                .openSidForFirstProduct()
                 .doAssert(sid -> sid.assertScalepointSupplierVisible(product.getSupplierName()));
     }
 }
