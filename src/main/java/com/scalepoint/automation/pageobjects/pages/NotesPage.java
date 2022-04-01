@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
@@ -61,8 +63,8 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public NotesPage addInternalNote(String note) {
 
-        verifyElementVisible($(getEditCustomerNote()));
-        $(getEditCustomerNote()).click();
+        $(getAddInternalNote()).should(Condition.visible);
+        $(getAddInternalNote()).click();
         return BaseDialog.at(AddInternalNoteDialog.class).addInternalNote(note, NotesPage.class);
     }
 
@@ -90,7 +92,13 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public boolean isAddInternalNoteButtonPresent() {
 
-        return verifyElementVisible($(getEditCustomerNote()));
+        try {
+
+            return $(getAddInternalNote()).has(Condition.exist);
+        }catch (ElementNotFound e){
+
+            return false;
+        }
     }
 
     public boolean isInternalNotePresent() {

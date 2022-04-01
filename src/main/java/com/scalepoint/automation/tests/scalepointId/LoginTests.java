@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests;
+package com.scalepoint.automation.tests.scalepointId;
 
 import com.scalepoint.automation.exceptions.LoginInvalidException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;

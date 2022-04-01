@@ -30,8 +30,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.empty;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -560,8 +559,8 @@ public class TextSearchPage extends Page {
 
         public Asserts assertNoPopularitySortChosen() {
 
-            boolean noAscendingImagesOnPage = $(By.xpath("//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")).is(empty);
-            boolean noDescendingImagesOnPage = $(By.xpath("//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")).is(empty);
+            boolean noAscendingImagesOnPage = $(By.xpath("//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")).is(not(visible));
+            boolean noDescendingImagesOnPage = $(By.xpath("//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")).is(not(visible));
             Assert.assertTrue(noAscendingImagesOnPage && noDescendingImagesOnPage);
             return this;
         }

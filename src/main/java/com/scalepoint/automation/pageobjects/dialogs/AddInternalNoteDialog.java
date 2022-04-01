@@ -26,7 +26,7 @@ public class AddInternalNoteDialog extends BaseDialog {
 
     public <T extends Page> T addInternalNote(String note, Class<T> pageClass) {
 
-        internalNote.setValue(note);
+        internalNote.sendKeys(note);
         ok.click();
         return Page.at(pageClass);
     }
