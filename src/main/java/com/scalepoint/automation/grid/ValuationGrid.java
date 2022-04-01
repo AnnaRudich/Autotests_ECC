@@ -161,8 +161,10 @@ public class ValuationGrid implements Actions {
         waitForAjaxCompletedAndJsRecalculation();
         By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
         ElementsCollection elements = $$(xpath);
+
         for (SelenideElement td : elements) {
-            String attribute = td.getAttribute("data-columnid");
+            
+            String attribute = td.attr("data-columnid");
             switch (ValuationGrid.ValuationGridColumn.getColumn(attribute)) {
                 case CASH_COMPENSATION:
                     valuationRow.cashCompensation = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
