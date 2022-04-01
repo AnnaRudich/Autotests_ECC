@@ -1,5 +1,6 @@
 package com.scalepoint.automation.grid;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -23,8 +24,7 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -47,6 +47,7 @@ public class ValuationGrid implements Actions {
         private String dataColumnId;
 
         ValuationGridColumn(String dataColumnId) {
+
             this.dataColumnId = dataColumnId;
         }
 
@@ -155,11 +156,10 @@ public class ValuationGrid implements Actions {
     }
 
     public ValuationGrid.ValuationRow parseValuationRow(ValuationGrid.Valuation valuation) {
-        ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
 
+        ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
+        waitForAjaxCompletedAndJsRecalculation();
         By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
-        Wait.waitForStaleElement(xpath);
-        waitForAjaxCompleted();
         ElementsCollection elements = $$(xpath);
         for (WebElement td : elements) {
             String attribute = td.getAttribute("data-columnid");
