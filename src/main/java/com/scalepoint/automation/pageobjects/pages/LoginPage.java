@@ -2,20 +2,16 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.google.common.base.Function;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.exceptions.LoginInvalidException;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccAdminPage
@@ -93,7 +89,7 @@ public class LoginPage extends Page {
 
     public void loginWithoutExpectedPage(String userLogin, String userPassword) {
 
-        verifyElementVisible($(By.id("j_username")));
+        $(By.id("j_username")).should(Condition.visible);
         username.sendKeys(userLogin);
         password.sendKeys(userPassword);
         getLoginButton().click();
@@ -110,19 +106,8 @@ public class LoginPage extends Page {
 
         try {
 
-            Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
-                try {
-
-                    $(By.id("loginErrorPlaceHolder"));
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }, 5);
-
-            return true;
-
-        } catch (Exception e) {
+            return  $(By.id("loginErrorPlaceHolder")).has(Condition.exist);
+        } catch (ElementNotFound e) {
 
             return false;
         }
