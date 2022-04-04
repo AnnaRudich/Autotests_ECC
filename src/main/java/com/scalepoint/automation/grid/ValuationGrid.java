@@ -158,9 +158,9 @@ public class ValuationGrid implements Actions {
     public ValuationGrid.ValuationRow parseValuationRow(ValuationGrid.Valuation valuation) {
 
         ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
-        waitForAjaxCompletedAndJsRecalculation();
         By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
-        $(xpath).should(Condition.visible);
+        $(xpath).should(Condition.exist);
+        waitForAjaxCompletedAndJsRecalculation();
         ElementsCollection elements = $$(xpath);
 
         for (SelenideElement td : elements) {
