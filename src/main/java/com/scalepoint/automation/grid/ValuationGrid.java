@@ -160,7 +160,7 @@ public class ValuationGrid implements Actions {
         ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
         waitForAjaxCompletedAndJsRecalculation();
         By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
-        ElementsCollection elements = $$(xpath).should(CollectionCondition.sizeGreaterThan(0));
+        ElementsCollection elements = $$(xpath).filter(Condition.visible);
 
         for (SelenideElement td : elements) {
             
