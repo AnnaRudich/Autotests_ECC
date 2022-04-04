@@ -30,7 +30,8 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -183,20 +184,8 @@ public class TextSearchPage extends Page {
 
     private TextSearchPage sort(WebElement sortLink, WebElement sortIconToWait) {
 
-        int totalAttempts = 10;
-        int currentAttempt = 0;
-        while (currentAttempt < totalAttempts) {
-
-            try {
-
-                $(sortLink).click();
-                $(sortIconToWait).should(visible);
-            } catch (Throwable e) {
-
-                logger.info(e.getMessage());
-            }
-            break;
-        }
+        $(sortLink).click();
+        $(sortIconToWait).should(visible);
         Wait.waitForAjaxCompletedAndJsRecalculation();
         return Page.at(TextSearchPage.class);
     }
@@ -229,12 +218,12 @@ public class TextSearchPage extends Page {
 
     public boolean isSortingMarketPriceAscendant() {
 
-        return ascendantMarketPrice.isDisplayed();
+        return ascendantMarketPrice.has(visible);
     }
 
     public boolean isSortingMarketPriceDescendant() {
 
-        return getDescendantMarketPrice().isDisplayed();
+        return $(getDescendantMarketPrice()).should(visible).has(visible);
     }
 
     public BestFitPage toBestFitPage() {
