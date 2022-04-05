@@ -49,9 +49,9 @@ public class UpdateCategoriesDialog extends BaseDialog {
         loadVouchersList();
         return this;
     }
-/*
-voucher list would be loaded only when we trigger open list, voucher data loaded at this point is needed for the voucher handling in SID later
- */
+    /*
+    voucher list would be loaded only when we trigger open list, voucher data loaded at this point is needed for the voucher handling in SID later
+     */
     private void loadVouchersList(){
 
         $("#bulk-vouchers-combobox-trigger-picker").click();
