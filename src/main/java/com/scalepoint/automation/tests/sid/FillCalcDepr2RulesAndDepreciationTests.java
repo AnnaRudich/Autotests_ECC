@@ -37,7 +37,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41));
     }
 
@@ -61,13 +61,13 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(sid -> sid.assertDepreciationPercentageIs(41))
                 .toSettlementDialog()
                 .enterAgeYears("6")
                 .automaticDepreciation(true)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(47))
                 .toSettlementDialog()
@@ -75,7 +75,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(47));
     }
 
@@ -96,13 +96,13 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     public void charlie_505_4_changeCategoryResetDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
                 .toSettlementDialog()
                 .setCategory(claimItem.getCategoryPersonalMedicine())
                 .automaticDepreciation(true)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
     }
@@ -125,13 +125,13 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     public void charlie_505_5_changeAgeResetDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
                 .toSettlementDialog()
                 .enterAgeYears("0")
                 .automaticDepreciation(true)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
     }

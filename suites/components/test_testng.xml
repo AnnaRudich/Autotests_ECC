@@ -2,7 +2,7 @@
 <suite name="test" configfailurepolicy="continue" parallel="methods">
     <test verbose="1" name="Test" group-by-instances="false" enabled="true" preserve-order="true" thread-count="4">
         <classes>
-            <class name="com.scalepoint.automation.tests.VoucherPredictionTest" />
+            <class name="com.scalepoint.automation.tests.dnd2.DnD2_ColumnsAndCalculations" />
         </classes>
     </test>
 

@@ -72,7 +72,7 @@ public class ShowMarketPricesTests extends BaseTest {
                     sid.assertMarketPriceSupplierInvisible();
                 })
                 .valuationGrid()
-                .parseValuationRow(MARKET_PRICE)
+                .getValuationRow(MARKET_PRICE)
                 .backToGrid()
                 .doAssert(asserts ->{
                     asserts.assertMarketPriceVisible();

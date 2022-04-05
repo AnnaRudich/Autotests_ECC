@@ -1,6 +1,5 @@
 package com.scalepoint.automation.grid;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -8,13 +7,11 @@ import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import java.util.*;
@@ -36,6 +33,7 @@ public class ValuationGrid implements Actions {
     public static final String CLASS = "class";
 
     public enum ValuationGridColumn {
+
         CHECK_COLUMN("active-valuation-checkcolumn"),
         TYPE("description"),
         CASH_COMPENSATION("cashCompensation"),
@@ -44,6 +42,7 @@ public class ValuationGrid implements Actions {
         EDIT_VALUATION("editValuation"),
         NULL(null);
 
+        @Getter
         private String dataColumnId;
 
         ValuationGridColumn(String dataColumnId) {
@@ -52,16 +51,16 @@ public class ValuationGrid implements Actions {
         }
 
         public static ValuationGridColumn getColumn(String dataColumnId) {
-            for (ValuationGridColumn valuationGridColumn : ValuationGridColumn.values()) {
-                if (dataColumnId.equals(valuationGridColumn.dataColumnId)) {
-                    return valuationGridColumn;
-                }
-            }
-            return NULL;
+
+            return Arrays.stream(ValuationGridColumn.values())
+                    .filter(valuationGridColumn -> valuationGridColumn.getDataColumnId().equals(dataColumnId))
+                    .findFirst()
+                    .orElse(NULL);
         }
     }
 
     public enum Valuation {
+
         NOT_SELECTED("valuation-type-NOT_SELECTED"),
         CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
         VOUCHER("valuation-type-VOUCHER"),
@@ -77,6 +76,14 @@ public class ValuationGrid implements Actions {
         Valuation(String className) {
             this.className = className;
         }
+
+        public static Valuation findByClassName(String className){
+
+            return Arrays.stream(Valuation.values())
+                    .filter(valuation -> className.contains(valuation.getClassName()))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException(className));
+        }
     }
 
     public class ValuationRow {
@@ -86,6 +93,40 @@ public class ValuationGrid implements Actions {
         private Integer depreciationPercentage;
         private Double totalPrice;
         private String description;
+
+        public ValuationRow(SelenideElement element){
+
+            valuation = Valuation.findByClassName($(element).attr("class"));
+
+            for (SelenideElement column : $(element).findAll("td")) {
+
+                String attribute = $(column).attr("data-columnid");
+
+                switch (ValuationGrid.ValuationGridColumn.getColumn(attribute)) {
+
+                    case CASH_COMPENSATION:
+
+                        cashCompensation = StringUtils.isBlank(column.getText()) ? null : OperationalUtils.toNumber(column.getText());
+                        break;
+                    case DEPRECIATION_COLUMN:
+
+                        depreciationPercentage = StringUtils.isBlank(column.getText()) ? null : Integer.valueOf(column.getText());
+                        break;
+                    case TOTAL_AMOUNT_OF_VALUATION:
+
+                        totalPrice = StringUtils.isBlank(column.getText()) ? null : OperationalUtils.toNumber(column.getText());
+                        break;
+                    case TYPE:
+
+                        description = column.getText();
+                        break;
+                    default:
+
+                        logger.warn("Valuation not supported: " + ValuationGrid.ValuationGridColumn.getColumn(attribute));
+                        break;
+                }
+            }
+        }
 
         Boolean isValuationChecked() {
             return $(By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']"))
@@ -155,36 +196,22 @@ public class ValuationGrid implements Actions {
         }
     }
 
-    public ValuationGrid.ValuationRow parseValuationRow(ValuationGrid.Valuation valuation) {
+    public List<ValuationRow> getValuationRows(){
 
-        ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
-        By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
-        $(xpath).should(Condition.exist);
         waitForAjaxCompletedAndJsRecalculation();
-        ElementsCollection elements = $$(xpath);
+        List<ValuationRow> valuationRows = $$("#valuations-grid table [role=row]").stream()
+                .map(ValuationRow::new)
+                .collect(Collectors.toList());
 
-        for (SelenideElement td : elements) {
-            
-            String attribute = td.attr("data-columnid");
-            switch (ValuationGrid.ValuationGridColumn.getColumn(attribute)) {
-                case CASH_COMPENSATION:
-                    valuationRow.cashCompensation = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
-                    break;
-                case DEPRECIATION_COLUMN:
-                    valuationRow.depreciationPercentage = StringUtils.isBlank(td.getText()) ? null : Integer.valueOf(td.getText());
-                    break;
-                case TOTAL_AMOUNT_OF_VALUATION:
-                    valuationRow.totalPrice = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
-                    break;
-                case TYPE:
-                    valuationRow.description = td.getText();
-                    break;
-                default:
-                    logger.warn("Valuation not supported: " + ValuationGrid.ValuationGridColumn.getColumn(attribute));
-                    break;
-            }
-        }
-        return valuationRow;
+        return valuationRows;
+    }
+
+    public ValuationRow getValuationRow(Valuation valuation){
+
+        return getValuationRows().stream()
+                .filter(valuationRow -> valuationRow.valuation.equals(valuation))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(valuation.getClassName()));
     }
 
     private boolean isValuationDisabled(ValuationGrid.Valuation valuation) {
@@ -210,7 +237,7 @@ public class ValuationGrid implements Actions {
 
         private Asserts checkInvisibilityOfValuationRow(String message, ValuationGrid.Valuation valuation) {
             try {
-                if (parseValuationRow(valuation).getDescription() != null) {
+                if (getValuationRow(valuation).getDescription() != null) {
                     Assert.fail(message);
                 }
             } catch (Exception e) {
@@ -221,34 +248,34 @@ public class ValuationGrid implements Actions {
 
 
         public Asserts assertCashCompensationIsDepreciated(int percentage, ValuationGrid.Valuation valuation) {
-            ValuationGrid.ValuationRow valuationRow = parseValuationRow(valuation);
+            ValuationGrid.ValuationRow valuationRow = getValuationRow(valuation);
             assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice() * (1 - ((double) percentage / 100)));
             return this;
         }
 
         public Asserts assertCashCompensationIsNotDepreciated(ValuationGrid.Valuation valuation, Double expectedNotDepreciatedValue) {
-            ValuationGrid.ValuationRow valuationRow = parseValuationRow(valuation);
+            ValuationGrid.ValuationRow valuationRow = getValuationRow(valuation);
             assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), expectedNotDepreciatedValue);
             return this;
         }
 
         public Asserts assertIsLowestPriceValuationSelected(ValuationGrid.Valuation... valuations) {
             List<ValuationGrid.ValuationRow> valuationRows = new ArrayList<>();
-            Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
+            Arrays.stream(valuations).forEach(v -> valuationRows.add(getValuationRow(v)));
             assertTrue(valuationRows.stream().min(Comparator.comparing(ValuationGrid.ValuationRow::getCashCompensation))
                     .map(ValuationGrid.ValuationRow::isValuationChecked).orElse(false));
             return this;
         }
 
         public Asserts assertPriceIsSameInTwoColumns(ValuationGrid.Valuation valuation) {
-            ValuationGrid.ValuationRow valuationRow = parseValuationRow(valuation);
+            ValuationGrid.ValuationRow valuationRow = getValuationRow(valuation);
             assertEquals(valuationRow.cashCompensation, valuationRow.totalPrice);
             return this;
         }
 
         public Asserts assertTotalPriceIsSameInRows(ValuationGrid.Valuation... valuations) {
             List<ValuationGrid.ValuationRow> valuationRows = new ArrayList<>();
-            Arrays.stream(valuations).forEach(valuation -> valuationRows.add(parseValuationRow(valuation)));
+            Arrays.stream(valuations).forEach(valuation -> valuationRows.add(getValuationRow(valuation)));
             assertTrue(valuationRows.stream()
                             .map(price -> price.getTotalPrice()).collect(Collectors.toList()).stream()
                             .distinct().count() <= 1,
@@ -279,7 +306,7 @@ public class ValuationGrid implements Actions {
 
         private Asserts checkVisibilityOfValuationRow(String message, Valuation valuation) {
             try {
-                if (parseValuationRow(valuation).getDescription() == null) {
+                if (getValuationRow(valuation).getDescription() == null) {
                     Assert.fail(message);
                 }
             } catch (Exception e) {
