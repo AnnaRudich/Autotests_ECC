@@ -4,7 +4,6 @@ import com.scalepoint.automation.pageobjects.modules.Module;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.Arrays;

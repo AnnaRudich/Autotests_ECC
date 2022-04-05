@@ -2,13 +2,11 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementta
 
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class VoucherAgreementDiscountDistributionTab extends BaseDialog implements VoucherAgreementTabs {

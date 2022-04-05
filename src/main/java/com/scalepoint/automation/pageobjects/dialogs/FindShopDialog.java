@@ -24,10 +24,8 @@ public class FindShopDialog extends BaseDialog {
 
     @FindBy(id = "search-voucher-search-button")
     private SelenideElement searchVoucherButton;
-
     @FindBy(id = "search-voucher-close-button")
     private SelenideElement closeButton;
-
     @FindBy(id = "search-voucher-address-input-inputEl")
     private SelenideElement postalCodeInput;
 

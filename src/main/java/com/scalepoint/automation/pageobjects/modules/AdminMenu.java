@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;

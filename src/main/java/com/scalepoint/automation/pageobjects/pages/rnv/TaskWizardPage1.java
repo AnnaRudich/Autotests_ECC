@@ -25,7 +25,6 @@ public class TaskWizardPage1 extends Page {
     @FindBy(css = "#button-next")
     private SelenideElement nextBtn;
 
-
     @Override
     protected void ensureWeAreOnPage() {
 

@@ -2,20 +2,16 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.OperationalUtils;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class CustomerDetails extends Module {
 
     @FindBy(xpath = "//td[9][contains(@class,'rejected-text')]")
     private SelenideElement cashValue;
-
     @FindBy(xpath = "//td[8][contains(@class,'rejected-text')]")
     private SelenideElement depreciation;
-
     @FindBy(xpath = "//td[4][contains(@class,'rejected-text')]")
     private SelenideElement voucherValue;
-
     @FindBy(xpath = "//td[contains(@class,'rejected-text')]//img")
     private SelenideElement iconToolTip;
 

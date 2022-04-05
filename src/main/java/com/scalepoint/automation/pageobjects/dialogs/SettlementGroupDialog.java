@@ -31,22 +31,16 @@ public class SettlementGroupDialog extends BaseDialog {
 
     @FindBy(name = "groupName")
     private SelenideElement groupName;
-
     @FindBy(name = "customerDemand")
     private SelenideElement customerDemand;
-
     @FindBy(name = "newPrice")
     private SelenideElement newPrice;
-
     @FindBy(name = "valuation")
     private SelenideElement valuation;
-
     @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
     private SelenideElement averageAge;
-
     @FindBy(xpath = "//*[contains(@id, 'group-save-button-btnEl')]")
     private SelenideElement saveGroup;
-
     @FindBy(xpath = "//*[contains(@id, 'group-close-button-btnInnerEl')]")
     private SelenideElement closeGroup;
 

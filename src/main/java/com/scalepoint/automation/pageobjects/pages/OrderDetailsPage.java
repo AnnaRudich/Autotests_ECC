@@ -10,7 +10,6 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.math.BigDecimal;
@@ -210,7 +209,7 @@ public class OrderDetailsPage extends BaseClaimPage {
                     .isFalse();
         }
     }
-@Getter
+    @Getter
     class OrderTotals{
 
         private BigDecimal compensationAmount; //IC to Scalepoint

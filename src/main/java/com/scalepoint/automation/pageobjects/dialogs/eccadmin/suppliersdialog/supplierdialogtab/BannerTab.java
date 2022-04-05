@@ -4,7 +4,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import java.io.File;
 import java.util.function.Consumer;

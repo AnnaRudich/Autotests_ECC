@@ -16,13 +16,10 @@ public class ClaimOperationsMenu extends Module {
 
     @FindBy(id = "selfServiceBtn")
     private SelenideElement requestSelfServiceBtn;
-
     @FindBy(id = "addGenericItemBtn")
     private SelenideElement addGenericItemBtn;
-
     @FindBy(xpath = "//span[contains(@style,'findInCatalogIcon.png')]/ancestor::a")
     private SelenideElement findInCatalogueBtn;
-
     @FindBy(id = "addByHandBtn")
     private SelenideElement addManuallyBtn;
 

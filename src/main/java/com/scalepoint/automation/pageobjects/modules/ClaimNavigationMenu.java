@@ -4,7 +4,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -16,19 +15,14 @@ public class ClaimNavigationMenu extends Module {
 
     @FindBy(id = "settlementButton")
     private SelenideElement settelment;
-
     @FindBy(id = "mailsButton")
     private SelenideElement mails;
-
     @FindBy(id = "repairValuationButton")
     private SelenideElement repairValuation;
-
     @FindBy(id = "orderButton")
     private SelenideElement order;
-
     @FindBy(id = "detailsButton")
     private SelenideElement details;
-
     @FindBy(id = "notesButton")
     private SelenideElement notes;
 
