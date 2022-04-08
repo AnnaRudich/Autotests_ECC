@@ -225,7 +225,7 @@ public class ValuationGrid implements Actions {
                 logger.info("getValuationRows stale element check");
             }
         }while(LocalDateTime.now().isBefore(start.plusSeconds(5)));
-        
+
             return valuationRows.stream()
                     .filter(valuationRow -> valuationRow.valuation.equals(valuation))
                     .findFirst()

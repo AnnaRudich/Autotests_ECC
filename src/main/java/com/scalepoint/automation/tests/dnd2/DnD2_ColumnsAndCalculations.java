@@ -68,7 +68,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                     asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * percentage / 100));
                 });
     }
-@RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = DEPRECIATION_DATA_PROVIDER,
