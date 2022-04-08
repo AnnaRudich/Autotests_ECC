@@ -1,7 +1,6 @@
 package com.scalepoint.automation.grid;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
@@ -21,7 +20,8 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -96,11 +96,12 @@ public class ValuationGrid implements Actions {
 
         public ValuationRow(SelenideElement element){
 
-            valuation = Valuation.findByClassName($(element).attr("class"));
+            element.should(Condition.visible);
+            valuation = Valuation.findByClassName(element.attr("class"));
 
-            for (SelenideElement column : $(element).findAll("td")) {
+            for (SelenideElement column : element.findAll("td")) {
 
-                String attribute = $(column).attr("data-columnid");
+                String attribute = column.attr("data-columnid");
 
                 switch (ValuationGrid.ValuationGridColumn.getColumn(attribute)) {
 
@@ -199,7 +200,9 @@ public class ValuationGrid implements Actions {
     public List<ValuationRow> getValuationRows(){
 
         waitForAjaxCompletedAndJsRecalculation();
-        List<ValuationRow> valuationRows = $$("#valuations-grid table [role=row]").stream()
+
+        List<ValuationRow> valuationRows = $$("#valuations-grid table [role=row]")
+                .stream()
                 .map(ValuationRow::new)
                 .collect(Collectors.toList());
 
