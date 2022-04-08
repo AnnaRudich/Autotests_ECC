@@ -203,7 +203,7 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage sortPopularityAscending() {
 
-        return sort(sortByPopularity, getAscendingOrderable());
+        return sort(sortByPopularity, getAscendingPopularity());
     }
 
     public TextSearchPage sortPopularityDescending() {
