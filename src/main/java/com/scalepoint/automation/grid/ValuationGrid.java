@@ -2,6 +2,7 @@ package com.scalepoint.automation.grid;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -96,7 +98,6 @@ public class ValuationGrid implements Actions {
 
         public ValuationRow(SelenideElement element){
 
-            element.should(Condition.visible);
             valuation = Valuation.findByClassName(element.attr("class"));
 
             for (SelenideElement column : element.findAll("td")) {
@@ -211,10 +212,24 @@ public class ValuationGrid implements Actions {
 
     public ValuationRow getValuationRow(Valuation valuation){
 
-        return getValuationRows().stream()
-                .filter(valuationRow -> valuationRow.valuation.equals(valuation))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException(valuation.getClassName()));
+        List<ValuationRow> valuationRows = null;
+
+        LocalDateTime start = LocalDateTime.now();
+
+        do{
+            try {
+
+                valuationRows = getValuationRows();
+            } catch (ElementNotFound e) {
+
+                logger.info("getValuationRows stale element check");
+            }
+        }while(LocalDateTime.now().isBefore(start.plusSeconds(5)));
+        
+            return valuationRows.stream()
+                    .filter(valuationRow -> valuationRow.valuation.equals(valuation))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException(valuation.getClassName()));
     }
 
     private boolean isValuationDisabled(ValuationGrid.Valuation valuation) {
