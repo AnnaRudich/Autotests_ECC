@@ -70,7 +70,8 @@ public class ValuationGrid implements Actions {
         MARKET_PRICE("valuation-type-MARKET_PRICE"),
         DISCRETIONARY("valuation-type-DISCRETIONARY_VALUATION"),
         CATALOG_PRICE("valuation-type-CATALOG_PRICE"),
-        USED_PRICE("valuation-type-USED_PRICE");
+        USED_PRICE("valuation-type-USED_PRICE"),
+        PURCHASE_PRICE("valuation-type-PURCHASE_PRICE");
 
         @Getter
         private String className;
@@ -217,6 +218,7 @@ public class ValuationGrid implements Actions {
         LocalDateTime start = LocalDateTime.now();
 
         do{
+
             try {
 
                 valuationRows = getValuationRows();
