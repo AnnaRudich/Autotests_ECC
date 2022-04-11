@@ -7,11 +7,9 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.EditCategoryMappingsDialog;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;

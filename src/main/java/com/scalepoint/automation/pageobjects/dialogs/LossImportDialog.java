@@ -18,7 +18,6 @@ public class LossImportDialog extends BaseDialog {
 
     @FindBy(id = "self-service-import-button")
     private SelenideElement selfServiceImportButton;
-
     @FindBy(id = "excel-import-button")
     private SelenideElement excelImportButton;
 

@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioButton;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 

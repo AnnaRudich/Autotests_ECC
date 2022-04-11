@@ -374,7 +374,7 @@ public class SelfServicePage extends Page {
                 } else {
 
                     listItems.stream().filter(element -> element.getText()
-                            .equals("Nej")).findFirst()
+                                    .equals("Nej")).findFirst()
                             .get()
                             .click();
                 }

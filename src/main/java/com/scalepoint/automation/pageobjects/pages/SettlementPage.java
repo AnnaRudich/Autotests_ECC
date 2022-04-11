@@ -375,9 +375,9 @@ public class SettlementPage extends BaseClaimPage {
 
             Arrays.stream(descriptions)
                     .forEach(desc -> new Actions(driver)
-                    .keyDown(Keys.CONTROL)
-                    .click(claimLineDescription.stream().filter(line -> line.getText().equals(desc)).findFirst().get())
-                    .keyUp(Keys.CONTROL).build().perform());
+                            .keyDown(Keys.CONTROL)
+                            .click(claimLineDescription.stream().filter(line -> line.getText().equals(desc)).findFirst().get())
+                            .keyUp(Keys.CONTROL).build().perform());
         } catch (IndexOutOfBoundsException e) {
 
             logger.error(e.getMessage());

@@ -17,13 +17,10 @@ public class EditDiscountDistributionDialog extends BaseDialog {
 
     @FindBy(id = "distribution-voucher-face-value-display")
     private SelenideElement faceValueText;
-
     @FindBy(id = "distribution-voucher-cash-value-display")
     private SelenideElement cashValueText;
-
     @FindBy(id = "distribution-voucher-ok-button")
     private SelenideElement saveButton;
-
     @FindBy(id = "distribution-voucher-cancel-button")
     private SelenideElement cancelButton;
 

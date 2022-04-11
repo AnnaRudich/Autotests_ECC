@@ -14,7 +14,6 @@ public class SelfServicePasswordDialog extends BaseDialog {
 
     @FindBy(css = "#new-password-dialog-ok-button")
     private SelenideElement ok;
-
     @FindBy(css = "#new-password-dialog-password-textfield-inputEl")
     private SelenideElement passwordInput;
 

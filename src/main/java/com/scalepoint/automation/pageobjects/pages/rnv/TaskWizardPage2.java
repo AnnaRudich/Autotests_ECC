@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -16,7 +15,6 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 
 @RVPage
 public class TaskWizardPage2 extends Page {
-
 
     @FindBy(css = "#button-send")
     private SelenideElement sendBtn;

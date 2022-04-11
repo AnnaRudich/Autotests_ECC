@@ -125,7 +125,7 @@ public class UsersPage extends AdminBasePage {
 
     public class Asserts {
         public Asserts assertUserExists(SystemUser newUser) {
-            
+
             Assert.assertTrue(isDisplayed(newUser), "User is not found");
             return this;
         }

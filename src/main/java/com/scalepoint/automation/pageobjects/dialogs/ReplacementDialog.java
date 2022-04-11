@@ -34,27 +34,20 @@ public class ReplacementDialog extends BaseDialog {
 
     @FindBy(id = "replacement-button-cancel-btnInnerEl")
     private SelenideElement cancelButton;
-
     @FindBy(css = ".x-grid-cell-faceValue div")
     private SelenideElement voucherFaceValue;
-
     @FindBy(css = ".x-grid-cell-cashValue")
     private SelenideElement itemPrice;
-
     @FindBy(css = ".x-form-radio")
     private SelenideElement payCompleteAmountRadio;
-
     @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
     private SelenideElement goToShopButton;
-
-    @FindBy(xpath = "//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]")
-    private ElementsCollection replacementOptionsList;
-
     @FindBy(xpath = "//span[contains(text(), 'OK')]/ancestor::a")
     private SelenideElement alertOk;
-
     @FindBy(id = "replacementType3")
     private SelenideElement sendChequeButton;
+    @FindBy(xpath = "//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]")
+    private ElementsCollection replacementOptionsList;
 
     private Radio getSelectItemCheckbox(){
 

@@ -8,7 +8,6 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialogViewM
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;

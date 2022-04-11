@@ -20,13 +20,10 @@ public class EditVoucherValuationDialog extends BaseDialog {
 
     @FindBy(id = "edit-voucher-tags-text-inputEl")
     private SelenideElement tags;
-
     @FindBy(id = "edit-voucher-ok-button")
     private SelenideElement ok;
-
     @FindBy(id = "edit-voucher-rebate-display-inputEl")
     private SelenideElement voucherRebate;
-
     @FindBy(id = "edit-voucher-distribution-button")
     private SelenideElement editDistributionButton;
 

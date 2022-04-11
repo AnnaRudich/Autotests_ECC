@@ -8,7 +8,6 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class CreateVoucherAgreementDialog extends BaseDialog {

@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;

@@ -7,7 +7,6 @@ import org.testng.Assert;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class VoucherTermsAndConditionsDialog extends BaseDialog {
