@@ -36,7 +36,6 @@ import org.testng.annotations.Test;
  * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
  */
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
 @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)

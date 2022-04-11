@@ -37,7 +37,6 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
         userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken.replace("c.", ""));
     }
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-5660")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(groups = {TestGroups.ECC_CWA_INTEGRATION}, enabled = false, dataProvider = "testDataProvider")
     public void selfServiceImport(User user, ClaimItem claimItem) {

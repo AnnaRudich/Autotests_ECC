@@ -23,7 +23,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-@RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
 public class SelfService2Tests extends BaseTest {
 
     private static final String IPHONE = "iPhone";
@@ -39,7 +38,6 @@ public class SelfService2Tests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -85,7 +83,6 @@ public class SelfService2Tests extends BaseTest {
         //assert Acquired in not implemented on Settlement page
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "SelfService2 password reset, login and logout")
     public void selfService2LogInWithNewPassword(User user, Claim claim) {
@@ -108,7 +105,6 @@ public class SelfService2Tests extends BaseTest {
         new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -157,7 +153,6 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemIsPresent(description[0]));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -211,7 +206,6 @@ public class SelfService2Tests extends BaseTest {
                         .assertItemNotPresent(description[0]));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -259,7 +253,6 @@ public class SelfService2Tests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -294,7 +287,6 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE, enabled = false)

@@ -19,11 +19,9 @@ import org.testng.annotations.Test;
  */
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-@RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
 public class SelfServiceTest extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
@@ -58,7 +56,6 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
