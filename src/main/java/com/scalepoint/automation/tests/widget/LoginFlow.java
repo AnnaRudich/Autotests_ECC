@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.widget;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.EditPolicyTypeDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
@@ -17,7 +16,6 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Settlement;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -29,16 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
-import static io.restassured.RestAssured.given;
 
 
 @Component
@@ -71,7 +65,7 @@ public class LoginFlow {
     public EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim, null);
-        return BaseDialogSelenide.at(EditPolicyTypeDialog.class);
+        return BaseDialog.at(EditPolicyTypeDialog.class);
     }
 
     public String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
