@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class DeductibleWarningDialog extends BaseDialogSelenide{
+public class DeductibleWarningDialog extends BaseDialog {
 
     @FindBy(css = ".x-window")
     private SelenideElement deductibleWarningDialog;

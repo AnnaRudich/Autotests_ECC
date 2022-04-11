@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
-import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
@@ -18,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
-import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -26,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.page;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @SuppressWarnings("unchecked")
@@ -44,7 +43,6 @@ public abstract class Page implements Actions {
 
     public Page() {
         this.driver = Browser.driver();
-        HtmlElementLoader.populatePageObject(this, this.driver);
     }
 
     protected abstract void ensureWeAreOnPage();
@@ -157,9 +155,9 @@ public abstract class Page implements Actions {
 
     public static <T extends Page> boolean isOn(Class<T> page) {
         try {
-            T t = page.newInstance();
+            T t = page(page);
             return t.areWeAt();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
         }
     }
@@ -187,8 +185,8 @@ public abstract class Page implements Actions {
             }
             return (T) classPageMap.computeIfAbsent(pageClass, aClass -> {
                 try {
-                    return aClass.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
+                    return page(aClass);
+                } catch (Exception e) {
                     throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
                 }
             });

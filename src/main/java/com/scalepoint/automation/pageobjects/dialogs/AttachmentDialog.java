@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
@@ -18,7 +19,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.*;
 
-public class AttachmentDialog extends BaseDialogSelenide {
+public class AttachmentDialog extends BaseDialog {
 
     @FindBy(id = "window-attachment-view_header-title-textEl")
     private SelenideElement dialogHeader;
@@ -187,7 +188,7 @@ public class AttachmentDialog extends BaseDialogSelenide {
             public void select(){
 
                 element.click();
-                element.waitUntil(Condition.attribute("aria-selected", "true"), TIMEOUT);
+                element.should(Condition.attribute("aria-selected", "true"), Duration.ofMillis(TIMEOUT));
             }
         }
     }
@@ -248,7 +249,7 @@ public class AttachmentDialog extends BaseDialogSelenide {
             elements.shouldHave(CollectionCondition.size(newSize));
             elements.get(newSize - 1)
                     .find(ATTACHMENT_NAME)
-                    .waitUntil(Condition.matchesText(name), TIME_OUT_IN_MILISECONDS);
+                    .should(Condition.matchText(name));
         }
 
         public int attachmentsSize(){
@@ -274,7 +275,7 @@ public class AttachmentDialog extends BaseDialogSelenide {
             public ListpanelAttachmentView delete(){
 
                 element.find("img[id^=\"img_delete\"]")
-                        .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                        .should(Condition.visible)
                         .click();
 
                 return new ListpanelAttachmentView();
@@ -283,7 +284,7 @@ public class AttachmentDialog extends BaseDialogSelenide {
             public ListpanelAttachmentView unlink(){
 
                 element.find("img[id^=\"img_link\"]")
-                        .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                        .should(Condition.visible)
                         .click();
 
                 return new ListpanelAttachmentView();
@@ -291,7 +292,7 @@ public class AttachmentDialog extends BaseDialogSelenide {
 
             public Attachment waitForLink(String id){
 
-                element.find("tr > td >.file-name span").waitUntil(Condition.text(id), TIME_OUT_IN_MILISECONDS);
+                element.find("tr > td >.file-name span").should(Condition.text(id));
 
                 return this;
             }

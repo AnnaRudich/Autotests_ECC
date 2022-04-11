@@ -10,11 +10,10 @@ import org.openqa.selenium.support.FindBy;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
 
-public class SelfServicePasswordDialog extends BaseDialogSelenide {
+public class SelfServicePasswordDialog extends BaseDialog {
 
     @FindBy(css = "#new-password-dialog-ok-button")
     private SelenideElement ok;
-
     @FindBy(css = "#new-password-dialog-password-textfield-inputEl")
     private SelenideElement passwordInput;
 

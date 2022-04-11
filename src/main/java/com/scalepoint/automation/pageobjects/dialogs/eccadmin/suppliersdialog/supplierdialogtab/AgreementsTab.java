@@ -1,7 +1,9 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
@@ -11,7 +13,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
@@ -22,27 +23,29 @@ import static org.testng.Assert.assertEquals;
 public class AgreementsTab extends SupplierDialog {
 
     public static final String DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT = "//div[@id='supplierVouchersGridId']//div[text()='";
+
     @FindBy(xpath = "//td[contains(@class, 'agreementsPanelExclusiveId')]")
-    private WebElement exclusiveGridCell;
-
-    @FindBy(xpath = "//td[contains(@class, 'voucherNameId')]/div")
-    private List<WebElement> voucherNameGridCell;
-
+    private SelenideElement exclusiveGridCell;
     @FindBy(className = "supplier-new-voucher-agreement-btn")
-    private WebElement createNewVoucherAgreementBtn;
+    private SelenideElement createNewVoucherAgreementBtn;
+    @FindBy(xpath = "//td[contains(@class, 'voucherNameId')]/div")
+    private ElementsCollection voucherNameGridCell;
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        $(createNewVoucherAgreementBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        createNewVoucherAgreementBtn.should(Condition.visible);
     }
 
     public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
-        $(createNewVoucherAgreementBtn).click();
-        return BaseDialogSelenide.at(CreateVoucherAgreementDialog.class);
+
+        createNewVoucherAgreementBtn.click();
+        return BaseDialog.at(CreateVoucherAgreementDialog.class);
     }
 
     public VoucherAgreementGeneralTab editVoucherAgreement(String agreementName) {
+
         Wait.waitForAjaxCompleted();
         $(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'" + agreementName + "')]")).doubleClick();
         isOn(VoucherAgreementGeneralTab.class);
@@ -51,26 +54,31 @@ public class AgreementsTab extends SupplierDialog {
     }
 
     public enum ActionType {
+
         LEAVE,
         JOIN
     }
 
     public boolean isExclusiveTickForFirstVoucherAvailable() {
+
         return exclusiveGridCell.getAttribute("class").contains("tick");
     }
 
     private WebElement findVoucher(String voucherName) {
+
         return voucherNameGridCell.stream()
                 .filter(element -> element.getText().equals(voucherName))
                 .findAny().orElseThrow(() -> new NoSuchElementException("Can't find voucher with name " + voucherName));
     }
 
     public boolean isExclusiveTickForVoucherAvailable(String voucherName) {
+
         return findVoucher(voucherName).findElement(By.xpath("./ancestor::tr//td[contains(@class, 'agreementsPanelExclusiveId')]"))
                 .getAttribute("class").contains("tick");
     }
 
     public AgreementsTab doWithAgreement(String voucherAgreementName, ActionType actionType) {
+
         By voucherRow = By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherAgreementName + "']/ancestor::tr");
         $(voucherRow).click();
 
@@ -93,33 +101,39 @@ public class AgreementsTab extends SupplierDialog {
     }
 
     public AgreementsTab doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return AgreementsTab.this;
     }
 
     public class Asserts {
         public Asserts assertVoucherStatus(String voucherName, boolean active) {
+
             By voucherRowActive = By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherName + "']/ancestor::tr//td[4]");
             assertEquals($(voucherRowActive).getText(), active ? "Yes" : "No");
             return this;
         }
 
         public Asserts assertVoucherAbsent(String voucherName) {
+
             Assert.assertFalse($(By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherName + "']")).exists());
             return this;
         }
 
         public Asserts assertShopOnlyVoucherIsPresent(String voucherName){
+
             Assert.assertTrue($(By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherName + "_SHOP"+"']")).exists());
             return this;
         }
 
         public Asserts assertIsExclusiveTickForVoucherVisible() {
+
             Assert.assertTrue(isExclusiveTickForFirstVoucherAvailable());
             return this;
         }
 
         public Asserts assertIsExclusiveTickForVoucherNotVisible(String voucherName) {
+
             Assert.assertFalse(isExclusiveTickForVoucherAvailable(voucherName));
             return this;
         }

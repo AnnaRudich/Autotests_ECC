@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 
-public class UpdateCategoriesDialog extends BaseDialogSelenide {
+public class UpdateCategoriesDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

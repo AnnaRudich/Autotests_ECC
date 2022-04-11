@@ -7,9 +7,9 @@ import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.math.BigDecimal;
@@ -28,108 +28,111 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OrderDetailsPage extends BaseClaimPage {
 
     @FindBy(xpath = "//div[@class='table-header']")
-    private WebElement legendItem;
-
+    private SelenideElement legendItem;
     @FindBy(xpath = "//div[@class='table-content']//tr[1]/td[1]")
-    private WebElement idemnityText;
-
+    private SelenideElement idemnityText;
     @FindBy(xpath = "//div[@class='table-content']//tr[1]/td[2]")
-    private WebElement idemnityValue;
-
+    private SelenideElement idemnityValue;
     @FindBy(xpath = "//div[@class='table-content']//tr[3]/td[1]")
-    private WebElement orderedItemsText;
-
+    private SelenideElement orderedItemsText;
     @FindBy(xpath = "//div[@class='table-content']//tr[3]/td[2]")
-    private WebElement orderedItemsValue;
-
+    private SelenideElement orderedItemsValue;
     @FindBy(xpath = "//div[@class='table-content']//tr[4]/td[1]")
-    private WebElement withdrawallsText;
-
+    private SelenideElement withdrawallsText;
     @FindBy(xpath = "//div[@class='table-content']//tr[4]/td[2]")
-    private WebElement withdrawallsValue;
-
+    private SelenideElement withdrawallsValue;
     @FindBy(xpath = "//div[@class='table-content']//tr[5]/td[1]")
-    private WebElement depositsText;
-
+    private SelenideElement depositsText;
     @FindBy(xpath = "//div[@class='table-content']//tr[5]/td[2]")
-    private WebElement depositsValue;
-
+    private SelenideElement depositsValue;
     @FindBy(xpath = "//div[@class='table-content']//tr[7]/td[1]")
-    private WebElement remainingIdemnityText;
-
+    private SelenideElement remainingIdemnityText;
     @FindBy(xpath = "//div[@class='table-content']//tr[7]/td[2]")
-    private WebElement remainingIdemnityValue;
-
+    private SelenideElement remainingIdemnityValue;
     @FindBy(id = "btnShowOrder")
-    private WebElement showButton;
-
+    private SelenideElement showButton;
     @FindBy(css = ".order-wrapper-table")
-    private WebElement orderDetails;
+    private SelenideElement orderDetails;
 
     ElementsCollection orderTotalRows = $$("#total table tr");
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/customer_order.jsp";
     }
 
     public String getLegendItemText() {
+
         return legendItem.getText();
     }
 
     public String getIdemnityText() {
-        return $(idemnityText).getText();
+
+        return idemnityText.getText();
     }
 
     public Double getIdemnityValue() {
+
         return OperationalUtils.toNumber(idemnityValue.getText());
     }
 
     public String getOrderedItemsText() {
-        return $(orderedItemsText).getText();
+
+        return orderedItemsText.getText();
     }
 
     public Double getOrderedItemsValue() {
+
         return OperationalUtils.toNumber(orderedItemsValue.getText());
     }
 
     public String getWithdrawText() {
-        return $(withdrawallsText).getText();
+
+        return withdrawallsText.getText();
     }
 
     public Double getWithdrawValue() {
+
         return OperationalUtils.toNumber(withdrawallsValue.getText());
     }
 
     public String getDepositText() {
-        return $(depositsText).getText();
+
+        return depositsText.getText();
     }
 
     public Double getDepositValue() {
+
         return OperationalUtils.toNumber(depositsValue.getText());
     }
 
     public String getRemainingIdemnityText() {
-        return $(remainingIdemnityText).getText();
+
+        return remainingIdemnityText.getText();
     }
 
     public Double getRemainingValue() {
+
         return OperationalUtils.toNumber(remainingIdemnityValue.getText());
     }
 
     public OrderDetailsPage refreshPageToGetOrders(){
+
         Browser.driver().navigate().refresh();
         return this;
     }
 
     public CustomerOrderEditPage showOrder(){
-        hoverAndClick($(showButton));
+
+        hoverAndClick(showButton);
         return Page.at(CustomerOrderEditPage.class);
     }
 
@@ -141,11 +144,13 @@ public class OrderDetailsPage extends BaseClaimPage {
     }
 
     public OrderDetailsPage doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return OrderDetailsPage.this;
     }
 
     public OrderDetailsPage doSuborderAssert(String description, Consumer<Suborders.Suborder.Asserts> assertFunc) {
+
         assertFunc.accept(new Suborders().getSuborderByDescription(description).new Asserts());
         return OrderDetailsPage.this;
     }
@@ -153,12 +158,14 @@ public class OrderDetailsPage extends BaseClaimPage {
     public class Asserts {
 
         public void assertCompensationAmount(Double expectedCompensationAmount){
+
             BigDecimal actualCompensationAmount = new OrderTotals().getCompensationAmount();
             assertThat(actualCompensationAmount)
                     .as("compensationAmount was: " + actualCompensationAmount + " but should be: " + NumberFormatUtils.formatBigDecimalToHaveTwoDigits(expectedCompensationAmount))
                     .isEqualTo(NumberFormatUtils.formatBigDecimalToHaveTwoDigits(expectedCompensationAmount));
         }
         public void assertAmountScalepointHasPaidToSupplier(Double expectedGoodsAmount){
+
             BigDecimal actualGoodsAmount = new OrderTotals().getGoods();
             assertThat(actualGoodsAmount)
                     .as("amount Scalepoint has paid to Supplier was: " + actualGoodsAmount + " but should be: " + NumberFormatUtils.formatBigDecimalToHaveTwoDigits(expectedGoodsAmount))
@@ -166,6 +173,7 @@ public class OrderDetailsPage extends BaseClaimPage {
         }
 
         public void assertAmountScalepointPaidToCustomer(Double expectedPayouts){
+
             BigDecimal actualPayouts = new OrderTotals().getPayouts();
             assertThat(actualPayouts)
                     .as("amount Scalepoint paid to customer was: " + actualPayouts + "but should be: " + NumberFormatUtils.formatBigDecimalToHaveTwoDigits(expectedPayouts))
@@ -173,6 +181,7 @@ public class OrderDetailsPage extends BaseClaimPage {
         }
 
         public void assertAmountCustomerHasPaidToScalepoint(Double expectedDeposit){
+
             BigDecimal actualDeposit = new OrderTotals().getDeposits();
             assertThat(actualDeposit)
                     .as("amount customer has paid to Scalepoint was :" + "but should be: " + NumberFormatUtils.formatBigDecimalToHaveTwoDigits(expectedDeposit))
@@ -180,6 +189,7 @@ public class OrderDetailsPage extends BaseClaimPage {
         }
 
         public void assertRemainingCompensationTotal(Double expectedRemainingCompensation) {
+
             BigDecimal actualRemainingCompensation = new OrderTotals().getRemainingCompensation();
             assertThat(actualRemainingCompensation).
                     as("remaining compensation was: " + actualRemainingCompensation + " but should be :" + NumberFormatUtils.formatBigDecimalToHaveTwoDigits(expectedRemainingCompensation))
@@ -198,40 +208,18 @@ public class OrderDetailsPage extends BaseClaimPage {
                     as("Order details should not be displayed")
                     .isFalse();
         }
-
     }
-
+    @Getter
     class OrderTotals{
+
         private BigDecimal compensationAmount; //IC to Scalepoint
         private BigDecimal goods;//Scalepoint has paid to supplier
         private BigDecimal payouts;//Scalepoint paid to customer
         private BigDecimal deposits;//Customer has paid to Scalepoint
         private BigDecimal remainingCompensation;
 
-
-
-        BigDecimal getCompensationAmount() {
-            return compensationAmount;
-        }
-
-        BigDecimal getGoods() {
-            return goods;
-        }
-
-        BigDecimal getPayouts() {
-            return payouts;
-        }
-
-        BigDecimal getDeposits() {
-            return deposits;
-        }
-
-        BigDecimal getRemainingCompensation() {
-            return remainingCompensation;
-        }
-
-
         OrderTotals() {
+
             this.compensationAmount = getValueForTotalRowWithIndex(0);
             this.goods = getValueForTotalRowWithIndex(2);
             this.payouts = getValueForTotalRowWithIndex(3);
@@ -240,10 +228,12 @@ public class OrderDetailsPage extends BaseClaimPage {
         }
 
         private BigDecimal getValueForTotalRowWithIndex(int rowIndex){
+
             return NumberFormatUtils.formatBigDecimalToHaveTwoDigits((getTextForTotalRowWithIndex(rowIndex).replace(',', '.')));
         }
 
         private String getTextForTotalRowWithIndex(int rowIndex){
+
             ElementsCollection totalRows = $$("#total table tr");
             By amountTextSelector = By.xpath("td[2]");
             return totalRows.get(rowIndex).find(amountTextSelector).getText();
@@ -256,6 +246,7 @@ public class OrderDetailsPage extends BaseClaimPage {
         BigDecimal totalOrderAmount;
 
         Suborders(){
+
             totalOrderAmount = NumberFormatUtils
                     .formatBigDecimalToHaveTwoDigits(OperationalUtils.getDoubleValue($("#orders .order-table td:first-of-type").getText()));
             subordersList = $$("#orders table.order-wrapper-table,table.Cancelled")
@@ -296,6 +287,7 @@ public class OrderDetailsPage extends BaseClaimPage {
             public class Asserts {
 
                 public Asserts assertUnitPrice(BigDecimal expectedUnitPrice) {
+
                     assertThat(unitPrice)
                             .as("unitPrice was: " + unitPrice + " but should be: " + expectedUnitPrice)
                             .isEqualTo(expectedUnitPrice);
@@ -303,6 +295,7 @@ public class OrderDetailsPage extends BaseClaimPage {
                 }
 
                 public Asserts assertQuantity(int expectedQuantity) {
+
                     assertThat(quantity)
                             .as("quantity was: " + quantity + " but should be: " + expectedQuantity)
                             .isEqualTo(expectedQuantity);
@@ -317,6 +310,7 @@ public class OrderDetailsPage extends BaseClaimPage {
                 }
 
                 public Asserts assertTotalPrice(BigDecimal expectedTotalPrice) {
+
                     assertThat(totalPrice)
                             .as("totalPrice was: " + totalPrice + " but should be: " + expectedTotalPrice)
                             .isEqualTo(expectedTotalPrice);

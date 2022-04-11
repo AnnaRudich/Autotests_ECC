@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class EditPolicyTypeDialog extends BaseDialogSelenide {
+public class EditPolicyTypeDialog extends BaseDialog {
 
     @FindBy(css = ".x-window")
     private SelenideElement editPolicyTypeDialog;

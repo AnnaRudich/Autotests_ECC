@@ -16,26 +16,31 @@ public abstract class BaseSupplierAdminNavigation extends Page {
     private final static By DEFAULT_SETTINGS = By.cssSelector("[data-recordid=mainDefaultSettingsId]");
 
     public SuppliersPage toSuppliersPage() {
+
         $(SUPPLIERS_PATH).click();
         return at(SuppliersPage.class);
     }
 
     public DefaultSettingsPage toDefaultSettings() {
+
         $(DEFAULT_SETTINGS).click();
         return at(DefaultSettingsPage.class);
     }
 
     public VouchersPage toVouchersPage() {
+
         $(VOUCHERS_PATH).click();
         return at(VouchersPage.class);
     }
 
     public LossSheetTemplatesPage toLossSheetTemplates(){
+
         $(LOSS_SHEET_TEMPLATES_PATH).click();
         return at(LossSheetTemplatesPage.class);
     }
 
     public LoginPage logout() {
+
         $(LOGOUT_PATH).click();
         return at(LoginPage.class);
     }

@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
@@ -33,26 +32,32 @@ public class SupplierDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
     }
 
     public GeneralTab selectGeneralTab() {
+
         return selectTab(SuppliersTab.TabType.GENERAL);
     }
 
     public ShopsTab selectShopsTab() {
+
         return selectTab(SuppliersTab.TabType.SHOPS);
     }
 
     public AgreementsTab selectAgreementsTab() {
+
         return selectTab(SuppliersTab.TabType.AGREEMENTS);
     }
 
     public BannerTab selectBannerTab() {
+
         return selectTab(SuppliersTab.TabType.BANNER);
     }
 
     public OrdersTab selectOrdersTab() {
+
         return selectTab(SuppliersTab.TabType.ORDERS);
     }
 
@@ -76,16 +81,19 @@ public class SupplierDialog extends BaseDialog {
     }
 
     public SuppliersPage saveSupplier() {
+
         hoverAndClick($(SAVE_BUTTON_PATH));
         return Page.at(SuppliersPage.class);
     }
 
     public SuppliersPage closeSupplier() {
+
         hoverAndClick($(CLOSE_BUTTON_PATH));
         return Page.at(SuppliersPage.class);
     }
 
     public SuppliersPage cancelSupplier() {
+
         hoverAndClick($(CANCEL_BUTTON_PATH));
         return Page.at(SuppliersPage.class);
     }
@@ -98,11 +106,13 @@ public class SupplierDialog extends BaseDialog {
         private SelenideElement tabElement;
 
         SuppliersTab(SelenideElement tab, TabType tabType) {
+
             this.tabElement = tab;
             this.tabType = findTabTypeByName(tab.getText());
         }
 
         public SupplierDialog click(){
+
             tabElement.click();
             return (SupplierDialog) BaseDialog.at(tabType.getTabClass());
         }
@@ -122,9 +132,11 @@ public class SupplierDialog extends BaseDialog {
             private Class tabClass;
 
             TabType(String name, Class tabClass){
+
                 this.name = name;
                 this.tabClass = tabClass;
             }
+
             public static TabType findTabTypeByName(String name) {
 
                 return Arrays.stream(TabType.values())
@@ -136,6 +148,7 @@ public class SupplierDialog extends BaseDialog {
     }
 
     public enum OrderMailFormat {
+
         PLAIN("Plain text", "PLAIN_TEXT_MAIL"),
         XML_ATTACHMENT("XML attachment", "NAVISION_XML_MAIL_ATTACHMENT"),
         XML_MAIL_BODY("XML mail body", "XML_MAIL_BODY"),
@@ -149,12 +162,13 @@ public class SupplierDialog extends BaseDialog {
         private String value;
 
         OrderMailFormat(String optionText, String value) {
+
             this.option = optionText;
             this.value = value;
         }
     }
 
-    public static class GeneralTabReadMode extends BaseDialogSelenide {
+    public static class GeneralTabReadMode extends BaseDialog {
 
         @FindBy(xpath = "//label[contains(text(),'Supplier name:')]")
         private SelenideElement name;

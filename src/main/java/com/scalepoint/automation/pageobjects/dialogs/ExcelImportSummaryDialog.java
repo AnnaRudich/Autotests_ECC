@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
-public class ExcelImportSummaryDialog extends BaseDialogSelenide {
+public class ExcelImportSummaryDialog extends BaseDialog {
 
     @FindBy(id = "import-summary-close-button")
     private SelenideElement confirmButton;

@@ -16,14 +16,18 @@ public class YesNoAttributeAction implements SearchAttributesActions {
 
     @Override
     public void selectAttribute(Attributes attribute) {
+
         yesNoSelect(attribute.getBy(), attribute.getOptions());
     }
 
     private void yesNoSelect(By by, String[] options) {
+
         WebElement initialElement = null;
         try {
+
             initialElement = Browser.driver().findElement(by);
         } catch (Exception e) {
+
             logger.error(e.getMessage());
         }
 
@@ -31,11 +35,13 @@ public class YesNoAttributeAction implements SearchAttributesActions {
 
         CheckBox checkBox = new CheckBox(initialElement.findElement(By.xpath("./parent::td/input")));
         if (!checkBox.isSelected()) {
+
             checkBox.select();
         }
         Select selectYesNo = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[1]")));
         Select comparision = new Select(null);
         if (options.length > 1) {
+
             comparision = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[2]")));
         }
         Select finalComparision = comparision;
@@ -43,14 +49,18 @@ public class YesNoAttributeAction implements SearchAttributesActions {
     }
 
     private void chooseOptionFromSelects(String option, Select... selects) {
+
         Arrays.stream(selects).forEach(select -> chooseOptionFromSelect(select, option));
     }
 
     private void chooseOptionFromSelect(Select select, String option) {
+
         try {
+
             select.selectByVisibleText(option);
             logger.info("Selecting option: " + option);
         } catch (Exception e) {
+
             logger.info(e.getMessage());
         }
     }

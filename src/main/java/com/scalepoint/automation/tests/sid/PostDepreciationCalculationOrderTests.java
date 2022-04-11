@@ -97,7 +97,6 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         sid.assertVoucherCashValueIs(replacementPrice);
     }
 
-
     @Test(groups = {TestGroups.SID, TestGroups.POST_DEPRECATION_CALCULATION_ORDER}, dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherCustomDD(User user, Claim claim, ClaimItem claimItem) {

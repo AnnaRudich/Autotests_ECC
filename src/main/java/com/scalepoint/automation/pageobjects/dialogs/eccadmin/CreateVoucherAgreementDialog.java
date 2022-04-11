@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import org.openqa.selenium.support.FindBy;
 
@@ -11,7 +10,7 @@ import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class CreateVoucherAgreementDialog extends BaseDialogSelenide {
+public class CreateVoucherAgreementDialog extends BaseDialog {
 
     @FindBy(name = "voucherName")
     private SelenideElement voucherName;

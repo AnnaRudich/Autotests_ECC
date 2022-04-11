@@ -8,5 +8,4 @@ public abstract class AdminBasePage extends Page {
     public LoginPage logout() {
         return to(AdminPage.class).toMatchingEngine().getClaimMenu().logout();
     }
-
 }

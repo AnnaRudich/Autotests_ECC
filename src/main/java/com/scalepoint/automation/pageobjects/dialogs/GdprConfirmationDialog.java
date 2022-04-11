@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class GdprConfirmationDialog extends BaseDialogSelenide {
+public class GdprConfirmationDialog extends BaseDialog {
 
     @FindBy(css = ".x-message-box")
     private SelenideElement gdprDialog;
