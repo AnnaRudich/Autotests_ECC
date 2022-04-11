@@ -1100,7 +1100,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setValuation(ValuationGrid.Valuation valuation) {
 
         return new ValuationGrid()
-                .parseValuationRow(valuation)
+                .getValuationRow(valuation)
                 .makeActive()
                 .backToGrid()
                 .toSettlementDialog();
@@ -1699,7 +1699,7 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertIsVoucherDiscountApplied(Double newPrice) {
 
-            ValuationGrid.ValuationRow valuationRow = new ValuationGrid().parseValuationRow(VOUCHER);
+            ValuationGrid.ValuationRow valuationRow = new ValuationGrid().getValuationRow(VOUCHER);
             assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;
         }

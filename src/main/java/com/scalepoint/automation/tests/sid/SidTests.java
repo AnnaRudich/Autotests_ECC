@@ -361,7 +361,7 @@ public class SidTests extends BaseTest {
                     });
         }
 
-        settlementDialog.valuationGrid().parseValuationRow(VOUCHER)
+        settlementDialog.valuationGrid().getValuationRow(VOUCHER)
                 .doAssert(row -> {
                     row.assertCashCompensationIs(voucherValuation.getCashValue());
                 })

@@ -7,10 +7,12 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
@@ -70,7 +72,7 @@ public class ShowMarketPricesTests extends BaseTest {
                     sid.assertMarketPriceSupplierInvisible();
                 })
                 .valuationGrid()
-                .parseValuationRow(MARKET_PRICE)
+                .getValuationRow(MARKET_PRICE)
                 .backToGrid()
                 .doAssert(asserts ->{
                     asserts.assertMarketPriceVisible();
@@ -95,9 +97,9 @@ public class ShowMarketPricesTests extends BaseTest {
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortMarketPricesAscending()
-                .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceAscendant)
+                .doAssert(textsearch -> textsearch.assertSortingMarketPriceAscendant())
                 .sortMarketPricesDescending()
-                .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceDescendant)
+                .doAssert(textsearch -> textsearch.assertSortingMarketPriceDescendant())
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
                 .doAssert(productDetails -> {

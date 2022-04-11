@@ -126,7 +126,7 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             sid.assertDepreciationAmountIs(expectedCalculations.getDepreciation());
         })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> {
                     valuationRow.assertCashCompensationIs(expectedCalculations.getCashValue());
                     valuationRow.assertDepreciationPercentageIs(10);
