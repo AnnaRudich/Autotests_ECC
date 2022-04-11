@@ -16,34 +16,42 @@ public interface VoucherAgreementTabs extends Actions {
     int TIMEOUT_MS = 10000;
 
     default VoucherAgreementLegalTab selectLegalTab() {
+
         return selectTab(VoucherAgreementLegalTab.class, "Legal");
     }
 
     default VoucherAgreementCoverageTab selectCoverageTab() {
+
         return selectTab(VoucherAgreementCoverageTab.class, "Coverage");
     }
 
     default VoucherAgreementInfoTab selectInfoTab() {
+
         return selectTab(VoucherAgreementInfoTab.class, "Info");
     }
 
     default VoucherAgreementGeneralTab selectGeneralTab() {
+
         return selectTab(VoucherAgreementGeneralTab.class, "General");
     }
 
     default VoucherAgreementCategoriesTab selectCategoriesTab() {
+
         return selectTab(VoucherAgreementCategoriesTab.class, "Categories");
     }
 
     default VoucherAgreementAdvancedTab selectAdvancedTab() {
+
         return selectTab(VoucherAgreementAdvancedTab.class, "Advanced");
     }
 
     default VoucherAgreementDiscountDistributionTab selectDiscountDistributionTab() {
+
         return selectTab(VoucherAgreementDiscountDistributionTab.class, "Discount Distribution");
     }
 
     default <T extends BaseDialog & VoucherAgreementTabs> T selectTab(Class<T> tabClass, String tabName) {
+
         SelenideElement element = $(By.xpath("//div[contains(@class,'editSupplierVoucherWindow')]//span[contains(normalize-space(text()),'" + tabName + "')]"));
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
         return at(tabClass);

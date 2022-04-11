@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
-public class OpenSettlementOptionDialog extends BaseDialogSelenide{
+public class OpenSettlementOptionDialog extends BaseDialog {
 
     private Button getReopen(){
 

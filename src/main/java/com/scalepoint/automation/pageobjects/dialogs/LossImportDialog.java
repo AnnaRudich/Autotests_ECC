@@ -14,11 +14,10 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class LossImportDialog extends BaseDialogSelenide {
+public class LossImportDialog extends BaseDialog {
 
     @FindBy(id = "self-service-import-button")
     private SelenideElement selfServiceImportButton;
-
     @FindBy(id = "excel-import-button")
     private SelenideElement excelImportButton;
 
@@ -45,13 +44,13 @@ public class LossImportDialog extends BaseDialogSelenide {
     public LossLineImportDialog confirmSelfServiceImport() {
 
         selfServiceImportButton.click();
-        return BaseDialogSelenide.at(LossLineImportDialog.class);
+        return BaseDialog.at(LossLineImportDialog.class);
     }
 
     public SettlementPage confirmSelfServiceImportNoErrors() {
 
         selfServiceImportButton.click();
-        return BaseDialogSelenide.at(ExcelImportSummaryDialog.class).confirmImportSummary();
+        return BaseDialog.at(ExcelImportSummaryDialog.class).confirmImportSummary();
     }
     /*
      * ExcelImportCategoriesAndValuationsSelectionTest
@@ -67,12 +66,12 @@ public class LossImportDialog extends BaseDialogSelenide {
     public SettlementPage uploadExcelNoErrors(String path){
 
         startUploadExcel(path);
-        return BaseDialogSelenide.at(ExcelImportSummaryDialog.class).confirmImportSummary();
+        return BaseDialog.at(ExcelImportSummaryDialog.class).confirmImportSummary();
     }
 
     public LossLineImportDialog uploadExcelWithErrors(String path){
 
         startUploadExcel(path);
-        return BaseDialogSelenide.at(LossLineImportDialog.class);
+        return BaseDialog.at(LossLineImportDialog.class);
     }
 }

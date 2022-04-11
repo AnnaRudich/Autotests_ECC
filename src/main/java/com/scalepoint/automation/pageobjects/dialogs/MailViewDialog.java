@@ -21,7 +21,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
-public class MailViewDialog extends BaseDialogSelenide {
+public class MailViewDialog extends BaseDialog {
 
     @FindBy(id = "show-mail-window-cancel-button-btnInnerEl")
     private SelenideElement cancelButton;

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class VoucherTermsAndConditionsDialog extends BaseDialogSelenide {
+public class VoucherTermsAndConditionsDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

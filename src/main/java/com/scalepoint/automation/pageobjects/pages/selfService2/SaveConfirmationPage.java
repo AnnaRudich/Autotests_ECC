@@ -10,16 +10,19 @@ public class SaveConfirmationPage extends Page {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "/self-service/dk/save-confirmation";
     }
 
     public LoginSelfService2Page continueRegistration(){
+
         $(".btn").click();
         return Page.at(LoginSelfService2Page.class);
     }

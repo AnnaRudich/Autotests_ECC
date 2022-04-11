@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
-public class EditCustomerNoteDialog extends BaseDialogSelenide {
+public class EditCustomerNoteDialog extends BaseDialog {
 
     @FindBy(id = "editCustomerNoteOkButton")
     private SelenideElement ok;

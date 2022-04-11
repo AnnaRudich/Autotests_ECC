@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.PastedData;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
@@ -26,43 +25,40 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class NewCustomerPage extends Page {
 
     @FindBy(id = "damageDate-inputEl")
-    private WebElement damageDate;
-
+    private SelenideElement damageDate;
     @FindBy(name = "salutation")
-    private WebElement title;
-
+    private SelenideElement title;
     @FindBy(name = "last_name")
-    private WebElement surname;
-
+    private SelenideElement surname;
     @FindBy(name = "first_name")
-    private WebElement firstNames;
-
+    private SelenideElement firstNames;
     @FindBy(name = "postal_code")
-    private WebElement postalCode;
-
+    private SelenideElement postalCode;
     @FindBy(id = "city")
-    private WebElement city;
-
+    private SelenideElement city;
     @FindBy(id = "address")
-    private WebElement address;
-
+    private SelenideElement address;
     @FindBy(name = "policy_number")
-    private WebElement policyNumber;
-
+    private SelenideElement policyNumber;
     @FindBy(name = "claim_number")
-    private WebElement claimsNumber;
-
-    @FindBy(id = "policy_type")
-    private Select policyType;
-
-    @FindBy(css = ".selectfield")
-    private Select selectCompany;
-
-    @FindBy(id = "continue")
-    private Button continueButton;
-
+    private SelenideElement claimsNumber;
     @FindBy(className = "copyPasteTextArea")
-    private WebElement copyPasteTextArea;
+    private SelenideElement copyPasteTextArea;
+
+    private Select getPolicyType(){
+
+        return new Select($(By.id("policy_type")));
+    }
+
+    private Select getSelectCompany(){
+
+        return new Select($(By.cssSelector(".selectfield")));
+    }
+
+    private Button getContinueButton(){
+
+        return new Button($(By.id("continue")));
+    }
 
     @Override
     protected String getRelativeUrl() {
@@ -71,69 +67,77 @@ public class NewCustomerPage extends Page {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(claimsNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        $(surname).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        claimsNumber.should(Condition.visible);
+        surname.should(Condition.visible);
     }
 
-    public WebElement getContinueButton() {
-        return continueButton.getWrappedElement();
-    }
+//    public WebElement getContinueButton() {
+//        return continueButton.getWrappedElement();
+//    }
 
     public NewCustomerPage enterTitle(String titleName) {
-        $(title).setValue(titleName);
+
+        title.setValue(titleName);
         return this;
     }
 
     public NewCustomerPage enterSurname(String surnameText) {
-        $(surname).setValue(surnameText);
+
+        surname.setValue(surnameText);
         return this;
     }
 
     public NewCustomerPage enterFirstName(String firstNameText) {
-        $(firstNames).setValue(firstNameText);
+
+        firstNames.setValue(firstNameText);
         return this;
     }
 
     public NewCustomerPage enterPolicyNumber(String policyNumberText) {
-        $(policyNumber).setValue(policyNumberText);
+
+        policyNumber.setValue(policyNumberText);
         return this;
     }
 
     public NewCustomerPage enterClaimNumber(String claimNumberText) {
-        $(claimsNumber).setValue(claimNumberText);
+
+        claimsNumber.setValue(claimNumberText);
         return this;
     }
 
     public NewCustomerPage selectPolicyType(String policyType) {
-        this.policyType.selectByVisibleText(policyType);
+
+        this.getPolicyType().selectByVisibleText(policyType);
         return this;
     }
 
     public NewCustomerPage enterCopyPasteTextArea(String text) {
-        $(copyPasteTextArea).setValue(text);
+        copyPasteTextArea.setValue(text);
         return this;
     }
 
     public NewCustomerPage selectPolicyType(int index) {
-        verifyElementVisible($(policyType));
-        policyType.selectByIndex(index);
+        verifyElementVisible($(getPolicyType()));
+        getPolicyType().selectByIndex(index);
         return this;
     }
 
     public SettlementPage create() {
-        continueButton.click();
+        getContinueButton().click();
         waitForAjaxCompletedAndJsRecalculation();
         return Page.at(SettlementPage.class);
     }
 
     public NewCustomerPage selectCompany(String company) {
-        selectCompany.selectByVisibleText(company);
+        getSelectCompany().selectByVisibleText(company);
         return this;
     }
 
     public NewCustomerPage selectDamageDate(LocalDate date) {
+
         damageDate.click();
         verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
@@ -147,6 +151,7 @@ public class NewCustomerPage extends Page {
     }
 
     public NewCustomerPage doAssert(Consumer<Asserts> assertsFunc) {
+
         assertsFunc.accept(new Asserts());
         return this;
     }
@@ -154,60 +159,71 @@ public class NewCustomerPage extends Page {
     public class Asserts {
 
         public Asserts assertThatDamageDateIsDisplayed() {
+
             assertThat(damageDate.isDisplayed()).isTrue();
             return this;
         }
 
         public Asserts assertDamageDate(String expectedDamageDate) {
-            assertThat($(damageDate).getValue()).isEqualTo(expectedDamageDate);
+
+            assertThat(damageDate.getValue()).isEqualTo(expectedDamageDate);
             return this;
         }
 
         public Asserts assertLastName(String expectedLastName) {
-            assertThat($(surname).getValue()).isEqualTo(expectedLastName);
+
+            assertThat(surname.getValue()).isEqualTo(expectedLastName);
             return this;
         }
 
         public Asserts assertFirstName(String expectedFirstName) {
-            assertThat($(firstNames).getValue()).isEqualTo(expectedFirstName);
+
+            assertThat(firstNames.getValue()).isEqualTo(expectedFirstName);
             return this;
         }
 
         public Asserts assertCity(String expectedCity) {
-            assertThat($(city).getValue()).isEqualTo(expectedCity);
+
+            assertThat(city.getValue()).isEqualTo(expectedCity);
             return this;
         }
 
         public Asserts assertAddress(String expectedAdress) {
-            assertThat($(address).getValue()).isEqualTo(expectedAdress);
+
+            assertThat(address.getValue()).isEqualTo(expectedAdress);
             return this;
         }
 
         public Asserts assertClaimNumber(String expectedClaimNumber) {
-            assertThat($(claimsNumber).getValue()).isEqualTo(expectedClaimNumber);
+
+            assertThat(claimsNumber.getValue()).isEqualTo(expectedClaimNumber);
             return this;
         }
 
         public Asserts assertPostalCode(String expectedPostalCode) {
-            assertThat($(postalCode).getValue()).isEqualTo(expectedPostalCode);
+
+            assertThat(postalCode.getValue()).isEqualTo(expectedPostalCode);
             return this;
         }
 
         public Asserts assertPolicyNumber(String expectedPolicyNumber) {
-            SelenideElement policyNumberElement = $(policyNumber);
-            if(policyNumberElement.has(not(attribute("type", "hidden")))) {
-                assertThat($(policyNumber).getValue()).isEqualTo(expectedPolicyNumber);
+
+            if(policyNumber.has(not(attribute("type", "hidden")))) {
+
+                assertThat(policyNumber.getValue()).isEqualTo(expectedPolicyNumber);
             }
             return this;
         }
 
         public Asserts assertPolicyType(String expectedPolicyType) {
-            assertThat($(policyType).getText()).isEqualTo(expectedPolicyType);
+
+            assertThat($(getPolicyType()).getText()).isEqualTo(expectedPolicyType);
             return this;
         }
 
         public Asserts assertCopyPasteMechanism() {
-            PastedData pastedData = PastedData.parsePastedData($(copyPasteTextArea).getValue());
+
+            PastedData pastedData = PastedData.parsePastedData(copyPasteTextArea.getValue());
             assertFirstName(pastedData.getFirstName());
             assertLastName(pastedData.getLastName());
             assertPostalCode(pastedData.getZipCode());

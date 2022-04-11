@@ -1,11 +1,12 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.modules.ClaimMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -21,90 +22,114 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class MyPage extends Page {
 
     private MainMenu mainMenu = new MainMenu();
-
     private ClaimMenu claimMenu = new ClaimMenu();
 
-    @FindBy(id = "EditPreferences")
-    private Button editPreferences;
-
-    @FindBy(id = "newCustomerButton-btnEl")
-    private Button createNewCase;
-
-    @FindBy(id = "cases-table")
-    private Table lastClaims;
-
-    @FindBy(id = "ActiveCustomer")
-    private Link activeCustomerLink;
-
-    @FindBy(id = "RecentCustomer0")
-    private Link recentCustomer;
-
     @FindBy(id = "RecentState0")
-    private WebElement latestCustomerStatus;
+    private SelenideElement latestCustomerStatus;
+
+    private Button getEditPreferences(){
+
+        return new Button($(By.id("EditPreferences")));
+    }
+
+    private Button getCreateNewCase(){
+
+        return new Button($(By.id("newCustomerButton-btnEl")));
+    }
+
+    private Table getLastClaims(){
+
+        return new Table($(By.id("cases-table")));
+    }
+
+    private Link getActiveCustomerLink(){
+
+        return new Link($(By.id("ActiveCustomer")));
+    }
+
+    private Link getRecentCustomer(){
+
+        return new Link($(By.id("RecentCustomer0")));
+    }
 
     @Override
     protected String getRelativeUrl() {
+
+
         return "webshop/jsp/matching_engine/my_page.jsp";
     }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(editPreferences).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        $(lastClaims).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(getEditPreferences()).should(Condition.visible);
+        $(getLastClaims()).should(Condition.visible);
     }
 
     public CustomerDetailsPage openRecentClaim() {
+
         $("#RecentCustomer0").click();
         return at(CustomerDetailsPage.class);
     }
 
     public SettlementPage openActiveRecentClaim() {
-        activeCustomerLink.click();
+
+        getActiveCustomerLink().click();
         return at(SettlementPage.class);
     }
 
     public NewCustomerPage clickCreateNewCase() {
-        $(createNewCase).click();
+
+        getCreateNewCase().click();
         return Page.at(NewCustomerPage.class);
     }
 
     public EditPreferencesPage openEditPreferences() {
-        editPreferences.click();
+
+        getEditPreferences().click();
         return Page.at(EditPreferencesPage.class);
     }
 
     public MainMenu getMainMenu() {
+
         return mainMenu;
     }
 
     public ClaimMenu getClaimMenu() {
+
         return claimMenu;
     }
 
     public MyPage doAssert(Consumer<Asserts> assertsFunc) {
+
         assertsFunc.accept(new Asserts());
         return MyPage.this;
     }
 
     public class Asserts {
+
         public Asserts assertClaimCompleted() {
+
             Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.COMPLETED.getText()), "Claim must be completed");
             return this;
         }
 
         public Asserts assertRecentClaimCancelled() {
+
             Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.CANCELLED.getText()), "Claim must be cancelled");
             return this;
         }
 
         public Asserts assertClaimHasStatus(String status) {
+
             Assert.assertTrue(latestCustomerStatus.getText().contains(status), errorMessage("Claim should have [%s] status", status));
             return this;
         }
 
         public Asserts assertAdminLinkDisplayed() {
+
             Assert.assertTrue(getClaimMenu().isAdminLinkDisplayed());
             return this;
         }

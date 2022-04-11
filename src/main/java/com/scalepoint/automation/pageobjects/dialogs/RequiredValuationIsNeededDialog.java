@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Selenide.$;
 /**
  * @author : igu
  */
-public class RequiredValuationIsNeededDialog extends BaseDialogSelenide {
+public class RequiredValuationIsNeededDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

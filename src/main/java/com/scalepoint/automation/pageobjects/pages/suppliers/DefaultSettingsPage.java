@@ -19,13 +19,15 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(".defaultSettings").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(".defaultSettings").should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "#defaultSettings";
     }
 
@@ -72,40 +74,46 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 canServicePartnerUpdateSelfRisk  = columns.get(7).find("img");
                 daysBeforeReminder = columns.get(8).getText();
                 daysBeforeAutoApprove = columns.get(9).getText();
-                System.out.println();
             }
 
             public DefaultSettingsRow setSelfRiskCollectedByInsuranceCompany(){
+
                 selfRiskCollectedBy.setByInsuranceCompany();
                 return this;
             }
 
             public DefaultSettingsRow setSelfRiskCollectedByServicePartner(){
+
                 selfRiskCollectedBy.setByServicePartner();
                 return this;
             }
 
             public DefaultSettingsRow setPaymentOfInvoiceByInsuranceCompany(){
+
                 paymentOfInvoice.setByInsuranceCompany();
                 return this;
             }
 
             public DefaultSettingsRow setPaymentOfInvoiceByScalepoint(){
+
                 paymentOfInvoice.setByScalepoint();
                 return this;
             }
 
             public DefaultSettingsRow setOvercollectedDeductibleViaContent(){
+
                 overcollectedDeductible.setViaContent();
                 return this;
             }
 
             public DefaultSettingsRow setOvercollectedDeductibleViaInsuranceCompany(){
+
                 overcollectedDeductible.setViaInsuranceCompany();
                 return this;
             }
 
             public DefaultSettingsRow enableCanServicePartnerUpdateSelfRisk(){
+
                 canServicePartnerUpdateSelfRisk.click();
                 return this;
             }
@@ -132,6 +140,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 private CheckBox servicePartner;
 
                 SelfRiskCollectedBy(SelenideElement insuranceCompany, SelenideElement servicePartner){
+
                     this.insuranceCompany = new CheckBox(insuranceCompany);
                     this.servicePartner = new CheckBox(servicePartner);
                 }
@@ -139,6 +148,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 public SelfRiskCollectedBy setByInsuranceCompany(){
 
                     if(!insuranceCompany.isChecked()){
+
                         insuranceCompany.click();
                     }
                     return this;
@@ -146,6 +156,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 public SelfRiskCollectedBy setByServicePartner(){
 
                     if(!servicePartner.isChecked()){
+
                         servicePartner.click();
                     }
                     return this;
@@ -158,6 +169,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 private CheckBox scalepoint;
 
                 PaymentOfInvoice(SelenideElement insuranceCompany, SelenideElement scalepoint){
+
                     this.insuranceCompany = new CheckBox(insuranceCompany);
                     this.scalepoint = new CheckBox(scalepoint);
                 }
@@ -165,6 +177,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 public PaymentOfInvoice setByInsuranceCompany(){
 
                     if(!insuranceCompany.isChecked()){
+
                         insuranceCompany.click();
                     }
                     return this;
@@ -172,6 +185,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 public PaymentOfInvoice setByScalepoint(){
 
                     if(!scalepoint.isChecked()){
+
                         scalepoint.click();
                     }
                     return this;
@@ -184,6 +198,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 CheckBox viaInsuranceCompany;
 
                 OvercollectedDeductible(SelenideElement viaContent, SelenideElement viaInsuranceCompany){
+
                     this.viaContent = new CheckBox(viaInsuranceCompany);
                     this.viaInsuranceCompany = new CheckBox(viaInsuranceCompany);
                 }
@@ -191,6 +206,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 public OvercollectedDeductible setViaContent(){
 
                     if(!viaContent.isChecked()){
+
                         viaContent.click();
                     }
                     return this;
@@ -198,6 +214,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 public OvercollectedDeductible setViaInsuranceCompany(){
 
                     if(!viaInsuranceCompany.isChecked()){
+
                         viaInsuranceCompany.click();
                     }
                     return this;

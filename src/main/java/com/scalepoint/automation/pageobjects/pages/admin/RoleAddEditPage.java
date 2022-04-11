@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,166 +16,126 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class RoleAddEditPage extends AdminBasePage {
 
     @FindBy(name = "roleName")
-    private WebElement nameField;
-
+    private SelenideElement nameField;
     @FindBy(name = "ADMINISTER_ROLES_PAGES_ACCESS_ID_1")
-    private WebElement adminRoleButton;
-
+    private SelenideElement adminRoleButton;
     @FindBy(name = "ACCESSORY_PAGE_ACCESS_ID_2")
-    private WebElement accessoryPageButton;
-
+    private SelenideElement accessoryPageButton;
     @FindBy(name = "USERS_PAGE_ACCESS_ID_3")
-    private WebElement usersPageButton;
-
+    private SelenideElement usersPageButton;
     @FindBy(name = "INSURANCE_COMPANY_PAGE_ACCESS_ID_4")
-    private WebElement icPageButton;
-
+    private SelenideElement icPageButton;
     @FindBy(name = "FUNCTION_TEMPLATE_PAGE_ACCESS_ID_5")
-    private WebElement ftPageButton;
-
+    private SelenideElement ftPageButton;
     @FindBy(name = "TESTMAIL_PAGE_ACCESS_ID_6")
-    private WebElement testMailPageButton;
-
+    private SelenideElement testMailPageButton;
     @FindBy(name = "TESTMOBILE_PAGE_ACCESS_ID_7")
-    private WebElement testMobilePageButton;
-
+    private SelenideElement testMobilePageButton;
     @FindBy(name = "SALES_TAXES_PAGE_ACCESS_ID_9")
-    private WebElement salesTaxesPageButton;
-
+    private SelenideElement salesTaxesPageButton;
     @FindBy(name = "FLUSH_ALL_PAGE_ACCESS_ID_10")
-    private WebElement flushAllPageButton;
-
+    private SelenideElement flushAllPageButton;
     @FindBy(name = "FLUSH_TEXT_CACHE_PAGE_ACCESS_ID_11")
-    private WebElement flushTextCashPageButton;
-
+    private SelenideElement flushTextCashPageButton;
     @FindBy(name = "IMPORT_TASKS_PAGE_ACCESS_ID_12")
-    private WebElement importTasksPageButton;
-
+    private SelenideElement importTasksPageButton;
     @FindBy(name = "DBVERSION_PAGE_ACCESS_ID_13")
-    private WebElement dbVersionPageButton;
-
+    private SelenideElement dbVersionPageButton;
     @FindBy(name = "DATABASE_INFO_PAGE_ACCESS_ID_14")
-    private WebElement dbInfoPageButton;
-
+    private SelenideElement dbInfoPageButton;
     @FindBy(name = "APPLICATION_INFO_PAGE_ACCESS_ID_15")
-    private WebElement applicationInfoPageButton;
-
+    private SelenideElement applicationInfoPageButton;
     @FindBy(name = "VERSION_INFO_PAGE_ACCESS_ID_16")
-    private WebElement versionInfoPageButton;
-
+    private SelenideElement versionInfoPageButton;
     @FindBy(name = "BBB_INITIALIZE_ORDERS_PAGE_ACCESS_ID_18")
-    private WebElement bbbInitOrdersPageButton;
-
+    private SelenideElement bbbInitOrdersPageButton;
     @FindBy(name = "BBB_SEND_ORDERS_PAGE_ACCESS_ID_19")
-    private WebElement bbbSentOrdersPageButton;
-
+    private SelenideElement bbbSentOrdersPageButton;
     @FindBy(name = "E_VOUCHER_LIST_PAGE_ACCESS_ID_20")
-    private WebElement eVouchersPageButton;
-
+    private SelenideElement eVouchersPageButton;
     @FindBy(name = "DEPARTMENTS_PAGE_ACCESS_ID_21")
-    private WebElement departmentsPageButton;
-
+    private SelenideElement departmentsPageButton;
     @FindBy(name = "ATTRIBUTE_META_DATA_PAGE_ACCESS_ID_22")
-    private WebElement attributeDataPageButton;
-
+    private SelenideElement attributeDataPageButton;
     @FindBy(name = "ATTRIBUTE_META_DATA_STATUS_PAGE_ACCESS_ID_23")
-    private WebElement attributeDataStatusPageButton;
-
+    private SelenideElement attributeDataStatusPageButton;
     @FindBy(name = "ATTRIBUTE_TYPE_DEFAULT_SORT_ORDER_PAGE_ACCESS_ID_24")
-    private WebElement attributeTypeDefaultPageButton;
-
+    private SelenideElement attributeTypeDefaultPageButton;
     @FindBy(name = "GENERIC_ITEMS_PAGE_ACCESS_ID_25")
-    private WebElement generaicItemsPageButton;
-
+    private SelenideElement generaicItemsPageButton;
     @FindBy(name = "DEPLOYMENT_PAGE_ACCESS_ID_26")
-    private WebElement deploymentPageButton;
-
+    private SelenideElement deploymentPageButton;
     @FindBy(name = "REDUCTION_RULE_PAGE_ACCESS_ID_28")
-    private WebElement redRulePageButton;
-
+    private SelenideElement redRulePageButton;
     @FindBy(name = "SETTLEMENT_INTEGRATION_DOCUMENTS_PAGE_ACCESS_ID_29")
-    private WebElement setIntPageButton;
-
+    private SelenideElement setIntPageButton;
     @FindBy(name = "SUPPLIER_ORDER_NOTIFICATION_PAGE_ACCESS_ID_30")
-    private WebElement supOrderNotPageButton;
-
+    private SelenideElement supOrderNotPageButton;
     @FindBy(name = "COMPANY_SPECIFIC_CATEGORIES_PAGE_ACCESS_ID_31")
-    private WebElement companySpecificCatPageButton;
-
+    private SelenideElement companySpecificCatPageButton;
     @FindBy(name = "COMPANY_SPECIFIC_CLAIMCATEGORIES_PAGE_ACCESS_ID_32")
-    private WebElement companySpecificClaimPageButton;
-
+    private SelenideElement companySpecificClaimPageButton;
     @FindBy(name = "PRICERUNNER_MAPPINGS_PAGE_ACCESS_ID_33")
-    private WebElement prMappingsPageButton;
-
+    private SelenideElement prMappingsPageButton;
     @FindBy(name = "PRICERUNNER_EXTENDED_DATA_PAGE_ACCESS_ID_34")
-    private WebElement prExtendedPageButton;
-
+    private SelenideElement prExtendedPageButton;
     @FindBy(name = "PRICERUNNER_EXTERNAL_PRICES_PAGE_ACCESS_ID_35")
-    private WebElement prExternalPageButton;
-
+    private SelenideElement prExternalPageButton;
     @FindBy(name = "CHECK_SCAN_ENGINE_PAGE_ACCESS_ID_36")
-    private WebElement checkScanEnginePageButton;
-
+    private SelenideElement checkScanEnginePageButton;
     @FindBy(name = "CATEGORY_SPECIFIC_IC_CLAIMSHEET_PAGE_ACCESS_ID_37")
-    private WebElement catSpecificICClaimPageButton;
-
+    private SelenideElement catSpecificICClaimPageButton;
     @FindBy(name = "TEXTSEARCH_CONFIGURATION_PAGE_ACCESS_ID_38")
-    private WebElement textSearchConfPageButton;
-
+    private SelenideElement textSearchConfPageButton;
     @FindBy(name = "PSEUDOCATEGORY_MODEL_PAGE_ACCESS_ID_39")
-    private WebElement pseudoCatModelPageButton;
-
+    private SelenideElement pseudoCatModelPageButton;
     @FindBy(name = "PSEUDOCATEGORY_GROUP_PAGE_ACCESS_ID_40")
-    private WebElement pseudoCatGroupPageButton;
-
+    private SelenideElement pseudoCatGroupPageButton;
     @FindBy(name = "PSEUDOCATEGORIES_PAGE_ACCESS_ID_41")
-    private WebElement pseudoCatPageButton;
-
+    private SelenideElement pseudoCatPageButton;
     @FindBy(name = "EDIT_CUSTOMER_ORDERS_ACCESS_ID_43")
-    private WebElement editCastOrderPageButton;
-
+    private SelenideElement editCastOrderPageButton;
     @FindBy(name = "CAN_REOPEN_CLAIMS_ACCESS_ID_44")
-    private WebElement canReopenClaimButton;
-
+    private SelenideElement canReopenClaimButton;
     @FindBy(name = "CAN_COMPLETE_CLAIMS_ACCESS_ID_45")
-    private WebElement canCompleteClaimButton;
-
+    private SelenideElement canCompleteClaimButton;
     @FindBy(name = "TEXTSEARCH_POPULARITY_PAGE_ACCESS_ID_47")
-    private WebElement tsPopularityButton;
-
+    private SelenideElement tsPopularityButton;
     @FindBy(xpath = "//td[@class='selectionTD'][1]/input[@name='TEXTSEARCH_POPULARITY_PAGE_ACCESS_ID_47']")
-    private WebElement enableTSPopularityButton;
-
+    private SelenideElement enableTSPopularityButton;
     @FindBy(xpath = "//td[@class='selectionTD'][2]/input[@name='TEXTSEARCH_POPULARITY_PAGE_ACCESS_ID_47']")
-    private WebElement disableTSPopularityButton;
-
+    private SelenideElement disableTSPopularityButton;
     @FindBy(id = "btnOk")
-    private WebElement saveButton;
+    private SelenideElement saveButton;
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        saveButton.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/role_permission_edit.jsp";
     }
 
     public void addRoleName(String roleName) {
+
         nameField.sendKeys(roleName);
     }
 
     public RolesPage selectSaveOption() {
-        hoverAndClick($(saveButton));
+
+        hoverAndClick(saveButton);
         return at(RolesPage.class);
     }
 
     public void enableAllRoles() {
-        List<WebElement> elements = Arrays.asList(adminRoleButton, accessoryPageButton,
+
+        List<SelenideElement> elements = Arrays.asList(adminRoleButton, accessoryPageButton,
                 usersPageButton, icPageButton, ftPageButton, testMailPageButton, testMobilePageButton,
                 salesTaxesPageButton, flushAllPageButton, flushTextCashPageButton, importTasksPageButton, dbVersionPageButton,
                 dbInfoPageButton, applicationInfoPageButton, versionInfoPageButton, bbbInitOrdersPageButton,
@@ -202,12 +163,15 @@ public class RoleAddEditPage extends AdminBasePage {
                 pseudoCatPageButton,
                 editCastOrderPageButton,
                 canCompleteClaimButton);
+
         for (WebElement item : elements) {
+
             hoverAndClick($(item).scrollTo());
         }
     }
 
     public RolesPage createNewRoleAllRolesEnabled(String roleName) {
+
         addRoleName(roleName);
         enableAllRoles();
         return selectSaveOption();

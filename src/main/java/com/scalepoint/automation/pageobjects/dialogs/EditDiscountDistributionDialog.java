@@ -13,17 +13,14 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class EditDiscountDistributionDialog extends BaseDialogSelenide {
+public class EditDiscountDistributionDialog extends BaseDialog {
 
     @FindBy(id = "distribution-voucher-face-value-display")
     private SelenideElement faceValueText;
-
     @FindBy(id = "distribution-voucher-cash-value-display")
     private SelenideElement cashValueText;
-
     @FindBy(id = "distribution-voucher-ok-button")
     private SelenideElement saveButton;
-
     @FindBy(id = "distribution-voucher-cancel-button")
     private SelenideElement cancelButton;
 
@@ -61,7 +58,7 @@ public class EditDiscountDistributionDialog extends BaseDialogSelenide {
     public EditVoucherValuationDialog saveDiscountDistribution() {
 
         saveButton.click();
-        return BaseDialogSelenide.at(EditVoucherValuationDialog.class);
+        return BaseDialog.at(EditVoucherValuationDialog.class);
     }
 
     public EditDiscountDistributionDialog doAssert(Consumer<Asserts> assertFunc) {

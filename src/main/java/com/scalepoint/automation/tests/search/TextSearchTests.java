@@ -7,18 +7,16 @@ import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.TOUCH_SCREEN_NEJ;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 public class TextSearchTests extends BaseTest {
 
@@ -147,13 +145,13 @@ public class TextSearchTests extends BaseTest {
         /* selecting model we have only one result shown so we can check only icon presence*/
         tsp.selectModel(textSearch.getModelGalaxyS7())
                 .waitForResultsLoad()
-                .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
+                .doAssert(asserts -> asserts.assertAscendingPopularityChosen());
 
         /* new search should reset popularity sort so no icons will be present */
         tsp.searchByProductName(product)
                 .waitForResultsLoad()
                 .doAssert(
-                        TextSearchPage.Asserts::assertNoPopularitySortChosen);
+                        asserts -> asserts.assertNoPopularitySortChosen());
     }
 
     @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",

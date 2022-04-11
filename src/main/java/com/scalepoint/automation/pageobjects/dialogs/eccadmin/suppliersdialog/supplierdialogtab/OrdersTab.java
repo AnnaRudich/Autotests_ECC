@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.Su
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroupTypeInput;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -17,127 +18,145 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public  class OrdersTab extends SupplierDialog{
 
     @FindBy(name = "orderEmail")
-    private WebElement emailField;
-
+    private SelenideElement emailField;
     @FindBy(id = "orderFlowOldFlow")
-    private WebElement radioOldOrderFlow;
-
+    private SelenideElement radioOldOrderFlow;
     @FindBy(id = "orderFlowOrderService")
-    private WebElement radioOrderService;
-
-    @FindBy(css = ".supplier-order-mail-format")
-    private ExtComboBoxBoundList orderMailFormatSelect;
-
-    @FindBy(xpath = "//table[contains(@class, 'supplier-add-freight-price')]")
-    private ExtCheckboxTypeInput addFreightPriceCheckbox;
-
-    @FindBy(id = "deliverySupportedId")
-    private ExtCheckboxTypeInput deliverySupportedCheckbox;
-
+    private SelenideElement radioOrderService;
     @FindBy(name = "deliveryTime")
-    private WebElement defaultDeliveryTimeField;
+    private SelenideElement defaultDeliveryTimeField;
 
-    @FindBy(xpath = "//table[contains(@class, 'supplier-products-only-for-claim-handling')]")
-    private ExtCheckboxTypeInput claimHandlingProductsCheckbox;
+    private ExtComboBoxBoundList getOrderMailFormatSelect(){
 
-    @FindBy(id = "invoiceSettingRadioGroup")
-    private ExtRadioGroupTypeInput invoiceSettings;
+        return new ExtComboBoxBoundList($(By.cssSelector(".supplier-order-mail-format")));
+    }
 
-    public ExtRadioGroupTypeInput getInvoiceSettings() {
-        return invoiceSettings;
+    private ExtCheckboxTypeInput getAddFreightPriceCheckbox(){
+
+        return new ExtCheckboxTypeInput($(By.xpath("//table[contains(@class, 'supplier-add-freight-price')]")));
+    }
+
+    private ExtCheckboxTypeInput getDeliverySupportedCheckbox(){
+
+        return new ExtCheckboxTypeInput($(By.id("deliverySupportedId")));
+    }
+
+    private ExtCheckboxTypeInput getClaimHandlingProductsCheckbox(){
+
+        return new ExtCheckboxTypeInput($(By.xpath("//table[contains(@class, 'supplier-products-only-for-claim-handling')]")));
+    }
+
+    private ExtRadioGroupTypeInput getInvoiceSettings(){
+
+        return new ExtRadioGroupTypeInput($(By.id("invoiceSettingRadioGroup")));
     }
 
     public OrdersTab selectInvoiceSetting(int value) {
-        invoiceSettings.select(value);
+
+        getInvoiceSettings().select(value);
         return this;
     }
 
     public OrdersTab setOrderEmail(String email) {
-        SelenideElement element = $(emailField);
-        element.clear();
-        element.setValue(email);
+
+        emailField.clear();
+        emailField.setValue(email);
         return this;
     }
 
     public OrdersTab selectRadioOldOrderFlow() {
+
         radioOldOrderFlow.click();
         return this;
     }
 
     public OrdersTab selectRadioOrderService() {
+
         radioOrderService.click();
         return this;
     }
 
     public OrdersTab setOrderMailFormat(SupplierDialog.OrderMailFormat orderMailFormat) {
-        orderMailFormatSelect.select(orderMailFormat.getOption());
+
+        getOrderMailFormatSelect().select(orderMailFormat.getOption());
         return this;
     }
 
     public OrdersTab setDefaultDeliveryTime(Integer deliveryTime) {
-        deliverySupportedCheckbox.set(true);
-        SelenideElement element = $(defaultDeliveryTimeField);
-        element.clear();
-        element.setValue(deliveryTime.toString());
+
+        getDeliverySupportedCheckbox().set(true);
+        defaultDeliveryTimeField.clear();
+        defaultDeliveryTimeField.setValue(deliveryTime.toString());
         return this;
     }
 
     public OrdersTab useFreightPrice() {
-        addFreightPriceCheckbox.set(true);
+
+        getAddFreightPriceCheckbox().set(true);
         return this;
     }
 
     public OrdersTab useProductsAsVouchers() {
-        claimHandlingProductsCheckbox.set(true);
+
+        getClaimHandlingProductsCheckbox().set(true);
         return this;
     }
 
     public OrdersTab doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new OrdersTab.Asserts());
         return OrdersTab.this;
     }
 
     public class Asserts {
         public Asserts assertOrderEmailIs(String email) {
-            Assert.assertEquals($(emailField).getValue(), email);
+
+            Assert.assertEquals(emailField.getValue(), email);
             return this;
         }
 
         public Asserts assertOrderEmailFormatIs(SupplierDialog.OrderMailFormat orderMailFormat) {
-            Assert.assertEquals(orderMailFormatSelect.getValue(), orderMailFormat.getValue());
+
+            Assert.assertEquals(getOrderMailFormatSelect().getValue(), orderMailFormat.getValue());
             return this;
         }
 
         public Asserts assertDeliveryTimeIs(Integer deliveryTime) {
-            Assert.assertTrue(deliverySupportedCheckbox.isChecked());
-            Assert.assertEquals($(defaultDeliveryTimeField).getValue(), deliveryTime.toString());
+
+            Assert.assertTrue(getDeliverySupportedCheckbox().isChecked());
+            Assert.assertEquals(defaultDeliveryTimeField.getValue(), deliveryTime.toString());
             return this;
         }
 
         public Asserts assertFreightPriceUsed() {
-            Assert.assertTrue(addFreightPriceCheckbox.isChecked());
+
+            Assert.assertTrue(getAddFreightPriceCheckbox().isChecked());
             return this;
         }
 
         public Asserts assertProductsUsedAsVouchers() {
-            Assert.assertTrue(claimHandlingProductsCheckbox.isChecked());
+
+            Assert.assertTrue(getClaimHandlingProductsCheckbox().isChecked());
             return this;
         }
 
         public Asserts assertInvoiceSettingIs(int value) {
-            Assert.assertEquals(invoiceSettings.getSelected(), value);
+
+            Assert.assertEquals(getInvoiceSettings().getSelected(), value);
             return this;
         }
 
         public Asserts assertOldOrderFlowItemsDisabled() {
-            Assert.assertFalse(orderMailFormatSelect.isInputElementEnabled());
-            Assert.assertFalse(addFreightPriceCheckbox.isChecked());
+
+            Assert.assertFalse(getOrderMailFormatSelect().isInputElementEnabled());
+            Assert.assertFalse(getAddFreightPriceCheckbox().isChecked());
             return this;
         }
     }
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
     }
 }

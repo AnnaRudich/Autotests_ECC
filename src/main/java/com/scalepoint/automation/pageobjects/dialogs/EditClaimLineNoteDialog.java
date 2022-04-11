@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EditClaimLineNoteDialog extends BaseDialogSelenide {
+public class EditClaimLineNoteDialog extends BaseDialog {
 
     private By textAreaPath = By.cssSelector("[role=textbox]");
 
@@ -27,13 +27,13 @@ public class EditClaimLineNoteDialog extends BaseDialogSelenide {
     public ClaimLineNotesDialog confirm(){
 
         clickButton(DialogButton.SAVE);
-        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
+        return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog cancel(){
 
         clickButton(DialogButton.ABORT);
-        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
+        return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
     public EditClaimLineNoteDialog enterNote(String text){

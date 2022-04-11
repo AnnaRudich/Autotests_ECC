@@ -20,7 +20,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SettlementGroupDialog extends BaseDialogSelenide {
+public class SettlementGroupDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
@@ -31,22 +31,16 @@ public class SettlementGroupDialog extends BaseDialogSelenide {
 
     @FindBy(name = "groupName")
     private SelenideElement groupName;
-
     @FindBy(name = "customerDemand")
     private SelenideElement customerDemand;
-
     @FindBy(name = "newPrice")
     private SelenideElement newPrice;
-
     @FindBy(name = "valuation")
     private SelenideElement valuation;
-
     @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
     private SelenideElement averageAge;
-
     @FindBy(xpath = "//*[contains(@id, 'group-save-button-btnEl')]")
     private SelenideElement saveGroup;
-
     @FindBy(xpath = "//*[contains(@id, 'group-close-button-btnInnerEl')]")
     private SelenideElement closeGroup;
 

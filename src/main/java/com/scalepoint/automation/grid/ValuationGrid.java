@@ -1,9 +1,11 @@
 package com.scalepoint.automation.grid;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.Actions;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -15,18 +17,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -49,6 +47,7 @@ public class ValuationGrid implements Actions {
         private String dataColumnId;
 
         ValuationGridColumn(String dataColumnId) {
+
             this.dataColumnId = dataColumnId;
         }
 
@@ -157,14 +156,15 @@ public class ValuationGrid implements Actions {
     }
 
     public ValuationGrid.ValuationRow parseValuationRow(ValuationGrid.Valuation valuation) {
-        ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
 
+        ValuationGrid.ValuationRow valuationRow = new ValuationGrid.ValuationRow(valuation);
+        waitForAjaxCompletedAndJsRecalculation();
         By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
-        Wait.waitForStaleElement(xpath);
-        waitForAjaxCompleted();
         ElementsCollection elements = $$(xpath);
-        for (WebElement td : elements) {
-            String attribute = td.getAttribute("data-columnid");
+
+        for (SelenideElement td : elements) {
+            
+            String attribute = td.attr("data-columnid");
             switch (ValuationGrid.ValuationGridColumn.getColumn(attribute)) {
                 case CASH_COMPENSATION:
                     valuationRow.cashCompensation = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
@@ -196,7 +196,7 @@ public class ValuationGrid implements Actions {
 
     public SettlementDialog toSettlementDialog(){
 
-        return new SettlementDialog();
+        return BaseDialog.at(SettlementDialog.class);
     }
 
     public ValuationGrid doAssert(Consumer<Asserts> func) {

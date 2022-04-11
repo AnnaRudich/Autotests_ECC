@@ -1,11 +1,13 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.ClaimSearchPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -15,70 +17,94 @@ import static com.scalepoint.automation.pageobjects.pages.Page.at;
 
 public class MainMenu extends Module {
 
-    @FindBy(id = "primaryCaseButton")
-    private Button claimInfo;
-
-    @FindBy(id = "topMenuSuppliersButton")
-    private Link suppliers;
-
-    @FindBy(id = "topMenuAdminButton")
-    private Link admin;
-
     @FindBy(id = "signOutButton")
-    private WebElement signOut;
+    private SelenideElement signOut;
 
-    @FindBy(id = "myPageButton")
-    private Link myPage;
+    private Link getSuppliers(){
 
-    @FindBy(id = "newCustomerButton")
-    private Link newCustomer;
+        return new Link($(By.id("topMenuSuppliersButton")));
+    }
 
-    @FindBy(id = "searchTextButton")
-    private Link search;
+    private Link getAdmin(){
 
-    @FindBy(id = "secondaryCaseButton")
-    private Button customerDetails;
+        return new Link($(By.id("topMenuAdminButton")));
+    }
+
+    private Link getMyPage(){
+
+        return new Link($(By.id("myPageButton")));
+    }
+
+    private Link getNewCustomer(){
+
+        return new Link($(By.id("newCustomerButton")));
+    }
+
+    private Link getSearch(){
+
+        return new Link($(By.id("searchTextButton")));
+    }
+
+    private Button getCustomerDetails(){
+
+        return new Button($(By.id("secondaryCaseButton")));
+    }
+
+    private Button getClaimInfo(){
+
+        return new Button($(By.id("primaryCaseButton")));
+    }
+
 
     public SuppliersPage toEccAdminPage() {
-        $(suppliers).click();
+
+        $(getSuppliers()).click();
         return at(SuppliersPage.class);
     }
 
     public AdminPage toAdminPage() {
-        $(admin).click();
-        return at(AdminPage.class);
+
+        $(getAdmin()).click();
+        return Page.at(AdminPage.class);
     }
 
     public void logOut() {
-        hoverAndClick($(signOut));
+
+        hoverAndClick(signOut);
         acceptAlert();
     }
 
     public MyPage myPage() {
-        $(myPage).click();
+
+        $(getMyPage()).click();
         return at(MyPage.class);
     }
 
     public NewCustomerPage newCustomer() {
-        $(newCustomer).click();
+
+        $(getNewCustomer()).click();
         return at(NewCustomerPage.class);
     }
 
     public ClaimSearchPage openClaimSearch() {
-        $(search).click();
+
+        $(getSearch()).click();
         return at(ClaimSearchPage.class);
     }
 
     public boolean isClaimInfoBlockPresent() {
-        return $(claimInfo).isDisplayed();
+
+        return $(getClaimInfo()).isDisplayed();
     }
 
     public void customerDetailsOpen() {
-        $(customerDetails).click();
+
+        $(getCustomerDetails()).click();
     }
 
     public void claimInfoOpen() {
-        $(claimInfo).click();
+
+        $(getClaimInfo()).click();
     }
 }
 

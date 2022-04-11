@@ -19,7 +19,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 /**
  * @author : igu
  */
-public class NotCheapestChoiceDialog extends BaseDialogSelenide {
+public class NotCheapestChoiceDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {

@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.shop;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -44,7 +45,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -79,7 +80,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -115,7 +116,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -151,7 +152,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -185,7 +186,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -218,7 +219,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -245,7 +246,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         MyPage myPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -278,7 +279,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -293,7 +294,7 @@ public class UCommerceShopTests extends BaseTest {
 
         new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
 
-        OrderDetailsPage orderDetailsPage =  new OrderDetailsPage()
+        OrderDetailsPage orderDetailsPage =  Page.at(OrderDetailsPage.class)
                 .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage1 -> {
                     orderDetailsPage1.assertRemainingCompensationTotal(balance - orderedProductPrice);//voucher
@@ -328,7 +329,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         MyPage myPage = dialog
                 .closeSidWithOk(SettlementPage.class)
@@ -358,7 +359,7 @@ public class UCommerceShopTests extends BaseTest {
                                 .withValuation(NEW_PRICE)
                 );
 
-        balance = balance + dialog.getCashCompensationValue();
+        balance = balance + dialog.getCashCompensation();
 
         dialog
                 .closeSidWithOk()
@@ -386,7 +387,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         MyPage myPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()

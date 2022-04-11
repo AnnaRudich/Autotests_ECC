@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialogSelenide;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import org.openqa.selenium.support.FindBy;
 
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class CreateSupplierDialog extends BaseDialogSelenide {
+public class CreateSupplierDialog extends BaseDialog {
 
     @FindBy(name = "name")
     private SelenideElement supplierName;
@@ -51,7 +50,7 @@ public class CreateSupplierDialog extends BaseDialogSelenide {
     public <T extends BaseDialog> T createSupplier(Class<T> dialogClass) {
 
         $(createSupplierButton).click();
-        BaseDialogSelenide
+        BaseDialog
                 .at(GdprConfirmationDialog.class)
                 .confirm();
         return BaseDialog.at(dialogClass);

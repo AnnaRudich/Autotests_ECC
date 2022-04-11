@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class RemoveClaimLineNoteWarningDialog extends BaseDialogSelenide{
+public class RemoveClaimLineNoteWarningDialog extends BaseDialog {
 
     @FindBy(css = ".x-window")
     private SelenideElement removeClaimLineNoteWarningDialog;
@@ -21,12 +21,12 @@ public class RemoveClaimLineNoteWarningDialog extends BaseDialogSelenide{
     public ClaimLineNotesDialog confirm(){
 
         clickButton(DialogButton.YES);
-        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
+        return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog cancel(){
 
         clickButton(DialogButton.NO);
-        return BaseDialogSelenide.at(ClaimLineNotesDialog.class);
+        return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 }
