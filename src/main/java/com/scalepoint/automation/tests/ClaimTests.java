@@ -257,7 +257,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().getValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -306,7 +306,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().getValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -344,7 +344,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().getValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))

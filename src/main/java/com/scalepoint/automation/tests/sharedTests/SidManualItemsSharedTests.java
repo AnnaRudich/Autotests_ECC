@@ -40,7 +40,7 @@ public class SidManualItemsSharedTests extends BaseTest {
                 .openSid()
                 .setCustomerDemand(customerDemand)
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(customerDemand));
     }
 
@@ -54,7 +54,7 @@ public class SidManualItemsSharedTests extends BaseTest {
                 .openSid()
                 .setNewPrice(newPrice)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(newPrice));
     }
 
@@ -128,9 +128,9 @@ public class SidManualItemsSharedTests extends BaseTest {
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
@@ -158,9 +158,9 @@ public class SidManualItemsSharedTests extends BaseTest {
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400))
                 .toSettlementDialog()
                 .setBaseData(claimItem)
@@ -172,9 +172,9 @@ public class SidManualItemsSharedTests extends BaseTest {
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(claimItem.getCustomerDemand()))
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
@@ -193,7 +193,7 @@ public class SidManualItemsSharedTests extends BaseTest {
                 .includeInClaim(false)
                 .setValuation(NEW_PRICE)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertTotalAmountIs(Constants.PRICE_2400));
     }
 

@@ -184,20 +184,8 @@ public class TextSearchPage extends Page {
 
     private TextSearchPage sort(WebElement sortLink, WebElement sortIconToWait) {
 
-        int totalAttempts = 10;
-        int currentAttempt = 0;
-        while (currentAttempt < totalAttempts) {
-
-            try {
-
-                $(sortLink).click();
-                $(sortIconToWait).should(visible);
-            } catch (Throwable e) {
-
-                logger.info(e.getMessage());
-            }
-            break;
-        }
+        $(sortLink).click();
+        $(sortIconToWait).should(visible);
         Wait.waitForAjaxCompletedAndJsRecalculation();
         return Page.at(TextSearchPage.class);
     }
@@ -215,7 +203,7 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage sortPopularityAscending() {
 
-        return sort(sortByPopularity, getAscendingOrderable());
+        return sort(sortByPopularity, getAscendingPopularity());
     }
 
     public TextSearchPage sortPopularityDescending() {
@@ -230,12 +218,12 @@ public class TextSearchPage extends Page {
 
     public boolean isSortingMarketPriceAscendant() {
 
-        return ascendantMarketPrice.isDisplayed();
+        return ascendantMarketPrice.has(visible);
     }
 
     public boolean isSortingMarketPriceDescendant() {
 
-        return getDescendantMarketPrice().isDisplayed();
+        return $(getDescendantMarketPrice()).should(visible).has(visible);
     }
 
     public BestFitPage toBestFitPage() {

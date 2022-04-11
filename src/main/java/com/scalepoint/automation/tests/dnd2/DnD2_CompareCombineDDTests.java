@@ -184,7 +184,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                     asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage() / 2, NEW_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
                 })
-                .parseValuationRow(VOUCHER)
+                .getValuationRow(VOUCHER)
                 .doAssert(asserts -> asserts.assertDepreciationPercentageIs(0));
     }
 
@@ -205,7 +205,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                     asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
                 })
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(asserts -> asserts.assertDepreciationPercentageIs(depreciationPercentage));
     }
 

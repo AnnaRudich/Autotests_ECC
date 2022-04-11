@@ -42,7 +42,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
                 .toSettlementDialog()
@@ -76,7 +76,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                             .withDepreciation(depreciationPercentage);
                 })
                 .valuationGrid()
-                .parseValuationRow(VOUCHER)
+                .getValuationRow(VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
                 .toSettlementDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
@@ -116,7 +116,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 })
                 .distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo.CUSTOMER, 6)
                 .valuationGrid()
-                .parseValuationRow(VOUCHER)
+                .getValuationRow(VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
                 .toSettlementDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
@@ -142,7 +142,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         int voucherPercentage = settlementDialog.getVoucherPercentage();
         double voucherCashValue = settlementDialog
                 .valuationGrid()
-                .parseValuationRow(VOUCHER).getTotalPrice();
+                .getValuationRow(VOUCHER).getTotalPrice();
 
         int depreciationPercentage = 10;
         double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
@@ -153,7 +153,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         settlementDialog.closeSidWithOk()
                 .editFirstClaimLine()
                 .valuationGrid()
-                .parseValuationRow(VOUCHER)
+                .getValuationRow(VOUCHER)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
                 .toSettlementDialog()

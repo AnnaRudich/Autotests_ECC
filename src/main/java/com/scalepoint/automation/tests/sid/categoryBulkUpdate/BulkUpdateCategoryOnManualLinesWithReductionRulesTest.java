@@ -73,7 +73,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithNoReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
+                .getValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected)
                 .toSettlementDialog()
                 .closeSidWithOk()
@@ -96,7 +96,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .getValuationRow(ValuationGrid.Valuation.NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected);
     }
 
@@ -148,7 +148,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithNoReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .getValuationRow(ValuationGrid.Valuation.NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected)
                 .toSettlementDialog()
                 .closeSidWithOk()
@@ -171,7 +171,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .getValuationRow(ValuationGrid.Valuation.NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected);
     }
 }
