@@ -55,7 +55,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
         Claim claim = getLisOfObjectByClass(parameters, Claim.class).get(0);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)

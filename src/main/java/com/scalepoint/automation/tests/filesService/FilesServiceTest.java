@@ -26,8 +26,8 @@ public class FilesServiceTest extends BaseTest {
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
 
-        String token = createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)

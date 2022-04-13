@@ -38,7 +38,7 @@ public class UCommerceShopTests extends BaseTest {
 
         XpriceInfo productInfo = getXPriceInfoForProduct();
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(100.00)
@@ -73,7 +73,7 @@ public class UCommerceShopTests extends BaseTest {
 
         XpriceInfo productInfo = getXpricesForConditions(DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY, DatabaseApi.PriceConditions.ORDERABLE);
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(100.00)
@@ -108,7 +108,7 @@ public class UCommerceShopTests extends BaseTest {
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -144,7 +144,7 @@ public class UCommerceShopTests extends BaseTest {
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -178,7 +178,7 @@ public class UCommerceShopTests extends BaseTest {
         Boolean isEvoucher = true;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -210,7 +210,7 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint")
     public void verifyGetBalance(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -237,7 +237,7 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for cancelled claim")
     public void verifyGetBalanceCancelledClaim(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -272,7 +272,7 @@ public class UCommerceShopTests extends BaseTest {
 
         XpriceInfo productInfo = getXPriceInfoForProduct();
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(100.00)
@@ -320,7 +320,7 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for reopened claim")
     public void verifyGetBalanceReopenClaim(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -378,7 +378,7 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for saved claim")
     public void verifyGetBalanceSavedClaim(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()

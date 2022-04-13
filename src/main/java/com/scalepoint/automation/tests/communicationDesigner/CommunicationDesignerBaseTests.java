@@ -43,7 +43,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         communicationDesignerMock.addStub(user.getCompanyName().toLowerCase());
 
-        login(user)
+        loginFlow.login(user)
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)

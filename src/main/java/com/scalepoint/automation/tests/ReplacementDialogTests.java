@@ -28,7 +28,7 @@ public class ReplacementDialogTests extends BaseTest {
         Double newVoucherFaceValue = Constants.PRICE_500;
         Integer voucherDiscount = Constants.VOUCHER_DISCOUNT_10;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withNewPrice(Constants.PRICE_2400)
@@ -55,7 +55,7 @@ public class ReplacementDialogTests extends BaseTest {
     public void contents592_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_500;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(newPrice)
                         .withCategory(claimItem.getCategoryOther()))
@@ -75,7 +75,7 @@ public class ReplacementDialogTests extends BaseTest {
             description = "CONTENTS-601 allow shop access to remaining amount")
     public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLinesForChosenCategories(claimItem.getCategoryBabyItems().getGroupName(), claimItem.getCategoryBicycles().getGroupName());
 
 
@@ -100,7 +100,7 @@ public class ReplacementDialogTests extends BaseTest {
             description = "CONTENTS-592 ReplacementButton can be invisible")
     public void contents592_turnOffReplacementOption(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .doAssert(CompleteClaimPage.Asserts::assertReplacementButtonIsNotVisible);
 
@@ -113,7 +113,7 @@ public class ReplacementDialogTests extends BaseTest {
             description = "CONTENTS-592 Replacement through the shop is disabled")
     public void contents592_turnOffReplacementThroughTheShop(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard(true)

@@ -34,7 +34,7 @@ public class UserPasswordTests extends BaseTest {
     @BeforeMethod(alwaysRun = true)
     public void toEditReasonPage(Object[] objects) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage();
     }
 

@@ -40,8 +40,8 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
         ClaimRequest createClaimRequest = getLisOfObjectByClass(parameters, ClaimRequest.class).get(0);
         ClaimRequest itemizationClaimRequest = getLisOfObjectByClass(parameters, ClaimRequest.class).get(0);
 
-        String token = createFNOLClaimAndGetClaimToken(itemizationClaimRequest, createClaimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token);
+        String token = loginFlow.createFNOLClaimAndGetClaimToken(itemizationClaimRequest, createClaimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token);
     }
 
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)

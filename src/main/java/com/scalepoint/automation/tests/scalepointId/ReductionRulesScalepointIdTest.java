@@ -1,22 +1,24 @@
-package com.scalepoint.automation.tests.admin;
+package com.scalepoint.automation.tests.scalepointId;
 
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Assignment;
 import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.translations.RRLinesFields;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static org.testng.Assert.assertEquals;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-546")
-public class ReductionRulesTest extends BaseTest {
+public class ReductionRulesScalepointIdTest extends BaseTest {
 
     private static String sufficientDocumentation = "Sufficient documentation";
     private static String undefined = "Undefined";
@@ -33,9 +35,9 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629, 635  Extend reduction rules lines with PriceRange fields + Documentation and ClaimantRating")
-    public void ecc4007_verifyRRLineFields(Translations translations) {
+    public void ecc4007_verifyRRLineFields(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Translations translations) {
 
-        AddEditReductionRulePage editPage = toNewReductionRulePage();
+        AddEditReductionRulePage editPage = toNewReductionRulePage(user);
 
         RRLinesFields ruleFields = translations.getRrLinesFields();
 
@@ -58,8 +60,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationNoOverlapping(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationNoOverlapping(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "1100", "3000")
@@ -76,8 +78,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationSamePriceRange(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationSamePriceRange(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "0", "1000")
@@ -93,8 +95,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629, 635 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationSameAgeRange(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationSameAgeRange(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "1", "2")
                 .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
@@ -111,8 +113,8 @@ public class ReductionRulesTest extends BaseTest {
 
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationAgeRangeOverlap(ReductionRule rule) throws Exception {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationAgeRangeOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) throws Exception {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "3", "2", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
@@ -128,8 +130,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationPriceRangeOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationPriceRangeOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "500", "2000")
@@ -145,8 +147,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationForMinToMaxPriceRange(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationForMinToMaxPriceRange(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("0", " ", "0", " ")
@@ -162,8 +164,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationForMinToMaxPriceRangeOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationForMinToMaxPriceRangeOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "0", " ")
@@ -179,8 +181,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyFailRRValidationForIncorrectAgeRange(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyFailRRValidationForIncorrectAgeRange(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("2", "1", "3", "4")
                 .fillPriceRangeForTwoLines("0", " ", "0", " ")
@@ -198,8 +200,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyFailRRValidationForIncorrectPriceRange(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyFailRRValidationForIncorrectPriceRange(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("2000", "1000", "1001", "2000")
@@ -217,8 +219,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationDocumentationDiffersSameAge(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationDocumentationDiffersSameAge(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "1", "2")
                 .fillPriceRangeForTwoLines("0", "1000", "500", "3000")
@@ -237,8 +239,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationDocumentationDiffersSamePrice(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationDocumentationDiffersSamePrice(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "3", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "0", "1000")
@@ -255,8 +257,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationRatingDiffersSameAge(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationRatingDiffersSameAge(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "2", "1", "2")
                 .fillPriceRangeForTwoLines("0", "1000", "0", " ")
@@ -275,8 +277,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyAddRRValidationRatingDiffersOverlapPriceAge(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyAddRRValidationRatingDiffersOverlapPriceAge(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("1", "3", "2", "4")
                 .fillPriceRangeForTwoLines("0", "1000", "0", " ")
@@ -295,8 +297,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
-    public void ecc4007_verifyFailRRValidationThreeLinesOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc4007_verifyFailRRValidationThreeLinesOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .addLine()
                 .fillDescriptionForLine(2, description)
@@ -320,33 +322,33 @@ public class ReductionRulesTest extends BaseTest {
     }
 
 
-    /**
-     * GIVEN: SP user U1 with Admin permissions
-     * WHEN: U1 add reduction rule RR1
-     * THEN: Documentation combobox contains necessary fields
-     */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES},
-            description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRDocumentationComboboxValues() {
-        String[] expectedDocumentationComboboxValues = {undefined, sufficientDocumentation, insufficient};
-        toNewReductionRulePage()
-                .addLine()
-                .assertDocumentationComboboxValuesAre(expectedDocumentationComboboxValues);
-    }
-
-    /**
-     * GIVEN: SP user U1 with Admin permissions
-     * WHEN: U1 add reduction rule RR1
-     * THEN: rating combobox contains necessary fields
-     */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES},
-            description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRRatingComboboxValues() {
-        String[] expectedRatingComboboxValues = {undefined, green, yellow, red};
-        toNewReductionRulePage()
-                .addLine()
-                .assertRatingComboboxValuesAre(expectedRatingComboboxValues);
-    }
+//    /**
+//     * GIVEN: SP user U1 with Admin permissions
+//     * WHEN: U1 add reduction rule RR1
+//     * THEN: Documentation combobox contains necessary fields
+//     */
+//    @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES},
+//            description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
+//    public void ecc3951_verifyAddRRDocumentationComboboxValues() {
+//        String[] expectedDocumentationComboboxValues = {undefined, sufficientDocumentation, insufficient};
+//        toNewReductionRulePage()
+//                .addLine()
+//                .assertDocumentationComboboxValuesAre(expectedDocumentationComboboxValues);
+//    }
+//
+//    /**
+//     * GIVEN: SP user U1 with Admin permissions
+//     * WHEN: U1 add reduction rule RR1
+//     * THEN: rating combobox contains necessary fields
+//     */
+//    @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES},
+//            description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
+//    public void ecc3951_verifyAddRRRatingComboboxValues() {
+//        String[] expectedRatingComboboxValues = {undefined, green, yellow, red};
+//        toNewReductionRulePage()
+//                .addLine()
+//                .assertRatingComboboxValuesAre(expectedRatingComboboxValues);
+//    }
 
     /**
      * GIVEN: SP user U1 with Admin permissions
@@ -355,8 +357,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyFailRRValidationDuplicatedLines(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyFailRRValidationDuplicatedLines(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "200", "100", "200")
@@ -373,8 +375,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyFailRRValidationDocumentationAndRatingOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyFailRRValidationDocumentationAndRatingOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "200", "100", "200")
@@ -393,8 +395,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyFailRRValidationSameRatingDocumentationOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyFailRRValidationSameRatingDocumentationOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -414,8 +416,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyFailRRValidationSameDocumentationRatingOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyFailRRValidationSameDocumentationRatingOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -433,8 +435,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationRatingDiffersDocumentationOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationRatingDiffersDocumentationOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -453,8 +455,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationDocumentationDiffersRatingOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationDocumentationDiffersRatingOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -473,8 +475,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationRatingAndDocumentationDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationRatingAndDocumentationDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -494,8 +496,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSameRatingAndDocumentationDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSameRatingAndDocumentationDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -515,8 +517,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSameRatingAndAgeDocumentationOverlapPriceRangeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSameRatingAndAgeDocumentationOverlapPriceRangeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "1001", "2000")
@@ -535,8 +537,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSameRatingAndAgeAndDocumentationButPriceRangeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSameRatingAndAgeAndDocumentationButPriceRangeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
@@ -552,8 +554,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSameAgeOverlapDocumentationAndRatingButPriceRangeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSameAgeOverlapDocumentationAndRatingButPriceRangeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
@@ -571,8 +573,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSameRatingAndPriceRangeAndDocumentationOverlapButAgeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSameRatingAndPriceRangeAndDocumentationOverlapButAgeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "13", "24")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -591,8 +593,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSamePriceAndDocumentationAndRatingButAgeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSamePriceAndDocumentationAndRatingButAgeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "13", "24")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -612,8 +614,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSamePriceAndDocumentationOverlapButRatingAndAgeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSamePriceAndDocumentationOverlapButRatingAndAgeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "13", "24")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -632,8 +634,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSamePriceButDocumentationAndRatingAndAgeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSamePriceButDocumentationAndRatingAndAgeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "13", "24")
                 .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
@@ -653,8 +655,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationThreeLinesSamePriceAndDocumentationAndRatingButAgeDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationThreeLinesSamePriceAndDocumentationAndRatingButAgeDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .addLine()
                 .fillDescriptionForLine(2, description)
@@ -677,8 +679,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyAddRRValidationSameAgeAndRatingPriceRangeOverlapButDocumentationDiffers(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyAddRRValidationSameAgeAndRatingPriceRangeOverlapButDocumentationDiffers(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .fillAgeRangeForTwoLines("0", "12", "0", "12")
                 .fillPriceRangeForTwoLines("100", "1000", "500", "4000")
@@ -698,8 +700,8 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
-    public void ecc3951_verifyFailRRValidationThreeLinesSameAgeAndRatingAndDocumentationButPriceRangeOverlap(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void ecc3951_verifyFailRRValidationThreeLinesSameAgeAndRatingAndDocumentationButPriceRangeOverlap(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillGeneralForTwoLines(rule)
                 .addLine()
                 .fillDescriptionForLine(2, description)
@@ -718,16 +720,16 @@ public class ReductionRulesTest extends BaseTest {
 
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "Create simple discretionary rule")
-    public void charlie_497_verifyCreateDiscretionaryRule(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void charlie_497_verifyCreateDiscretionaryRule(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .fillSimpleDiscretionaryRRAndSave(rule)
                 .assertRuleDisplayed(rule);
     }
 
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "Create simple discretionary rule")
-    public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(ReductionRule rule) {
-        toNewReductionRulePage()
+    public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule) {
+        toNewReductionRulePage(user)
                 .addLine()
                 .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
                 .assertRuleDisplayed(rule);
@@ -735,9 +737,9 @@ public class ReductionRulesTest extends BaseTest {
 
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "Create simple discretionary rule")
-    public void charlie_497_verifyCreateRuleAndAssignIt(ReductionRule rule, Assignment assignment) {
+    public void charlie_497_verifyCreateRuleAndAssignIt(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, ReductionRule rule, Assignment assignment) {
         databaseApi.removeAssignment(assignment);
-        toNewReductionRulePage()
+        toNewReductionRulePage(user)
                 .addLine()
                 .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
                 .assertRuleDisplayed(rule)
@@ -748,9 +750,9 @@ public class ReductionRulesTest extends BaseTest {
                 .doAssert(asserts -> asserts.assertIsFirstLineAssignmentAdded(assignment));
     }
 
-    private AddEditReductionRulePage toNewReductionRulePage() {
+    private AddEditReductionRulePage toNewReductionRulePage(User user) {
         return loginFlow
-                .login(getSystemUser(), AdminPage.class)
+                .login(user, AdminPage.class)
                 .to(AddEditReductionRulePage.class);
     }
 }

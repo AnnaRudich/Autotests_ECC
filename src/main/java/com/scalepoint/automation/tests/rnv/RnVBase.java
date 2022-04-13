@@ -68,7 +68,7 @@ public class RnVBase extends BaseTest {
 
     protected void setSelfRiskCollectedByServicePartner(User user){
 
-        DefaultSettingsPage defaultSettingsPage = login(user)
+        DefaultSettingsPage defaultSettingsPage = loginFlow.login(user)
                 .getMainMenu()
                 .toEccAdminPage()
                 .toDefaultSettings();
@@ -83,7 +83,7 @@ public class RnVBase extends BaseTest {
 
     protected void setSelfRiskCollectedByInsuranceCompany(User user){
 
-        DefaultSettingsPage defaultSettingsPage = login(user)
+        DefaultSettingsPage defaultSettingsPage = loginFlow.login(user)
                 .getMainMenu()
                 .toEccAdminPage()
                 .toDefaultSettings();
@@ -101,7 +101,7 @@ public class RnVBase extends BaseTest {
                                                              String selfRisk, BigDecimal repairPrice,
                                                              BigDecimal selfriskByServicePartner){
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getSettlementSummary()
                 .editSelfRisk()
                 .setSelfRisk(selfRisk)

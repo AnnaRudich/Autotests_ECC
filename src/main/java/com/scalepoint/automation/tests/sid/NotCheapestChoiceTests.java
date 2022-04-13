@@ -33,7 +33,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-530 When Not Minimal Valuation Is Selected Then Minimal Valuation Is Suggested")
     public void charlie530WhenNotMinimalValuationIsSelectedThenMinimalValuationIsSuggested(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(NEW_PRICE))
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(1.00));
@@ -43,7 +43,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-530 Selected reason is stored")
     public void charlie530SelectedReasonIsStored(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         String selectedReason = selectFirstNotCheapestReason(claimItem, settlementPage);
         settlementPage
                 .findClaimLine(Constants.TEXT_LINE)
@@ -56,7 +56,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
     public void charlie530WhenMinimalValuationIsSelectedThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(CUSTOMER_DEMAND))
                 .closeSidWithOk();
     }
@@ -69,7 +69,7 @@ public class NotCheapestChoiceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     public void charlie530MinimalValuationIsSuggestedInCaseOfDiscretionaryDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, sid)
                             .withDepreciation(50, DepreciationType.DISCRETIONARY)
@@ -87,7 +87,7 @@ public class NotCheapestChoiceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     public void charlie530MinimalValuationIsSuggestedInCaseOfPolicyDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, sid)
                             .withDepreciation(50, DepreciationType.POLICY)
@@ -102,7 +102,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-530 Not Possible To Not Select The Reason")
     public void charlie530NotPossibleToNotSelectTheReason(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, sid)
                             .withValuation(NEW_PRICE);
@@ -116,7 +116,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Item From Catalog")
     public void charlie530MinimalValuationIsSuggestedInCaseOfItemFromCatalog(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
@@ -132,7 +132,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Generic Item")
     public void charlie530MinimalValuationIsSuggestedInCaseOfGenericItem(User user, Claim claim, GenericItem genericItem) {
         genericItem.setPrice("10");
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .savePoint(SettlementPage.class)
                 .to(GenericItemsAdminPage.class)
                 .clickCreateNewItem()
@@ -150,7 +150,7 @@ public class NotCheapestChoiceTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-530 When reason is set then edit button appears and reason can be changed using popup")
     public void charlie530WhenReasonIsSetThenEditButtonAppearsAndReasonCanBeChangedUsingPopup(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         selectFirstNotCheapestReason(claimItem, settlementPage);
 

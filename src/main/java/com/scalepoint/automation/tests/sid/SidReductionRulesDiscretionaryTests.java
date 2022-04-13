@@ -81,7 +81,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                Claim claim,
                                                                ClaimItem claimItem,
                                                                ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -133,7 +133,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                         Claim claim,
                                                                         ClaimItem claimItem,
                                                                         ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -175,7 +175,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                       Claim claim,
                                       ClaimItem claimItem,
                                       ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -231,7 +231,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                          Claim claim,
                                                          ClaimItem claimItem,
                                                          ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -277,7 +277,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                            Claim claim,
                                                            ClaimItem claimItem,
                                                            ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeAF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -330,7 +330,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                     Claim claim,
                                                                     ClaimItem claimItem,
                                                                     ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF()).openSid()
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeAF()).openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
