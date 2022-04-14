@@ -1,5 +1,6 @@
 package com.scalepoint.automation.services.ucommerce;
 
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
@@ -34,6 +35,7 @@ import com.scalepoint.automation.utils.data.entity.order.SupplierShopPrice;
 import com.scalepoint.automation.utils.data.entity.order.TotalInvoicePrice;
 import com.scalepoint.automation.utils.data.entity.order.TotalPurchasePrice;
 import com.scalepoint.automation.utils.data.entity.order.Voucher;
+import com.scalepoint.automation.utils.data.response.Token;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +52,18 @@ public class CreateOrderService extends BaseService {
     private final Double amountNet = 80.2;
     private final int quantity = 1;
     private final String locale = Configuration.getLocale().getValue().toUpperCase();
-            
+
+    private Token token;
+
+    public CreateOrderService(){
+
+        super();
+        this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+    }
 
     public void createOrderForProduct(XpriceInfo xpriceInfo, String claimNumber){
         given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildProductOrderRequestBody(xpriceInfo, claimNumber))
                 .when()
@@ -63,6 +73,7 @@ public class CreateOrderService extends BaseService {
 
     public void createOrderForProductExtraPay(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
         given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildVoucherOrderExtraPayRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
                 .when()
@@ -72,6 +83,7 @@ public class CreateOrderService extends BaseService {
 
     public void createOrderForVoucher(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
         given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildVoucherOrderRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
                 .when()

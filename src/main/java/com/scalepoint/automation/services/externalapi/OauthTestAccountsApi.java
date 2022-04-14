@@ -54,7 +54,8 @@ public class OauthTestAccountsApi {
         EVENTS_INTERNAL("events-internal"),
         EVENTS("events"),
         PLATFORM_CASE_READ("platform-case:read"),
-        FILES_READ("files:read");
+        FILES_READ("files:read"),
+        SHOP("shop:ecc");
 
         private String scope;
 

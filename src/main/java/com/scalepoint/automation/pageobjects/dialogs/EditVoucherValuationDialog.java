@@ -77,7 +77,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
             getCompanyPercentageInput().sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
         } else {
 
-            getCompanyPercentageInput().enter(percentage.toString());
+            getCustomerPercentageInput().enter(percentage.toString());
         }
         return this;
     }
