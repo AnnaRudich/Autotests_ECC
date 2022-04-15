@@ -37,7 +37,7 @@ public class FuncTemplatesScalepointIdTests extends BaseTest {
         createNewTemplate(user, ftName);
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES}, dataProvider = CREATE_NEW_FT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES, TestGroups.SCALEPOINT_ID}, dataProvider = CREATE_NEW_FT_DATA_PROVIDER,
             description = "CHARLIE-555 It's possible to create new ME_FT. New ME_FT is displayed in ME_FT list")
     public void createNewFtTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, String ftName) {
 
@@ -45,7 +45,7 @@ public class FuncTemplatesScalepointIdTests extends BaseTest {
                 .assertTemplateExists(ftName);
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES}, dataProvider = DELETE_NEW_FT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES, TestGroups.SCALEPOINT_ID}, dataProvider = DELETE_NEW_FT_DATA_PROVIDER,
             description = "CHARLIE-555 It's possible to delete new ME_FT. New ME_FT is not displayed in ME_FT list")
     public void deleteNewFtTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, String ftName) {
 
@@ -54,7 +54,7 @@ public class FuncTemplatesScalepointIdTests extends BaseTest {
         Assert.assertTrue(deleted, "Template can't be deleted");
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES}, dataProvider = EDIT_FT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES, TestGroups.SCALEPOINT_ID}, dataProvider = EDIT_FT_DATA_PROVIDER,
             description = "CHARLIE-555 It's possible to edit new ME_FT. Edited ME_FT is displayed in ME_FT list")
     public void editFtTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, String ftName, String ftNameUpdated) {
 

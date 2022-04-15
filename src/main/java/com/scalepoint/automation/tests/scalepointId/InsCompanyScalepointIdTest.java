@@ -38,7 +38,7 @@ public class InsCompanyScalepointIdTest extends BaseTest {
      * WHEN: U1 creates Insurance company IC1
      * THEN: IC1 is displayed in company's list
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.INS_COMPANY}, dataProvider = TEST_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.INS_COMPANY, TestGroups.SCALEPOINT_ID}, dataProvider = TEST_DATA_PROVIDER,
             description = "CHARLIE-509 It's possible to update new simple parent IC. IC is displayed in IC list")
     public void charlie509_updateNewSimpleParentIC(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, InsuranceCompany insuranceCompany, InsuranceCompany secondInsuranceCompany) {
 
@@ -52,7 +52,7 @@ public class InsCompanyScalepointIdTest extends BaseTest {
      * WHEN: U1 creates Insurance company IC1
      * THEN: IC1 is displayed in company's list
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.INS_COMPANY}, dataProvider = TEST_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.INS_COMPANY, TestGroups.SCALEPOINT_ID}, dataProvider = TEST_DATA_PROVIDER,
             description = "CHARLIE-509 It's possible to create new simple parent IC. IC is displayed in IC list")
     public void charlie509_createNewSimpleParentIC(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE)User user, InsuranceCompany insuranceCompany) {
 

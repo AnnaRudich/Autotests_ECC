@@ -35,7 +35,7 @@ public class GenericItemsScalepointIdTests extends BaseTest {
                 .to(GenericItemsAdminPage.class);
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
+    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS, TestGroups.SCALEPOINT_ID},
             dataProvider = TEST_DATA_PROVIDER, description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, Claim claim, GenericItem genericItem, GenericItem newGenericItem) {
         String companyName = user.getCompanyName();
@@ -62,7 +62,7 @@ public class GenericItemsScalepointIdTests extends BaseTest {
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
+    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS, TestGroups.SCALEPOINT_ID},
             dataProvider = TEST_DATA_PROVIDER, description = "CHARLIE-535 Publish/Unpublish generic item")
     public void charlie535_testWeCanPublishGenericItems(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
@@ -82,7 +82,7 @@ public class GenericItemsScalepointIdTests extends BaseTest {
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
+    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS, TestGroups.SCALEPOINT_ID},
             dataProvider = TEST_DATA_PROVIDER, description = "CHARLIE-535 Delete generic item")
     public void charlie535_testWeCanDeleteGenericItem(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, Claim claim,
                                                       GenericItem genericItem, GenericItem genericItemToDelete) {
