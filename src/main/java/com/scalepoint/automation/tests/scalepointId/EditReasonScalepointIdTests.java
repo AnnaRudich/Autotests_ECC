@@ -47,7 +47,7 @@ public class EditReasonScalepointIdTests extends BaseTest {
      * WHEN: Try to input Reason text 501 char
      * THEN: The value should be trimmed to 500 char
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, TestGroups.SCALEPOINT_ID},
             dataProvider = EDIT_REASON_PAGE_FROM_ADMIN_EXCEEDED_LENGTH_DATA_PROVIDER,
             description = "Verify Reason text length is restricted to 500 characters")
     public void editReasonPageFromAdminExceededLengthTest(@UserAttributes(company = FUTURE, type = User.UserType.SCALEPOINT_ID) User user, InsuranceCompany insuranceCompany,
@@ -71,7 +71,7 @@ public class EditReasonScalepointIdTests extends BaseTest {
      * THEN: reason is deleted
      */
     @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, TestGroups.SCALEPOINT_ID},
             dataProvider = DELETE_REASON_NOT_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
     public void deleteReasonNotInUseTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = FUTURE) User user, InsuranceCompany insuranceCompany, String reason) {
@@ -94,7 +94,7 @@ public class EditReasonScalepointIdTests extends BaseTest {
      * THEN: the field is enabled and user can edit the reason
      */
     @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, TestGroups.SCALEPOINT_ID},
             dataProvider = EDIT_REASON_NOT_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
     public void editReasonNotInUseTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = FUTURE) User user, InsuranceCompany insuranceCompany, String reason) {

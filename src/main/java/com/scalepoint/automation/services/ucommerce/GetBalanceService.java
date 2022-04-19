@@ -1,9 +1,11 @@
 package com.scalepoint.automation.services.ucommerce;
 
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.getBalance.GetBalanceRequest;
 import com.scalepoint.automation.utils.data.entity.getBalance.GetBalanceResponse;
+import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 
@@ -16,9 +18,17 @@ public class GetBalanceService extends BaseService {
 
     private final String locale = Configuration.getLocale().getValue().toUpperCase();
 
+    private Token token;
+
+    public GetBalanceService(){
+
+        super();
+        this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+    }
     public GetBalanceService getBalance(String claimNumber) {
         RestAssured.defaultParser = Parser.XML;
         getBalanceResponse = given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildGetBalanceRequest(claimNumber))
                 .when()

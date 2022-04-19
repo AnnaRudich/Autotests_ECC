@@ -22,6 +22,7 @@ public class Ip2Test extends BaseTest {
     public void claimSettledEventSettlementDoc(@UserAttributes(company = CompanyCode.FUTURE70) User user,
                                                Claim claim,
                                                ClaimItem claimItem) {
+
         loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)

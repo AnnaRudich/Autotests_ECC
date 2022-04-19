@@ -35,8 +35,8 @@ public class Configuration {
     private static final String tasksFeedbackUrl = "ws/task_feedback.action";
     private static final String pullTaskDataUrl = "ws/tasks.xml";
     private static final String repairValuationUrl = "repairValuation";
-    private static final String createOrderBasePath = "resteasy/uCommerce/CreateOrder";
-    private static final String createGetBalanceBasePath = "resteasy/uCommerce/GetBalance";
+    private static final String createOrderBasePath = "resteasy/uCommerce/v2/CreateOrder";
+    private static final String createGetBalanceBasePath = "resteasy/uCommerce/v2/GetBalance";
 
     private static final String SLASH = "/";
 
