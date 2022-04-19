@@ -36,7 +36,6 @@ public class OauthTestAccountsApi {
                     .extract().as(Token.class);
         }catch (Exception e){
 
-
             logger.warn("Request failed, randomDelay {} : {}", RandomUtils.randomDelay(1,5), e);
         }
 
