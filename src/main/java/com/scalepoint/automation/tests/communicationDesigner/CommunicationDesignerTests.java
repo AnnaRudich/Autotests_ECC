@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
@@ -20,6 +21,7 @@ import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
+import com.scalepoint.automation.utils.data.response.Token;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -260,6 +262,8 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                                       CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                       CommunicationDesigner communicationDesigner) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        CreateOrderService createOrderService = new CreateOrderService(token);
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
         String orderConfirmationTitle = communicationDesignerEmailTemplates
@@ -276,7 +280,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim();
 
-        new CreateOrderService().createOrderForProductExtraPay
+        createOrderService.createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
         new CustomerDetailsPage().toMailsPage()
