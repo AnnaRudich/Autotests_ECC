@@ -97,10 +97,10 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
 
     public SupplierDialog openFirstSupplier() {
 
-        waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        WebElement supplier = allSuppliersList.get(0);
-        $(supplier).doubleClick();
-        waitForStaleElement(By.xpath("//span[contains(text(),'General')]"));
+        $(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]")).should(Condition.visible);
+        allSuppliersList.get(0)
+                .doubleClick();
+        $(By.xpath("//span[contains(text(),'General')]")).should(Condition.visible);
         return BaseDialog.at(SupplierDialog.class);
     }
 
@@ -113,7 +113,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
 
         $(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplierName);
-        waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
+        $(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")).should(Condition.visible);
 
         SelenideElement element = $(getOption(supplierName));
         if (element.getText().contains(supplierName)) {
@@ -139,7 +139,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
 
         hoverAndClick($(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
-        waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
+        $(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]")).should(Condition.visible);
         String xpath = String.format(bySupplierNameXpath, supplierName);
         try {
 

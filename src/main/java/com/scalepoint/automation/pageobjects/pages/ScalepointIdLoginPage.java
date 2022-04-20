@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.TimeoutException;
 import com.scalepoint.automation.utils.Wait;
@@ -25,9 +26,9 @@ public class ScalepointIdLoginPage extends Page {
 
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        Wait.waitForVisibleAndEnabled(getPasswordField());
-        Wait.waitForVisibleAndEnabled(getUsernameField());
-        Wait.waitForVisibleAndEnabled(getLoginButton());
+        $(getPasswordField()).should(Condition.visible);
+        $(getUsernameField()).should(Condition.visible);
+        $(getLoginButton()).should(Condition.visible);
     }
 
     @Override

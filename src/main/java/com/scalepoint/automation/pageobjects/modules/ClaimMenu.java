@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -80,7 +81,7 @@ public class ClaimMenu extends Module {
 
         if ($(By.xpath("//button[@onclick='onEditPreferencesClick()']")).isDisplayed()) return;
         $(By.xpath("//a[@id='myPageButton']")).click();
-        Wait.waitForStaleElement(By.xpath("//button[@onclick='onEditPreferencesClick()']"));
+        $(By.xpath("//button[@onclick='onEditPreferencesClick()']")).should(Condition.visible);
     }
 
     public void selectTextSearchItem() {

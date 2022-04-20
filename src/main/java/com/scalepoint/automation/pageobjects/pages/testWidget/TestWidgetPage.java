@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.testWidget;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
@@ -59,7 +60,7 @@ public class TestWidgetPage extends SelfService2Page {
 
     public SelfService2Page sendResponseToEcc() {
 
-        Wait.waitForVisibleAndEnabled($(SEND_BUTTON_PATH)).click();
+        $(SEND_BUTTON_PATH).should(Condition.visible).click();
         return this;
     }
 

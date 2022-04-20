@@ -83,9 +83,8 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page addDescription(String text) {
 
-        Wait.waitForStaleElement(By.id("description-text"));
-        $("#description-text").setValue(text);
-        verifyElementVisible($(suggestions));
+        $("#description-text").should(Condition.visible).setValue(text);
+        $(suggestions).should(Condition.visible);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ENTER);
@@ -140,22 +139,19 @@ public class SelfService2Page extends Page {
         WebElement selectElement = $(element.findElement(By.xpath(".//span//span"))).should(Condition.visible);
         hoverAndClick($(selectElement));
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
-        verifyElementVisible($(element.findElement(By.xpath(menuLocator))));
+        $(element.findElement(By.xpath(menuLocator))).should(Condition.visible);
         String itemLocator = ".//span[contains(text(),'%s')]";
         WebElement selectItemElement = Wait.forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
-        verifyElementVisible($(selectItemElement));
-        $(selectItemElement).scrollTo();
-        verifyElementVisible($(selectItemElement));
-        hoverAndClick($(selectItemElement));
-        verifyElementVisible($(selectElement));
+        $(selectItemElement).should(Condition.visible).scrollTo().click();
+        $(selectElement).should(Condition.visible);
 
-        waitForElementContainsText($(selectElement), text);
+        $(selectElement).should(Condition.ownText(text));
     }
 
-    private void trySelectItem(WebElement element, String text) {
+    private void trySelectItem(SelenideElement element, String text) {
 
-        WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
+        SelenideElement selectElement = $(element.find(By.xpath(".//span//span"))).should(Condition.visible);
 
         int count = 0;
         while (!selectElement.getText().equals(text) && count < 5) {
@@ -341,13 +337,13 @@ public class SelfService2Page extends Page {
 
         public Asserts assertAlertIsDisplayed() {
 
-            assertThat(verifyElementVisible($("div[class^=alert]"))).as("alert should be displayed").isTrue();
+            assertThat($("div[class^=alert]").has(Condition.visible)).as("alert should be displayed").isTrue();
             return this;
         }
 
         public Asserts assertAlertIsMissing() {
 
-            assertThat(verifyElementVisible($("div[class^=alert]"))).as("alert should not be displayed").isTrue();
+            assertThat($("div[class^=alert]").has(Condition.visible)).as("alert should not be displayed").isTrue();
             return this;
         }
 
@@ -405,7 +401,7 @@ public class SelfService2Page extends Page {
 
         public Asserts assertSendButtonEnabled(){
 
-            assertThat(Wait.waitForVisibleAndEnabled($(SEND_BUTTON_PATH)).isEnabled())
+            assertThat($(SEND_BUTTON_PATH).has(Condition.enabled))
                     .as("Send button should be enabled")
                     .isTrue();
             return this;

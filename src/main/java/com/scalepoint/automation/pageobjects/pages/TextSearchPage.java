@@ -30,8 +30,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -235,7 +234,7 @@ public class TextSearchPage extends Page {
 
     public ProductDetailsDialog openProductDetailsOfFirstProduct() {
 
-        verifyElementVisible(match);
+        match.should(visible);
         waitForAjaxCompleted();
         firstProductDetails.click();
         return BaseDialog.at(ProductDetailsDialog.class);
@@ -257,8 +256,7 @@ public class TextSearchPage extends Page {
     public SettlementDialog openSidForProductWithVoucher() {
 
         waitForAjaxCompleted();
-        verifyElementVisible(match);
-        hoverAndClick($(match));
+        $(match).should(visible).click();
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
         if (!settlementDialog.isDiscountDistributionDisplayed()) {
 
@@ -271,7 +269,7 @@ public class TextSearchPage extends Page {
     public SettlementDialog match(String productDescription) {
 
         Wait.waitForAjaxCompletedAndJsRecalculation();
-        waitForStaleElement(By.cssSelector("#productsTable table td"));
+        $(By.cssSelector("#productsTable table td")).should(exist);
         ElementsCollection matchButtons = $$(By.xpath(".//*[@id='productsTable']//button[@class='matchbutton']"));
         if (matchButtons.isEmpty()) {
 
@@ -294,24 +292,9 @@ public class TextSearchPage extends Page {
         }
     }
 
-    public SettlementDialog matchStrict(String productDescription) {
-
-        Wait.waitForAjaxCompleted();
-        waitForStaleElement(By.cssSelector("#productsTable table td"));
-        sortOrderableFirst();
-        By matchButtonsLocator = By.xpath(".//*[@id='productsTable']//span[contains(text(), '" + productDescription + "')]/ancestor::td[1]/..//button[@class='matchbutton']");
-        ElementsCollection matchButtons = $$(matchButtonsLocator);
-        if (matchButtons.isEmpty()) {
-
-            throw new IllegalStateException("No text search results found!");
-        }
-        waitForStaleElements(matchButtonsLocator).get(0).click();
-        return BaseDialog.at(SettlementDialog.class);
-    }
-
     public TextSearchPage chooseCategory(String _category) {
 
-        verifyElementVisible($(By.cssSelector("#categoryFieldSet table:first-child")));
+        $(By.cssSelector("#categoryFieldSet table:first-child")).should(visible);
         ElementsCollection categories = $$(By.cssSelector(".ygtvitem span span"));
         forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + _category)))).click();
         waitForResultsLoad();
@@ -319,8 +302,7 @@ public class TextSearchPage extends Page {
     }
 
     public TextSearchPage chooseCategory(PseudoCategory pseudoCategory) {
-
-        verifyElementVisible($(By.cssSelector("#categoryFieldSet table:first-child")));
+        $(By.cssSelector("#categoryFieldSet table:first-child")).should(visible);
         ElementsCollection categories = $$(By.cssSelector(".ygtvitem span span"));
         forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(pseudoCategory.getGroupName())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + pseudoCategory.getGroupName())))).click();
         waitForResultsLoad();
@@ -347,7 +329,7 @@ public class TextSearchPage extends Page {
         searchProduct(productName);
         getSearch().click();
         Wait.waitForAjaxCompleted();
-        waitForStaleElement(By.cssSelector("#productsTable table tbody"));
+        $(By.cssSelector("#productsTable table tbody")).should(visible);
         return this;
     }
 
@@ -369,7 +351,7 @@ public class TextSearchPage extends Page {
 
     private void waitForSuggestions() {
 
-        verifyElementVisible($(By.xpath("//div[@id='suggest_div']/table")));
+        $(By.xpath("//div[@id='suggest_div']/table")).should(visible);
     }
 
     public TextSearchPage searchProductAndSelectFirstSuggestion(String productName) {
@@ -379,7 +361,7 @@ public class TextSearchPage extends Page {
         searchInput.sendKeys(Keys.ARROW_DOWN);
         searchInput.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
-        waitForStaleElement(By.cssSelector("#productsTable table tbody"));
+        $(By.cssSelector("#productsTable table tbody")).should(visible);
         return this;
     }
 
@@ -391,14 +373,14 @@ public class TextSearchPage extends Page {
     public String getFirstProductId() {
 
         waitForAjaxCompleted();
-        verifyElementVisible($(By.xpath("(.//*[@id='productsTable']/table//td[@productid])[1]")));
+        $(By.xpath("(.//*[@id='productsTable']/table//td[@productid])[1]")).should(visible);
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productid])")).attr("productid");
     }
 
     public TextSearchPage selectBrand(String text) {
 
         forCondition(ExpectedConditions.elementToBeClickable(getBrandButton())).click();
-        waitElementVisible($(getBrandSelect())).selectOption(text);
+       $(getBrandSelect()).should(visible).selectOption(text);
         waitForResultsLoad();
         return this;
     }
@@ -406,7 +388,7 @@ public class TextSearchPage extends Page {
     public TextSearchPage selectModel(String text) {
 
         forCondition(ExpectedConditions.elementToBeClickable(getModelButton())).click();
-        waitElementVisible($(getModelSelect())).selectOption(text);
+        $(getModelSelect()).should(visible).selectOption(text);
         waitForResultsLoad();
         return this;
     }
@@ -415,12 +397,12 @@ public class TextSearchPage extends Page {
 
         try {
 
-            waitElementVisible($(fieldSetDisabled));
+            $(fieldSetDisabled).should(visible);
         }catch (ElementNotFound | ElementShould e) {
 
             logger.info(e.getMessage());
         }
-        waitElementVisible($(fieldSetNotDisabled));
+        $(fieldSetNotDisabled).should(visible);
         Wait.waitForAjaxCompleted();
         return this;
     }
@@ -435,7 +417,7 @@ public class TextSearchPage extends Page {
 
         waitForResultsLoad();
         forCondition(ExpectedConditions.elementToBeClickable(productsSpecifications.get(index))).click();
-        waitForElementContainsText($(productsSpecifications.get(index)), "-");
+        productsSpecifications.get(index).should(Condition.ownText("-"));
         return this;
     }
 
@@ -487,7 +469,7 @@ public class TextSearchPage extends Page {
 
         public Asserts assertMarketPriceSortingInvisible() {
 
-            Assert.assertFalse(verifyElementVisible(ascendantMarketPrice), "Market price sorting still visible");
+            Assert.assertFalse(ascendantMarketPrice.has(visible), "Market price sorting still visible");
             return this;
         }
 

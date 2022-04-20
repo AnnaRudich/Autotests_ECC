@@ -78,11 +78,10 @@ public class ShopsTab extends SupplierDialog {
 
     public AddShopDialog openEditShopDialog(String shopName) {
 
-        SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shopName)));
-        element
+        $(By.xpath(String.format(byShopNameXpath, shopName)))
                 .scrollTo()
                 .doubleClick();
-        waitForVisibleAndEnabled($(By.name("shopName")));
+        $(By.name("shopName")).should(Condition.visible);
         return BaseDialog.at(AddShopDialog.class);
     }
 

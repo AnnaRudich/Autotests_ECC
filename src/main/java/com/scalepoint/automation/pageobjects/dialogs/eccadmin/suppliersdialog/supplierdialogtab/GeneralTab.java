@@ -89,7 +89,7 @@ public  class GeneralTab extends SupplierDialog {
 
         SelenideElement elem = $(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
         elem.uploadFile(new File(logoPath));
-        verifyElementVisible($(By.cssSelector(("img.imageUploadImg"))));
+        $(By.cssSelector(("img.imageUploadImg"))).should(Condition.visible);
         return this;
     }
 
@@ -124,7 +124,7 @@ public  class GeneralTab extends SupplierDialog {
 
         public Asserts assertCity(String cityValue) {
 
-            Assert.assertEquals(waitElementVisible(city).getAttribute(VALUE), cityValue);
+            Assert.assertEquals(city.should(Condition.visible).getAttribute(VALUE), cityValue);
             return this;
         }
 
@@ -142,7 +142,7 @@ public  class GeneralTab extends SupplierDialog {
 
         public Asserts assertIsDialogNotEditable() {
 
-            Assert.assertFalse(verifyElementVisible($(By.id("editSupplierTabPanelId"))));
+            Assert.assertFalse($(By.id("editSupplierTabPanelId")).has(Condition.visible));
             return this;
         }
     }

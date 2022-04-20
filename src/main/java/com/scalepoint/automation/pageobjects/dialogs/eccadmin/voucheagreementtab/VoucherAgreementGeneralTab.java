@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
@@ -79,7 +80,7 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
         public FormFiller withActive(boolean active) {
 
             waitForAjaxCompleted();
-            waitElementVisible($(dialog.getAgreementStatusCombo()));
+            $(dialog.getAgreementStatusCombo()).should(Condition.visible);
             dialog.getAgreementStatusCombo().select(active ? "Active" : "Inactive");
             return this;
         }
@@ -89,7 +90,7 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
             dialog.useCustomLogoRadio.click();
             WebElement elem = $(By.xpath("//input[contains(@id, 'voucherLogoFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
-            verifyElementVisible($(dialog.logoImageXpath));
+            $(dialog.logoImageXpath).should(Condition.visible);
             return this;
         }
 
@@ -97,7 +98,7 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
 
             WebElement elem = $(By.xpath("//input[contains(@id, 'voucherImageFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
-            verifyElementVisible($(dialog.imageXpath));
+            $(dialog.imageXpath).should(Condition.visible);
             return this;
         }
     }
@@ -126,7 +127,7 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
     protected void ensureWeAreAt() {
 
         waitForAjaxCompletedAndJsRecalculation();
-        waitElementVisible(voucherNameInput);
+        voucherNameInput.should(Condition.visible);
     }
 
     public VoucherAgreementGeneralTab doAssert(Consumer<Asserts> assertFunc) {

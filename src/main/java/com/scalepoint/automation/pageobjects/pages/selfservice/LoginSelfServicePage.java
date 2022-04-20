@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.selfservice;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
@@ -9,7 +10,6 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 
 @EccPage
 public class LoginSelfServicePage extends Page {
@@ -38,8 +38,8 @@ public class LoginSelfServicePage extends Page {
     public void ensureWeAreOnPage() {
 
         waitForUrl(getRelativeUrl());
-        verifyElementVisible(passwordField);
-        verifyElementVisible($(getLogin()));
+        passwordField.should(Condition.visible);
+        $(getLogin()).should(Condition.visible);
     }
 
     public LoginSelfServicePage enterPassword(String password) {
