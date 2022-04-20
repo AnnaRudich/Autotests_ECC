@@ -27,10 +27,9 @@ public class CreateOrderService extends BaseService {
 
     private Token token;
 
-    public CreateOrderService(){
+    public CreateOrderService(Token token){
 
-        super();
-        this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        this.token = token;
     }
 
     public void createOrderForProduct(XpriceInfo xpriceInfo, String claimNumber){

@@ -20,12 +20,12 @@ public class GetBalanceService extends BaseService {
 
     private Token token;
 
-    public GetBalanceService(){
+    public GetBalanceService(Token token){
 
-        super();
-        this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        this.token = token;
     }
     public GetBalanceService getBalance(String claimNumber) {
+
         RestAssured.defaultParser = Parser.XML;
         getBalanceResponse = given().log().all()
                 .header(token.getAuthorizationHeader())
