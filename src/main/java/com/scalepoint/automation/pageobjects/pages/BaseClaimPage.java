@@ -20,7 +20,8 @@ public abstract class BaseClaimPage extends BaseSupplierAdminNavigation {
     public MailsPage toMailsPage() {
 
         Wait.waitForAjaxCompletedAndJsRecalculation();
-        return claimNavigationMenu.toMailsPage();
+        return claimNavigationMenu
+                .toMailsPage();
     }
 
     public MailsPage toEmptyMailsPage() {
