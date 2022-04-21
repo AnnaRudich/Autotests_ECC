@@ -31,7 +31,7 @@ public class ManualCreateClaimTest extends BaseTest {
 
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
 
-        login(user)
+        loginFlow.login(user)
                 .clickCreateNewCase();
     }
 

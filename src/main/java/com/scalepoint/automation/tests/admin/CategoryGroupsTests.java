@@ -38,7 +38,7 @@ public class CategoryGroupsTests extends BaseTest {
 
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
 
-        login(user, AdminPage.class);
+        loginFlow.login(user, AdminPage.class);
     }
     /**
      * GIVEN: SP user U1 with Admin permissions

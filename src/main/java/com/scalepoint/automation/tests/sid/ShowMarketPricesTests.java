@@ -33,7 +33,7 @@ public class ShowMarketPricesTests extends BaseTest {
             description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .doAssert(TextSearchPage.Asserts::assertMarketPriceSortingInvisible)
@@ -62,7 +62,7 @@ public class ShowMarketPricesTests extends BaseTest {
             description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
@@ -93,7 +93,7 @@ public class ShowMarketPricesTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortMarketPricesAscending()
@@ -124,7 +124,7 @@ public class ShowMarketPricesTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
     public void charlie_588_5_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()

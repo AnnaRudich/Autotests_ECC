@@ -28,7 +28,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE}, dataProvider = "testDataProvider",
             description = "Claim should have flat structure")
     public void charlie550_claimHaveFlatStructure(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
     }
@@ -36,7 +36,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE}, dataProvider = "testDataProvider",
             description = "Claim should have group view")
     public void charlie550_createGroups(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
@@ -61,7 +61,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE}, dataProvider = "testDataProvider",
             description = "Claim should have group view")
     public void charlie550_createGroupsValidateAgeAndQuantity(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
 
                 .addLines(claimItem, lineDescriptions)
                 .selectLinesByDescriptions(lineDescriptions)
@@ -98,7 +98,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Create valuation group")
     public void charlie550_createValuationGroup(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
@@ -146,7 +146,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Check reason is not visible")
     public void charlie550_createValuationGroupWithoutReason(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
@@ -170,7 +170,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Check if new price is mandatory")
     public void charlie550_createValuationGroupWithMandatoryNewPrice(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
@@ -196,7 +196,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Check if new price is mandatory")
     public void charlie550_createValuationGroupWithMandatoryCustomerDemand(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
@@ -219,7 +219,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE}, dataProvider = "testDataProvider",
             description = "Exclude group from claim")
     public void charlie550_excludeGroupFromClaim(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .addLines(claimItem, "itemNotInGroup")
                 .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
@@ -248,7 +248,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE}, dataProvider = "testDataProvider",
             description = "Move line from group to group")
     public void charlie550_dragAndDropFromGroupToGroup(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
 
                 .selectLinesByDescriptions(lineDescriptions[0])
@@ -276,7 +276,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE}, dataProvider = "testDataProvider",
             description = "Edit default group")
     public void charlie550_editDefaultGroup(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
@@ -298,7 +298,7 @@ public class LessIsMoreTests extends BaseTest {
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Delete valuation group")
     public void charlie_550_deleteGroup(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
@@ -317,7 +317,7 @@ public class LessIsMoreTests extends BaseTest {
             description = "Excel import with grouping")
     public void charlie_550_excelImportWithGrouping(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimLineGroup claimLineGroup) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .importExcelFile(new File(claimLineGroup.getExcelWithGroupsFilePath()).getAbsolutePath())
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();

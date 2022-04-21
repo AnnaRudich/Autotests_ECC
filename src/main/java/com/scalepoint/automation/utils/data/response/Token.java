@@ -22,5 +22,4 @@ public class Token {
     public Header getAuthorizationHeader() {
         return new Header("Authorization", tokenType + " " + accessToken);
     }
-
 }

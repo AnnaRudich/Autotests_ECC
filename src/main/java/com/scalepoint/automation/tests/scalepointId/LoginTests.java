@@ -24,7 +24,7 @@ public class LoginTests extends BaseTest {
     private static final String INVALID_DATA_CREDENTIALS_DATA_PROVIDER = "invalidCredentialsDataProvider";
     private static final String USERS_CREDENTIAL_DATA_PROVIDER = "usersCredentialDataProvider";
 
-    @Test(groups = {TestGroups.LOGIN}, description = "It is not possible to sign in with blank credentials",
+    @Test(groups = {TestGroups.LOGIN, TestGroups.SCALEPOINT_ID}, description = "It is not possible to sign in with blank credentials",
             expectedExceptions = {LoginInvalidException.class},
             dataProvider = INVALID_DATA_CREDENTIALS_DATA_PROVIDER)
     public void invalidCredentialsLoginTest(User user) {
@@ -33,7 +33,7 @@ public class LoginTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
-    @Test(groups = {TestGroups.LOGIN}, description = "Login different user types",
+    @Test(groups = {TestGroups.LOGIN, TestGroups.SCALEPOINT_ID}, description = "Login different user types",
             dataProvider = USERS_CREDENTIAL_DATA_PROVIDER)
     public void differentUserTypesLoginTest(User user){
 

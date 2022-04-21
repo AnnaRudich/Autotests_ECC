@@ -22,7 +22,7 @@ public class SidMarkDocumentationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeChecked(User user, Claim claim, GenericItem genericItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(
                         SettlementDialog.Asserts::assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked
@@ -51,7 +51,7 @@ public class SidMarkDocumentationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeUnchecked(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(
                         SettlementDialog.Asserts::assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked

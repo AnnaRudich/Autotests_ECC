@@ -95,7 +95,7 @@ public class DeprecationDeductedTests extends BaseTest {
 
     private void verify(User user, Claim claim, Double expectedVoucherCashValue, Double expectedVoucherFaceValue, Double customerCashValue,
                         PseudoCategory pseudoCategory, String voucherNameSP) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(pseudoCategory, sidForm -> {
                     sidForm.withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
@@ -111,7 +111,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
-        login(user).openRecentClaim()
+        loginFlow.login(user).openRecentClaim()
                 .doAssert(customerDetailsPage -> {
                     customerDetailsPage.assertCustomerCashValueIs(customerCashValue);
                     customerDetailsPage.assertCustomerFaceValueTooltipIs(expectedVoucherFaceValue);

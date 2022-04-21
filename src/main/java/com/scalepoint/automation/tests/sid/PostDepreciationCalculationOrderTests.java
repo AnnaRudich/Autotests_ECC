@@ -39,7 +39,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         double depreciationAmount = 130.00;
         int depreciationPercentage = 13;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
                 .valuationGrid()
                 .getValuationRow(NEW_PRICE)
@@ -69,7 +69,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         double depreciationAmount = 117.00;
         int depreciationPercentage = 13;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, purchasePrice, sid)
                             .withVoucher(claimItem.getExistingVoucher1())
@@ -108,7 +108,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         double depreciationAmount = 124.80;
         int depreciationPercentage = 13;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, purchasePrice, sid)
                             .withVoucher(claimItem.getExistingVoucher1())
@@ -134,7 +134,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         ProductInfo product = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY));
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(product.getSku())
                 .openSidForProductWithVoucher();

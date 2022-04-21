@@ -39,7 +39,7 @@ public class VoucherAgreementTests extends BaseTest {
     public void charlie550_createVoucherWithBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         String brand = "brand_test";
         String tag = "tag_test";
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -60,7 +60,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .doAssert(page -> page.assertVoucherPresent(voucher.getVoucherNameSP()))
                 .signOut();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(),
                         sid -> sid.withNewPrice(PRICE_2400)
                                 .withVoucher(voucher.getVoucherNameSP()))
@@ -87,7 +87,7 @@ public class VoucherAgreementTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-3038 Vouchers list on Vouchers page contains new voucher")
     public void ecc3038_newVoucherInVouchersList(User user, Voucher voucher) {
-        loginToEccAdmin(user).editSupplier(Constants.getSupplierNameForVATests(user))
+        loginFlow.loginToEccAdmin(user).editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
@@ -120,7 +120,7 @@ public class VoucherAgreementTests extends BaseTest {
         int faceValue = 15;
         int faceValueStep = 3;
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -174,7 +174,7 @@ public class VoucherAgreementTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to add Advanced data for new voucher")
     public void ecc3038_advancedDataAdding(User user, Voucher voucher) {
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -219,7 +219,7 @@ public class VoucherAgreementTests extends BaseTest {
         String conditions = RandomStringUtils.randomAlphabetic(100);
         String limitations = RandomStringUtils.randomAlphabetic(140);
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -259,7 +259,7 @@ public class VoucherAgreementTests extends BaseTest {
         int discountToIc = 10;
         int discountToCustomer = 15;
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -294,7 +294,7 @@ public class VoucherAgreementTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to remove assigned category for new voucher")
     public void ecc3038_removeAssignedCategory(User user, Voucher voucher, ClaimItem claimItem) {
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -469,7 +469,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .closeSupplier()
                 .logout();
 
-        loginToEccAdmin(futureUser2)
+        loginFlow.loginToEccAdmin(futureUser2)
                 .editSupplier(supplier.getSupplierName())
                 .selectAgreementsTab()
                 .doAssert(tab -> tab.assertVoucherStatus(vname, true))
@@ -528,7 +528,7 @@ public class VoucherAgreementTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CLAIMSHOP-5147 Differentiate between which discounts on vouchers we show/sell in shop and in ECC")
     public void createShopOnlyVoucher(User user, Voucher voucher, Claim claim, ClaimItem claimItem) {
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .editSupplier(Constants.getSupplierNameForVATests(user))
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
@@ -547,7 +547,7 @@ public class VoucherAgreementTests extends BaseTest {
 
         new SupplierDialog().saveSupplier().logout();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
                         .withCategory(claimItem.getCategoryBabyItems())
                         .withNewPrice(PRICE_2400))
@@ -628,7 +628,7 @@ public class VoucherAgreementTests extends BaseTest {
     }
 
     private AgreementsTab testVoucherVisibilityAcrossCompanies(VoucherAgreementData voucherAgreementData) {
-        SuppliersPage suppliersPage = loginToEccAdmin(voucherAgreementData.creator);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(voucherAgreementData.creator);
 
         String supplierName;
 
@@ -677,7 +677,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .toVouchersPage()
                 .doAssert(page -> page.assertVoucherPresent(voucherAgreementData.voucherName))
                 .logout();
-        VouchersPage vouchersPage = loginToEccAdmin(voucherAgreementData.anotherUser).toVouchersPage();
+        VouchersPage vouchersPage = loginFlow.loginToEccAdmin(voucherAgreementData.anotherUser).toVouchersPage();
 
         /* convert voucher state for voucher list page*/
         switch (voucherAgreementData.voucherAgreementState) {

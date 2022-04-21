@@ -49,7 +49,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -89,7 +89,7 @@ public class SelfService2Tests extends BaseTest {
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "SelfService2 password reset, login and logout")
     public void selfService2LogInWithNewPassword(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -119,7 +119,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -168,7 +168,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[2];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -222,7 +222,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -270,7 +270,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -305,7 +305,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
@@ -359,7 +359,7 @@ public class SelfService2Tests extends BaseTest {
     private void sendSMSandVerifyResponse(User user, Claim claim, int httpStatus){
 
         claim.setCellNumber(mailserviceStub.getTestMobileNumberForStatusCode(httpStatus));
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
 
         databaseApi.waitForFailedMailServiceRequest(claim.getClaimId(), httpStatus);

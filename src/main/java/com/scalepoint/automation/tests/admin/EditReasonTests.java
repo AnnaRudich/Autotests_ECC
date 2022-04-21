@@ -249,14 +249,14 @@ public class EditReasonTests extends BaseTest {
         addReasonToClaimAndLogout(trygUser, claim, claimItem, reason, description, customerDemandPrice, month,
                 depreciation, discretionaryReasonPrice, newPrice);
 
-        openEditReasonPage(insuranceCompany, true)
+        loginFlow.openEditReasonPage(insuranceCompany, true)
                 .findReason(reason)
                 .disable()
                 .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .assertReasonDisabled(reason)
                 .logout();
 
-        login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
+        loginFlow.login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .findClaimLine(reason)
@@ -374,7 +374,7 @@ public class EditReasonTests extends BaseTest {
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason,
                                            String description, Double customerDemandPrice, String month, int depreciation,
                                            Double discretionaryReasonPrice, Double newPrice) {
-        loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
                 .cancel()
                 .openSid()
                 .setDescription(description)
@@ -395,7 +395,7 @@ public class EditReasonTests extends BaseTest {
     }
 
     private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany) {
-        return openEditReasonPage(insuranceCompany, false);
+        return loginFlow.openEditReasonPage(insuranceCompany, false);
     }
 
 }

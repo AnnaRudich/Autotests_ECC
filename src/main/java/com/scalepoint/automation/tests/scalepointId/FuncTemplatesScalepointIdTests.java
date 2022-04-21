@@ -1,10 +1,14 @@
-package com.scalepoint.automation.tests.admin;
+package com.scalepoint.automation.tests.scalepointId;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
+import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -14,11 +18,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-555")
-public class FuncTemplatesTests extends BaseTest {
+public class FuncTemplatesScalepointIdTests extends BaseTest {
 
     private static final String CREATE_NEW_FT_DATA_PROVIDER = "createNewFtDataProvider";
     private static final String DELETE_NEW_FT_DATA_PROVIDER = "deleteNewFtDataProvider";
@@ -30,30 +32,31 @@ public class FuncTemplatesTests extends BaseTest {
         List parameters = Arrays.asList(objects);
 
         String ftName = getLisOfObjectByClass(parameters, String.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
 
-        createNewTemplate(ftName);
+        createNewTemplate(user, ftName);
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES}, dataProvider = CREATE_NEW_FT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES, TestGroups.SCALEPOINT_ID}, dataProvider = CREATE_NEW_FT_DATA_PROVIDER,
             description = "CHARLIE-555 It's possible to create new ME_FT. New ME_FT is displayed in ME_FT list")
-    public void createNewFtTest(String ftName) {
+    public void createNewFtTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, String ftName) {
 
         Page.at(FunctionalTemplatesPage.class)
                 .assertTemplateExists(ftName);
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES}, dataProvider = DELETE_NEW_FT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES, TestGroups.SCALEPOINT_ID}, dataProvider = DELETE_NEW_FT_DATA_PROVIDER,
             description = "CHARLIE-555 It's possible to delete new ME_FT. New ME_FT is not displayed in ME_FT list")
-    public void deleteNewFtTest(String ftName) {
+    public void deleteNewFtTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, String ftName) {
 
         boolean deleted = Page.at(FunctionalTemplatesPage.class)
                 .delete(ftName);
         Assert.assertTrue(deleted, "Template can't be deleted");
     }
 
-    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES}, dataProvider = EDIT_FT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.FUNC_TEMPLATES, TestGroups.SCALEPOINT_ID}, dataProvider = EDIT_FT_DATA_PROVIDER,
             description = "CHARLIE-555 It's possible to edit new ME_FT. Edited ME_FT is displayed in ME_FT list")
-    public void editFtTest(String ftName, String ftNameUpdated) {
+    public void editFtTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID)User user, String ftName, String ftNameUpdated) {
 
         Page.at(FunctionalTemplatesPage.class)
                 .editTemplate(ftName)
@@ -68,7 +71,8 @@ public class FuncTemplatesTests extends BaseTest {
         String ftName = FT_TEMPLATE_NAME + System.currentTimeMillis();
 
         return new Object[][]{
-                new Object[]{ftName}
+
+                TestDataActions.getTestDataWithExternalParameters(method, ftName).toArray()
         };
     }
 
@@ -78,7 +82,8 @@ public class FuncTemplatesTests extends BaseTest {
         String ftName = FT_TEMPLATE_NAME + System.currentTimeMillis();
 
         return new Object[][]{
-                new Object[]{ftName}
+
+                TestDataActions.getTestDataWithExternalParameters(method, ftName).toArray()
         };
     }
 
@@ -89,12 +94,13 @@ public class FuncTemplatesTests extends BaseTest {
         String ftNameUpdated = UPDATED_FT_TEMPLATE_NAME;
 
         return new Object[][]{
-                new Object[]{ftName, ftNameUpdated}
+
+                TestDataActions.getTestDataWithExternalParameters(method, ftName, ftNameUpdated).toArray()
         };
     }
 
-    private FunctionalTemplatesPage createNewTemplate(String ftName) {
-        return loginFlow.login(getSystemUser()).
+    private FunctionalTemplatesPage createNewTemplate(User user, String ftName) {
+        return loginFlow.login(user).
                 to(FunctionalTemplatesPage.class).
                 copyTemplate(DEFAULT_COPY_TEMPLATE).
                 setName(ftName).

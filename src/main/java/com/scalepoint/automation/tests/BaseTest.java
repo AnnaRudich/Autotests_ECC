@@ -5,30 +5,29 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.EditPolicyTypeDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
-import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
-import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.testWidget.GenerateWidgetPage;
-import com.scalepoint.automation.services.externalapi.*;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
+import com.scalepoint.automation.services.externalapi.EventDatabaseApi;
+import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
+import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
-import com.scalepoint.automation.services.restService.*;
+import com.scalepoint.automation.services.restService.EccIntegrationService;
+import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
+import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
+import com.scalepoint.automation.tests.widget.LoginFlow;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.SystemUtils;
@@ -39,10 +38,7 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.data.response.Token;
 import com.scalepoint.automation.utils.driver.DriverHelper;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
@@ -52,7 +48,6 @@ import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
-import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -80,18 +75,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
 import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
-import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static com.scalepoint.automation.utils.Configuration.getEccUrl;
-import static com.scalepoint.automation.utils.DateUtils.ISO8601;
-import static com.scalepoint.automation.utils.DateUtils.format;
-import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
 import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getDefaultFTSettings;
 
 @SpringBootTest(classes = Application.class)
@@ -99,7 +88,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class, LoginFlow.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
@@ -162,6 +151,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected MailserviceMock.MailserviceStub mailserviceStub;
+
+    @Autowired
+    protected LoginFlow loginFlow;
 
     @BeforeClass(alwaysRun = true)
     public void updateFeatureToggle(ITestContext context){
@@ -325,119 +317,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return functionalTemplatesApi.updateTemplate(user, returnPageClass, operations);
     }
 
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
-
-        LoginPage loginPage = Page.to(LoginPage.class);
-
-        if(user.getType().equals(SCALEPOINT_ID))
-        {
-
-            loginPage
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword());
-
-            ClaimApi.createClaim(claim, 1);
-            return Page.to(SettlementPage.class);
-
-        }else {
-
-            ClaimApi claimApi = new ClaimApi(user);
-            claimApi.createClaim(claim, policyType);
-            return redirectToSettlementPage(user);
-        }
-
-
-    }
-
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
-        return loginAndCreateClaim(user, claim, null);
-    }
-
-    protected EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
-        loginAndCreateClaim(user, claim, null);
-        return BaseDialog.at(EditPolicyTypeDialog.class);
-    }
-
-    protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
-        Token token = new OauthTestAccountsApi().sendRequest().getToken();
-
-        Response response = new CreateClaimService(token).addClaim(claimRequest).getResponse();
-
-        CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
-
-        return response.jsonPath().get("token");
-    }
-
-    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
-        Token token = new OauthTestAccountsApi().sendRequest().getToken();
-        return new CreateClaimService(token).addClaim(claimRequest);
-    }
-
-    protected String createFNOLClaimAndGetClaimToken(ClaimRequest itemizationRequest, ClaimRequest createClaimRequest){
-        itemizationRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
-        String test = unifiedIntegrationService.createItemizationCaseFNOL(createClaimRequest.getCountry(), createClaimRequest.getTenant(), itemizationRequest);
-        createClaimRequest.setItemizationCaseReference(test);
-        createClaimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        return unifiedIntegrationService.createClaimFNOL(createClaimRequest, databaseApi);
-    }
-
-    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
-
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            Page.to(LoginPage.class)
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword(), MyPage.class);
-
-        }else {
-
-            login(user, null);
-        }
-
-        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
-
-        return new SettlementPage();
-    }
-
-    protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
-
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            Page.to(LoginPage.class)
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword(), MyPage.class);
-        }else {
-
-            login(user, null);
-        }
-
-        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
-
-        return Page.at(returnPageClass);
-    }
-
-    protected MyPage login(User user) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, MyPage.class);
-    }
-
-    protected <T extends Page> T login(User user, Class<T> returnPageClass) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass);
-    }
-
-    protected <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass, parameters);
-    }
-
-    protected SuppliersPage loginToEccAdmin(User user) {
-        return login(user)
-                .getMainMenu()
-                .toEccAdminPage();
-    }
-
     protected GenerateWidgetPage openGenerateWidgetPage(){
 
         Browser.open(com.scalepoint.automation.utils.Configuration.getWidgetUrl());
@@ -447,22 +326,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected GenerateWidgetPage openGenerateWidgetPageNonAuth(){
         Browser.open(com.scalepoint.automation.utils.Configuration.getNonAuthWidgetUrl());
         return Page.at(GenerateWidgetPage.class);
-    }
-
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
-        return openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
-    }
-
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
-        return login(getSystemUser(), AdminPage.class)
-                .to(EditReasonsPage.class)
-                .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
-                .assertEditReasonsFormVisible();
-    }
-    protected SettlementPage redirectToSettlementPage(User user){
-
-        return login(user)
-                .to(SettlementPage.class);
     }
 
     public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {

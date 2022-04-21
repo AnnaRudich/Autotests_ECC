@@ -24,6 +24,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.*;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -222,7 +223,7 @@ public class TextSearchPage extends Page {
 
     public boolean isSortingMarketPriceDescendant() {
 
-        return $(getDescendantMarketPrice()).should(visible).has(visible);
+        return $(getDescendantMarketPrice()).should(visible, Duration.ofSeconds(30)).has(visible);
     }
 
     public BestFitPage toBestFitPage() {

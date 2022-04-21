@@ -17,7 +17,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim by multiple fields")
     public void searchClaim_byMultipleConditions(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getMainMenu()
                 .openClaimSearch()
                 .fillCustomerName(claim.getFirstName())
@@ -35,7 +35,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim by claim handler")
     public void searchClaim_claimHandler(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getMainMenu()
                 .openClaimSearch()
                 .fillClaimHandler("FirstName ÆæØøÅåß LastName ÆæØøÅåß")
@@ -46,7 +46,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim by name and last name")
     public void searchClaim_byName(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getMainMenu()
                 .openClaimSearch()
                 .fillCustomerName(claim.getFirstName())
@@ -60,7 +60,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim by company")
     public void searchClaim_byCompany(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getMainMenu()
                 .openClaimSearch()
                 .fillCompany(user.getCompanyName())
@@ -73,7 +73,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim in use")
     public void searchClaim_inUse(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getMainMenu()
                 .openClaimSearch()
                 .fillClaimNumber(claim.getClaimNumber())
@@ -88,7 +88,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for open claim")
     public void searchClaim_open(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .getMainMenu()
                 .openClaimSearch()
@@ -104,7 +104,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for completed claim")
     public void searchClaim_completed(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
@@ -124,7 +124,7 @@ public class ClaimSearchTest extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim closed externally")
     public void searchClaim_closedExternally(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .completeClaimWithoutMail(claim)
                 .getMainMenu()
                 .openClaimSearch()

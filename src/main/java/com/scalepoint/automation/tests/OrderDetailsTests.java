@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.CustomerOrderEditPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.VoucherInfo;
@@ -18,6 +19,7 @@ import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
+import com.scalepoint.automation.utils.data.response.Token;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -47,7 +49,7 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, Translations translations) {
         String companyName = user.getCompanyName();
 
-        OrderDetailsPage ordersPage = loginAndCreateClaim(user, claim).
+        OrderDetailsPage ordersPage = loginFlow.loginAndCreateClaim(user, claim).
                 toOrdersDetailsPage();
 
         OrderDetails orderDetails = translations.getOrderDetails();
@@ -98,7 +100,7 @@ public class OrderDetailsTests extends BaseTest {
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimItem.getSetDialogTextMatch())
                 .chooseCategory(claimItem.getCategoryMobilePhones())
@@ -142,7 +144,7 @@ public class OrderDetailsTests extends BaseTest {
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimItem.getSetDialogTextMatch())
                 .chooseCategory(claimItem.getCategoryMobilePhones())
@@ -183,10 +185,11 @@ public class OrderDetailsTests extends BaseTest {
             description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")
     public void orderDetailsInvisibilityTest(@UserAttributes(company = BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -195,7 +198,7 @@ public class OrderDetailsTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim();
 
-        new CreateOrderService().createOrderForProductExtraPay
+        new CreateOrderService(token).createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
         new CustomerDetailsPage()
@@ -212,10 +215,11 @@ public class OrderDetailsTests extends BaseTest {
             description = "The order details should only be visible when having VIEW_CUSTOMER_ORDERS permission")
     public void orderDetailsVisibilityTest(User user, Claim claim, ClaimItem claimItem) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -224,7 +228,7 @@ public class OrderDetailsTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim();
 
-        new CreateOrderService().createOrderForProductExtraPay
+        new CreateOrderService(token).createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
         new CustomerDetailsPage()
@@ -311,7 +315,7 @@ public class OrderDetailsTests extends BaseTest {
                                                           BigDecimal secondItemUnitPrice){
         String existingVoucher = voucher.getExistingVoucherForDistances();
 
-        return loginAndCreateClaim(user, claim)
+        return loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimItem.getSetDialogTextMatch())
                 .chooseCategory(claimItem.getCategoryMobilePhones())

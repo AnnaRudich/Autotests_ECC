@@ -39,7 +39,7 @@ public class SettlementSummaryTests extends BaseTest {
     public void ecc3034_setSummaryCheck(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(item.getCategoryBabyItems())
@@ -79,7 +79,7 @@ public class SettlementSummaryTests extends BaseTest {
 
         double totalPrice = BigDecimal.valueOf(voucherValuation.getCashCompensationWithDepreciation() + lowestPrice).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(item.getCategoryBabyItems())

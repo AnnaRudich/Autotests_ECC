@@ -22,7 +22,8 @@ public class Ip2Test extends BaseTest {
     public void claimSettledEventSettlementDoc(@UserAttributes(company = CompanyCode.FUTURE70) User user,
                                                Claim claim,
                                                ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -43,7 +44,7 @@ public class Ip2Test extends BaseTest {
     public void claimSettledEventSettlementInclusiveRepairDoc(@UserAttributes(company = CompanyCode.FUTURE71) User user,
                                                               Claim claim,
                                                               ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()

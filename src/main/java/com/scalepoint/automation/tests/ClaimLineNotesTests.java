@@ -20,7 +20,7 @@ public class ClaimLineNotesTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void editClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, firstItemName)
                 .addLines(claimItem, secondItemName)
                 .getToolBarMenu()
@@ -74,7 +74,7 @@ public class ClaimLineNotesTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void addClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, firstItemName)
                 .addLines(claimItem, secondItemName)
                 .getToolBarMenu()
@@ -118,7 +118,7 @@ public class ClaimLineNotesTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void removeClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, firstItemName)
                 .addLines(claimItem, secondItemName)
                 .getToolBarMenu()

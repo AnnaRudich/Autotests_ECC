@@ -23,7 +23,7 @@ public class BulkUpdateCategoryTests extends BaseTest {
         final String itemDescriptions[] = {"item1", "item2"};
         PseudoCategory mobilePhonesCategory = claimItem.getCategoryMobilePhones();
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, itemDescriptions[0], itemDescriptions[1])
                 .getToolBarMenu()
                 .selectAll()

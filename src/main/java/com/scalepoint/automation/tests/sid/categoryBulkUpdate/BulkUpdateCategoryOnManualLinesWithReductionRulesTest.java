@@ -47,7 +47,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
         PseudoCategory categoryWithReductionRulesMapped = claimItem.getCategoryMobilePhones();
 
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
 
         Integer depreciationPercentageFromReductionRule =
                 claimLinesHelper.startAddLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
@@ -121,7 +121,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
         PseudoCategory categoryWithReductionRulesMapped = claimItem.getCategoryMobilePhones();
 
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
 
         Integer depreciationPercentageFromReductionRule =
                 claimLinesHelper
