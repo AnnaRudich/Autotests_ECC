@@ -17,7 +17,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -139,16 +139,10 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
 
         hoverAndClick($(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
-        $(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]")).should(Condition.visible);
+
         String xpath = String.format(bySupplierNameXpath, supplierName);
-        try {
 
-            WebElement option = $(By.xpath(xpath));
-            return option.getText().contains(supplierName);
-        } catch (Error e) {
-
-            return false;
-        }
+        return $(By.xpath(xpath)).has(Condition.text(supplierName));
     }
 
     private boolean isTickDisplayed(String query, String XpathLocator) {

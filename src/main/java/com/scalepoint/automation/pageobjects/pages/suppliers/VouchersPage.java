@@ -85,7 +85,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         vouchersSearchField.sendKeys(query);
         vouchersSearchField.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
-        $(By.xpath("id('vouchersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]")).should(Condition.visible);
     }
 
     /**
