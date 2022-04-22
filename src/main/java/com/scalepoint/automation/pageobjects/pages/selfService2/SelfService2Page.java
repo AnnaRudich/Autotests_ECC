@@ -401,7 +401,9 @@ public class SelfService2Page extends Page {
 
         public Asserts assertSendButtonEnabled(){
 
-            assertThat($(SEND_BUTTON_PATH).has(Condition.enabled))
+            assertThat($(SEND_BUTTON_PATH)
+                    .should(Condition.enabled)
+                    .has(Condition.enabled))
                     .as("Send button should be enabled")
                     .isTrue();
             return this;

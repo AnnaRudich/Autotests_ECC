@@ -32,6 +32,7 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -348,6 +349,7 @@ public class SettlementPage extends BaseClaimPage {
         $(deleteGroupButton).click();
         waitForAjaxCompleted();
         $(By.xpath("//span[text() = 'Ja']")).click();
+        Wait.waitForJavascriptRecalculation();
         return this;
     }
 
@@ -509,13 +511,13 @@ public class SettlementPage extends BaseClaimPage {
 
         public Asserts assertSettlementPageIsInFlatView() {
 
-            assertThat($(By.xpath("//div[contains(@class, 'x-tree-view')]")).has(visible)).isFalse();
+            assertThat($(By.xpath("//div[contains(@class, 'x-tree-view')]")).shouldNot(visible).has(visible)).isFalse();
             return this;
         }
 
         public Asserts assertSettlementPageIsNotInFlatView() {
 
-            assertThat($(By.xpath("//div[contains(@class, 'x-tree-view')]")).has(visible)).isTrue();
+            assertThat($(By.xpath("//div[contains(@class, 'x-tree-view')]")).should(visible).has(visible)).isTrue();
             return this;
         }
 
