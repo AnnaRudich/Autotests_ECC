@@ -10,7 +10,7 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.Test;
 
-public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
+public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseUITest {
 
     @Test(groups = {TestGroups.EXCEL_IMPORT_CATEGORIES_AND_VALUATIONS_SELECTION}, dataProvider = "testDataProvider",
             description = "Import Excel where categories are not specified, but line description is meaningful " +

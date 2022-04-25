@@ -6,7 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.BankAccount;
@@ -21,7 +21,7 @@ import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
-public class CommunicationDesignerBaseTests extends BaseTest {
+public class CommunicationDesignerBaseTests extends BaseUITest {
 
     protected static String oneAttachment;
     protected static String twoAttachments;

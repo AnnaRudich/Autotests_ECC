@@ -20,7 +20,7 @@ import java.io.File;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 
-public class LessIsMoreTests extends BaseTest {
+public class LessIsMoreTests extends BaseUITest {
 
     private String groupDescription = "GroupName" + System.currentTimeMillis();
     private String[] lineDescriptions = new String[]{"item1", "item2", "item3"};

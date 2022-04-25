@@ -7,7 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -26,7 +26,7 @@ import static org.testng.Assert.assertEquals;
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-530")
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
-public class NotCheapestChoiceTests extends BaseTest {
+public class NotCheapestChoiceTests extends BaseUITest {
 
     /*09*/
     @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},

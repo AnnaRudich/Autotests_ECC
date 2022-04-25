@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class BulkUpdateCategoryTests extends BaseTest {
+public class BulkUpdateCategoryTests extends BaseUITest {
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4524")
     @Test(groups = {TestGroups.BULK_UPDATE_CATEGORY, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider")

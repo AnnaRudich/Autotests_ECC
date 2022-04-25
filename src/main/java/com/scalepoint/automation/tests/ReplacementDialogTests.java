@@ -19,7 +19,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
 
 @SuppressWarnings("AccessStaticViaInstance")
-public class ReplacementDialogTests extends BaseTest {
+public class ReplacementDialogTests extends BaseUITest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",

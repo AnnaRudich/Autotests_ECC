@@ -6,7 +6,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -29,7 +29,7 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
 @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED, enabled = false)
 @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
-public class PostDepreciationCalculationOrderTests extends BaseTest {
+public class PostDepreciationCalculationOrderTests extends BaseUITest {
 
     @Test(groups = {TestGroups.SID, TestGroups.POST_DEPRECATION_CALCULATION_ORDER}, dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")

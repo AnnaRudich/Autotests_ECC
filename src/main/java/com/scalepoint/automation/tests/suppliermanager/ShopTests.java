@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.suppliermanager;
 
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.testng.annotations.Test;
@@ -11,7 +11,7 @@ import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDial
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-507")
-public class ShopTests extends BaseTest {
+public class ShopTests extends BaseUITest {
 
     /**
      * GIVEN: User with Supply Manager credentials

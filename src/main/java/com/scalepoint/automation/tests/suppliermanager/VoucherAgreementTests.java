@@ -12,7 +12,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.Wait;
@@ -29,7 +29,7 @@ import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagree
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
-public class VoucherAgreementTests extends BaseTest {
+public class VoucherAgreementTests extends BaseUITest {
 
     private static final String AUTOTEST_SUPPLIER_VA_TESTS = "Autotest-Supplier-VA-Tests";
 

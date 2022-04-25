@@ -5,7 +5,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-589")
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-public class ShowScalepointSupplierTests extends BaseTest {
+public class ShowScalepointSupplierTests extends BaseUITest {
 
     /**
      * GIVEN: FT "Show Scalepoint Supplier" OFF

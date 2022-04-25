@@ -14,7 +14,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -37,7 +37,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUS
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
 
-public class IntelligentRepair2WebServiceTest extends BaseTest {
+public class IntelligentRepair2WebServiceTest extends BaseUITest {
 
     private static final String FEEDBACK_CLAIM_AUTO_COMPLETED_DATA_PROVIDER = "feedbackApprovedClaimAutoCompletedDataProvider";
     private static final String FEEDBACK_REJECTED_DATA_PROVIDER = "feedbackRejectedDataProvider";

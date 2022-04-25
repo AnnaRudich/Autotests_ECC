@@ -19,7 +19,7 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
  */
 
 @SuppressWarnings("AccessStaticViaInstance")
-public class CatalogPricesTests extends BaseTest {
+public class CatalogPricesTests extends BaseUITest {
 
     /**
      * this section covers ProductsAsVouchers "B&O products"

@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.api.unifiedpayments.v1;
 
 import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -61,7 +61,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
             TestGroups.SENDING_TO_EVENT_API},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void closeClaimWithSettlementWithAmountEqual0ShouldBeSendToEventApiTest(User user, InsertSettlementItem item,
                                                                                    ClaimRequest claimRequest) {
 
@@ -119,7 +119,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
             TestGroups.SENDING_TO_EVENT_API},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void cancelNotSettledClaimShouldSendClaimUpdatedCaseClosedEventTest(User user, InsertSettlementItem item,
                                                                                ClaimRequest claimRequest) {
 
@@ -132,7 +132,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
             TestGroups.SENDING_TO_EVENT_API},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void cancelSettledClaimShouldSendClaimUpdatedCaseClosedAndCaseSettledEvensTest(User user,
                                                                                           InsertSettlementItem item,
                                                                                           ClaimRequest claimRequest) {
@@ -151,7 +151,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
             TestGroups.SENDING_TO_EVENT_API},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void cancelClaimShouldBeNotSendToEventApiTest(User user, EccIntegration eccIntegration,
                                                          ClaimRequest claimRequest) {
 
@@ -169,7 +169,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
             TestGroups.SENDING_TO_EVENT_API},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void cancelClaimPreviouslySettledShouldBeSendToEventApiTest(User user, InsertSettlementItem item,
                                                                        ClaimRequest claimRequest) {
 

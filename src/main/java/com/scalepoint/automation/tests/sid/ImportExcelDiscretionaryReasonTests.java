@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Depreciati
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -21,7 +21,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
-public class ImportExcelDiscretionaryReasonTests extends BaseTest {
+public class ImportExcelDiscretionaryReasonTests extends BaseUITest {
 
     private String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 

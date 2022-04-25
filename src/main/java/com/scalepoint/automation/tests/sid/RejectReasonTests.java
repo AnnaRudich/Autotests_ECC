@@ -7,7 +7,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.*;
 
-public class RejectReasonTests extends BaseTest {
+public class RejectReasonTests extends BaseUITest {
 
     private ITestResult iTestResult;
 

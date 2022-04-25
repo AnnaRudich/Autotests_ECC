@@ -2,7 +2,7 @@ package com.scalepoint.automation.utils.data;
 
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.ExistingSuppliers;
@@ -52,13 +52,13 @@ public class TestDataActions {
                         instances.add(TestData.Data.getInstance(parameterType));
                     } catch (Exception e) {
 
-                        LogManager.getLogger(BaseTest.class).error(e.getMessage());
+                        LogManager.getLogger(BaseUITest.class).error(e.getMessage());
                         break;
                     }
                 }
             }
         } catch (Exception e) {
-            LogManager.getLogger(BaseTest.class).error(e.getMessage());
+            LogManager.getLogger(BaseUITest.class).error(e.getMessage());
         }
         return instances;
     }

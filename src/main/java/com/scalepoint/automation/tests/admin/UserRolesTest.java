@@ -7,7 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
@@ -26,7 +26,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-537")
-public class UserRolesTest extends BaseTest {
+public class UserRolesTest extends BaseUITest {
 
     private static final String LOGIN_AS_NEW_SP_ADMIN_DATA_PROVIDER = "loginAsNewSPAdminDataProvider";
     private static final String UPDATE_NEW_SP_ADMIN_USER_DATA_PROVIDER = "updateNewSPAdminUserDataProvider";

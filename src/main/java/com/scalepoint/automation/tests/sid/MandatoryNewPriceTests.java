@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.dialogs.RequiredValuationIsNeededDialog;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
-public class MandatoryNewPriceTests extends BaseTest {
+public class MandatoryNewPriceTests extends BaseUITest {
 
     @Test(groups = {TestGroups.SID, TestGroups.MANDATORY_NEW_PRICE},
             dataProvider = "testDataProvider",

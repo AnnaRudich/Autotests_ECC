@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.suppliermanager;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 @RequiredSetting(type = FTSetting.SELF_SERVICE_EXCEL_CHOICE)
-public class LossSheetTemplatesTests extends BaseTest {
+public class LossSheetTemplatesTests extends BaseUITest {
 
     @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.LOSS_SHEET_TEMPLATES}, dataProvider = "testDataProvider",
             description = "Verifies single template available for company")

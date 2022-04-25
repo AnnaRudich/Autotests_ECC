@@ -4,7 +4,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,7 +16,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRIC
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-526")
-public class DnD2_MarketPriceLogicTests extends BaseTest {
+public class DnD2_MarketPriceLogicTests extends BaseUITest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",

@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-public class OrderDetailsTests extends BaseTest {
+public class OrderDetailsTests extends BaseUITest {
 
     /**
      * GIVEN: SP User

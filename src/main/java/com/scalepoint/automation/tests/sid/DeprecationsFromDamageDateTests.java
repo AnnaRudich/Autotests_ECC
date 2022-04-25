@@ -7,7 +7,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -25,7 +25,7 @@ import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeprecationsFromDamageDateTests extends BaseTest {
+public class DeprecationsFromDamageDateTests extends BaseUITest {
 
     private static final String API_FORMAT = "yyyy-MM-dd";
 

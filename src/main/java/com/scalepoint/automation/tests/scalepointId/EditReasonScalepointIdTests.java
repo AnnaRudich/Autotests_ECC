@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.scalepointId;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -23,7 +23,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.FUT
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
-public class EditReasonScalepointIdTests extends BaseTest {
+public class EditReasonScalepointIdTests extends BaseUITest {
 
     private static final String EDIT_REASON_PAGE_FROM_ADMIN_EXCEEDED_LENGTH_DATA_PROVIDER = "editReasonPageFromAdminExceededLengthDataProvider";
     private static final String DELETE_REASON_NOT_IN_USE_DATA_PROVIDER = "deleteReasonNotInUseDataProvider";

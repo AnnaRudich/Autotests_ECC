@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-545")
-public class CategoryGroupsTests extends BaseTest {
+public class CategoryGroupsTests extends BaseUITest {
 
     public static final String CREATE_NEW_PS_CAT_GROUP_DATA_PROVIDER = "createNewPsCatGroupDataProvider";
     public static final String CREATE_NEW_PS_CAT_WITH_NEW_GROUP_DATA_PROVIDER = "createNewPsCatWithNewGroupDataProvider";

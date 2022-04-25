@@ -5,7 +5,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -20,7 +20,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-505")
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
+public class FillCalcDepr2RulesAndDepreciationTests extends BaseUITest {
 
     /**
      * GIVEN: Checkbox 'Automatic update of depreciation' is checked in SID
