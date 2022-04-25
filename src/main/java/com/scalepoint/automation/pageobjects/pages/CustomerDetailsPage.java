@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.DateUtils;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
@@ -20,7 +21,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -93,8 +93,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
 
         cancelClaimButton.click();
         By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
-        verifyElementVisible($(alertMessageBy));
-        $(alertMessageBy).click();
+        $(alertMessageBy).should(Condition.visible).click();
         return at(CustomerDetailsPage.class);
     }
 
@@ -119,19 +118,22 @@ public class CustomerDetailsPage extends BaseClaimPage {
 
     public CustomerDetailsPage selectDamageDate(LocalDate date) {
 
-        $(By.xpath("//a[@href='javascript:EditDamageDate()']")).click();
-        $(By.id("damageDate-inputEl")).click();
-        verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
-        $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
-        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
-        hoverAndClick($(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]")));
-        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='" + date.getDayOfMonth() + "']")).click();
-        verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
-        $(By.xpath("//div[contains(@id, 'toolbar')]//div[@class='x-box-inner']//a")).click();
-        verifyElementVisible($(By.id("damageDate-inputEl")));
+        $("#damage_date_row a").click();
+        $("#damageDate-inputEl").click();
+        $("[data-ref=middleBtnEl] a")
+                .should(Condition.visible).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" +
+                date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']"))
+                .should(Condition.visible).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']"))
+                .should(Condition.visible).click();
+        $(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]"))
+                .should(Condition.visible).click();
+        $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='" + date.getDayOfMonth() + "']"))
+                .should(Condition.visible).click();
+        $(By.xpath("//div[contains(@id, 'toolbar')]//div[@class='x-box-inner']//a"))
+                .hover().click();
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -212,7 +214,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
         }
 
         public Asserts assertIsDamageDateEditAvailable() {
-            assertThat(verifyElementVisible(damageDateEdit)).isTrue();
+            assertThat(damageDateEdit.has(Condition.visible)).isTrue();
             return this;
         }
 

@@ -17,6 +17,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 @SuppressWarnings("AccessStaticViaInstance")
 public class SidMarkDocumentationTests extends BaseTest {
+
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(groups = {TestGroups.SID, TestGroups.SID_MARK_DOCUMENTATION},
             dataProvider = "testDataProvider",

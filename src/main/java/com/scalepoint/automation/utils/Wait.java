@@ -1,9 +1,7 @@
 package com.scalepoint.automation.utils;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.codeborne.selenide.ex.ElementShould;
 import com.google.common.base.Function;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -59,8 +57,10 @@ public class Wait {
     }
 
     public static void waitForSpinnerToDisappear() {
+
         try {
-            verifyElementCondition($(By.xpath("//div[contains(@class, 'loader')]")), Condition.empty);
+
+            $(By.xpath("//div[contains(@class, 'loader')]")).should(Condition.empty);
         }catch (ElementNotFound e){
             log.info("Spinner not found");
         }
@@ -72,106 +72,6 @@ public class Wait {
         } catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
         }
-    }
-
-    public static boolean verifyElementVisible(SelenideElement element) {
-
-        try {
-
-            return waitElementVisible(element).isDisplayed();
-        }catch (ElementShould | ElementNotFound e){
-
-            return false;
-        }
-    }
-
-    public static boolean verifyElementInvisible(SelenideElement element) {
-
-        try {
-
-            return waitElementInvisible(element).isDisplayed();
-        }catch (ElementShould | ElementNotFound e){
-
-            return true;
-        }
-    }
-
-    public static SelenideElement waitElementVisible(SelenideElement element){
-        return verifyElementCondition(element, Condition.visible);
-    }
-
-    public static SelenideElement waitElementInvisible(SelenideElement element){
-        try {
-            return verifyElementCondition(element, Condition.not(Condition.visible));
-        }catch (ElementNotFound | ElementShould e){
-            return null;
-        }
-    }
-
-    public static SelenideElement waitNumberParseable(SelenideElement element){
-
-        return element.should(Condition.not(Condition.exactText("")));
-    }
-
-    public static WebElement waitForVisibleAndEnabled(SelenideElement element) {
-
-        return verifyElementCondition(element, Condition.and("wait for element to be visible and enabled", Condition.visible, Condition.enabled));
-    }
-
-    public static SelenideElement verifyElementCondition(SelenideElement element, Condition condition){
-
-        return element.shouldBe(condition, TIMEOUT);
-    }
-
-    public static SelenideElement verifyElementNotCondition(SelenideElement element, Condition condition){
-
-        return element.shouldNot(condition, TIMEOUT);
-    }
-
-    public static void waitForStaleElement(final By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            wrap((WebDriver d) -> {
-                try {
-                    return d.findElement(locator);
-                } catch (StaleElementReferenceException ex) {
-                    log.error("waitForStableElement: " + ex.getMessage() + " for: " + locator.toString());
-                    return null;
-                }
-            });
-        } finally {
-            logIfLong(start, "waitForStaleElement");
-        }
-    }
-
-    public static List<WebElement> waitForStaleElements(final By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            return wrapShort((WebDriver d) -> {
-                try {
-                    List<WebElement> elements = d.findElements(locator);
-                    if (elements.isEmpty()) {
-                        return null;
-                    }
-                    return elements;
-                } catch (StaleElementReferenceException ex) {
-                    log.error("waitForStaleElements: " + ex.getMessage() + " for: " + locator.toString());
-                    return null;
-                }
-            });
-        } finally {
-            logIfLong(start, "waitForStaleElements");
-        }
-    }
-
-    public static SelenideElement waitForElementContainsText(SelenideElement element, String text) {
-
-        return verifyElementCondition(element, Condition.text(text));
-    }
-
-    public static SelenideElement waitElementDisappeared(SelenideElement element) {
-
-        return verifyElementCondition(element, Condition.disappear);
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {
@@ -256,20 +156,6 @@ public class Wait {
         } finally {
             logIfLong(start, "waitForLoaded");
         }
-    }
-
-    private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, 1000).until(expectedCondition);
-    }
-
-    public static void waitForElementWithPageReload(By locator) {
-        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(1, TimeUnit.MINUTES)
-                .pollingEvery(10, TimeUnit.SECONDS)
-                .ignoring(NoSuchElementException.class);
-        wait.until((WebDriver driver) -> {
-            driver.navigate().refresh();
-            return driver.findElement(locator);
-        });
     }
 
     private static void logIfLong(long start, String method) {

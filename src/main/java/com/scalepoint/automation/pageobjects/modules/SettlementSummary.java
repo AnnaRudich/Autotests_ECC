@@ -24,7 +24,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {
@@ -160,7 +159,7 @@ public class SettlementSummary extends Module {
     public SettlementSummary ensureAuditInfoPanelVisible() {
 
         expand();
-        verifyElementVisible(auditInfoPanel);
+        auditInfoPanel.should(visible);
         return this;
     }
 
@@ -192,12 +191,12 @@ public class SettlementSummary extends Module {
         RepairPanel(){
 
             ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
-            repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(0)).getText());
-            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(1)).getText());
-            subtractedFromStatement = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(2)).getText());
-            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(3)).getText());
-            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(4)).getText());
-            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(5)).getText());
+            repairPrice = OperationalUtils.toBigDecimal(repairPanelItems.get(0).shouldNot(exactText("")).getText());
+            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(repairPanelItems.get(1).shouldNot(exactText("")).getText());
+            subtractedFromStatement = OperationalUtils.toBigDecimal(repairPanelItems.get(2).shouldNot(exactText("")).getText());
+            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(repairPanelItems.get(3).shouldNot(exactText("")).getText());
+            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(4).shouldNot(exactText("")).getText());
+            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(5).shouldNot(exactText("")).getText());
         }
 
         static boolean isDisplayed(){

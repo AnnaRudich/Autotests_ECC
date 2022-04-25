@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,8 +88,7 @@ public class CustomerDetailsPage2 extends BaseClaimPage {
 
         cancelClaimButton.click();
         By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
-        verifyElementVisible($(alertMessageBy));
-        $(alertMessageBy).click();
+        $(alertMessageBy).should(Condition.visible).click();
         return at(CustomerDetailsPage2.class);
     }
 

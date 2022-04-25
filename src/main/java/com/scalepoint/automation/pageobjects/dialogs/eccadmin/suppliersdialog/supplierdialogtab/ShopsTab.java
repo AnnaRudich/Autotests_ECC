@@ -13,7 +13,8 @@ import org.openqa.selenium.support.FindBy;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -78,11 +79,10 @@ public class ShopsTab extends SupplierDialog {
 
     public AddShopDialog openEditShopDialog(String shopName) {
 
-        SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shopName)));
-        element
+        $(By.xpath(String.format(byShopNameXpath, shopName)))
                 .scrollTo()
                 .doubleClick();
-        waitForVisibleAndEnabled($(By.name("shopName")));
+        $(By.name("shopName")).should(Condition.visible);
         return BaseDialog.at(AddShopDialog.class);
     }
 

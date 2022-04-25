@@ -170,12 +170,12 @@ public class ReplacementDialog extends BaseDialog {
         }
 
         public Asserts assertItemsListIsEmpty() {
-            assertThat(verifyElementVisible($(selectItemCheckboxByXpath))).as("there should not be items in the list").isFalse();
+            assertThat($(selectItemCheckboxByXpath).has(Condition.visible)).as("there should not be items in the list").isFalse();
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
-            assertThat(verifyElementVisible($(goToShopButtonByXpath))).as("goToShopButton should not be present").isFalse();
+            assertThat($(goToShopButtonByXpath).has(Condition.visible)).as("goToShopButton should not be present").isFalse();
             return this;
         }
 

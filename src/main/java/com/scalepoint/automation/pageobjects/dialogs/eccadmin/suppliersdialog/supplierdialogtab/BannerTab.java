@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.utils.JavascriptHelper;
@@ -9,7 +10,6 @@ import java.io.File;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertTrue;
 
@@ -32,7 +32,7 @@ public class BannerTab extends SupplierDialog {
 
         public BannerTab.Asserts assertBannerIsPresent() {
 
-            assertTrue(JavascriptHelper.isImagePresent(waitElementVisible($(By.className("bannerUploadImg")))));
+            assertTrue(JavascriptHelper.isImagePresent($(By.className("bannerUploadImg")).should(Condition.visible)));
             return this;
         }
     }

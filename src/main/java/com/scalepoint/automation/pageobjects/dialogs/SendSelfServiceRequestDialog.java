@@ -14,7 +14,6 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitElementInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class SendSelfServiceRequestDialog extends BaseDialog {
@@ -135,7 +134,6 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
         element.click();
         BaseDialog.at(GdprConfirmationDialog.class)
                 .confirm();
-        waitElementInvisible(element);
         return Page.at(SettlementPage.class);
     }
 
@@ -143,7 +141,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
         SelenideElement element = $(getOkButton());
         element.click();
-        waitElementInvisible(element);
+        element.should(Condition.not(Condition.visible));
         return Page.at(SettlementPage.class);
     }
 }

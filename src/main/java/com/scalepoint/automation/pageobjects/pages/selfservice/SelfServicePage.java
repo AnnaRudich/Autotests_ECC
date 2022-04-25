@@ -24,7 +24,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertTrue;
 
@@ -82,7 +82,7 @@ public class SelfServicePage extends Page {
     public boolean isFirst10SuggestionContainQuery(String query) {
 
         String[] queryList = query.split(" ");
-        waitForStaleElement(By.xpath("//div[contains(@class, 'x-combo-list-item')]"));
+        $(By.xpath("//div[contains(@class, 'x-combo-list-item')]")).should(visible);
         List<WebElement> suggestionItem = driver.findElements(By.xpath("//div[contains(@class, 'x-combo-list-item')]"));
 
         for (int i = 0; i < 10; i++) {
@@ -132,7 +132,7 @@ public class SelfServicePage extends Page {
      */
     public void waitForUploadCompleted() {
 
-        verifyElementVisible($(By.xpath("//div[contains(text(),'100 %')]")));
+        $(By.xpath("//div[contains(text(),'100 %')]")).should(visible);
     }
 
     public SelfServiceGrid getSelfServiceGrid(){
@@ -228,7 +228,7 @@ public class SelfServicePage extends Page {
 
                 this.row = row;
                 category = row.find("[class*=categoryColumn] div div");
-                acquired = waitElementVisible(row.find("[class*=acquired] div div"));
+                acquired = row.find("[class*=acquired] div div").should(visible);
                 purchaseDate = row.find("[class*=purchaseDate] div div");
                 purchasePrice = row.find("[class*=purchasePrice] div div");
                 newPrice = row.find("[class*=newPrice] div div");

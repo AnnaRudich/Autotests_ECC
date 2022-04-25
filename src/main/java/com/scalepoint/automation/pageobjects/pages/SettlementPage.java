@@ -38,6 +38,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Constants.*;
@@ -347,6 +348,7 @@ public class SettlementPage extends BaseClaimPage {
         $(deleteGroupButton).click();
         waitForAjaxCompleted();
         $(By.xpath("//span[text() = 'Ja']")).click();
+        Wait.waitForJavascriptRecalculation();
         return this;
     }
 
@@ -508,13 +510,13 @@ public class SettlementPage extends BaseClaimPage {
 
         public Asserts assertSettlementPageIsInFlatView() {
 
-            assertThat(verifyElementInvisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isFalse();
+            assertThat($(By.xpath("//div[contains(@class, 'x-tree-view')]")).shouldNot(visible).has(visible)).isFalse();
             return this;
         }
 
         public Asserts assertSettlementPageIsNotInFlatView() {
 
-            assertThat(verifyElementVisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
+            assertThat($(By.xpath("//div[contains(@class, 'x-tree-view')]")).should(visible).has(visible)).isTrue();
             return this;
         }
 

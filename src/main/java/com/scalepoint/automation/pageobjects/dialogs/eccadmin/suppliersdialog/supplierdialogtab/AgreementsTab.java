@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertEquals;
 
 public class AgreementsTab extends SupplierDialog {
@@ -79,24 +79,20 @@ public class AgreementsTab extends SupplierDialog {
 
     public AgreementsTab doWithAgreement(String voucherAgreementName, ActionType actionType) {
 
-        By voucherRow = By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherAgreementName + "']/ancestor::tr");
-        $(voucherRow).click();
+        SelenideElement voucherRow = $(By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherAgreementName + "']/ancestor::tr"));
+        voucherRow.click();
 
-        By actionButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
-        waitForVisibleAndEnabled($(actionButtonBy));
-
-        WebElement actionButton = $(actionButtonBy);
+        SelenideElement actionButton = $(By.className("supplier-join-leave-voucher-agreement-btn")).should(Condition.visible);
         Assert.assertEquals(actionButton.getText(), actionType == ActionType.JOIN ? "Join" : "Leave");
         actionButton.click();
 
-        By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
-        verifyElementVisible($(alertMessageBy));
-        $(alertMessageBy).click();
+        $(By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a")).should(Condition.visible)
+                .click();
 
         Wait.waitForAjaxCompleted();
         $(voucherRow).click();
 
-        Assert.assertEquals($(actionButton).getText(), actionType == ActionType.JOIN ? "Leave" : "Join");
+        Assert.assertEquals(actionButton.getText(), actionType == ActionType.JOIN ? "Leave" : "Join");
         return this;
     }
 

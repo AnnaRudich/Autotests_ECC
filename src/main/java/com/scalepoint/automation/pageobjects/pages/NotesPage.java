@@ -17,7 +17,6 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
@@ -56,8 +55,8 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public EditCustomerNoteDialog editCustomerNote() {
 
-        verifyElementVisible($(getEditCustomerNote()));
-        getEditCustomerNote().click();
+        $(getEditCustomerNote())
+                .should(Condition.visible).click();
         return BaseDialog.at(EditCustomerNoteDialog.class);
     }
 
@@ -75,13 +74,13 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public boolean isCustomerNotesPresent(String _customerNote) {
 
-        verifyElementVisible(customerNote);
+        customerNote.should(Condition.visible);
         return customerNote.getText().contains(_customerNote);
     }
 
     public boolean isInternalNotesPresent(String _internalNote) {
 
-        verifyElementVisible(internalNote);
+        internalNote.should(Condition.visible);
         return internalNote.getText().contains(_internalNote);
     }
 

@@ -14,10 +14,8 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -120,7 +118,8 @@ public class NewCustomerPage extends Page {
     }
 
     public NewCustomerPage selectPolicyType(int index) {
-        verifyElementVisible($(getPolicyType()));
+
+        $(getPolicyType()).should(visible);
         getPolicyType().selectByIndex(index);
         return this;
     }
@@ -139,14 +138,15 @@ public class NewCustomerPage extends Page {
     public NewCustomerPage selectDamageDate(LocalDate date) {
 
         damageDate.click();
-        verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
-        $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
-        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
-        hoverAndClick($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']/parent::span")));
-        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='" + date.getDayOfMonth() + "']")).click();
+        $(By.xpath("//a[contains(@id, 'splitbutton')]")).should(visible).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']"))
+                .should(visible).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']"))
+                .should(visible).click();
+        $(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']/parent::span"))
+                .should(visible).click();
+        $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='" + date.getDayOfMonth() + "']"))
+                .should(visible).click();
         return this;
     }
 

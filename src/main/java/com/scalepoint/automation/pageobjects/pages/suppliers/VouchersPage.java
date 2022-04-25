@@ -85,7 +85,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         vouchersSearchField.sendKeys(query);
         vouchersSearchField.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
     }
 
     /**
@@ -94,9 +93,9 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      */
     public void openFirstVoucher() {
 
-        Wait.waitForStaleElement(By.xpath("//div[1]/table/tbody/tr/td[2]/div"));
+        $((By.xpath("//div[1]/table/tbody/tr/td[2]/div"))).should(Condition.visible);
         firstVoucherItem.doubleClick();
-        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
+        $(By.xpath("//div[@id='categoriesVoucherTabId']")).should(Condition.visible);
     }
 
     public boolean isExclusiveColumnDisplayed() {
