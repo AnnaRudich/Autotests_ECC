@@ -381,7 +381,7 @@ public class TextSearchPage extends Page {
     public TextSearchPage selectBrand(String text) {
 
         forCondition(ExpectedConditions.elementToBeClickable(getBrandButton())).click();
-       $(getBrandSelect()).should(visible).selectOption(text);
+        $(getBrandSelect()).should(visible).selectOption(text);
         waitForResultsLoad();
         return this;
     }
