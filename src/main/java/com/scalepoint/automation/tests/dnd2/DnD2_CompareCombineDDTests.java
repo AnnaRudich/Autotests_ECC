@@ -231,7 +231,6 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     //@TODO: find solution how to deal with react.js components in ss
     //TODO
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, enabled = false, dataProvider = "testDataProvider",

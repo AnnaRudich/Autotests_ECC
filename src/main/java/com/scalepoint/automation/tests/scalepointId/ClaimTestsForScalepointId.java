@@ -16,7 +16,6 @@ import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.
 
 @SuppressWarnings("AccessStaticViaInstance")
 
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTestsForScalepointId extends ClaimSharedTests {
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
