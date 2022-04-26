@@ -26,7 +26,6 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
 public class UCommerceShopTests extends BaseTest {
 
     private final Double orderedProductPrice = Constants.PRICE_100;

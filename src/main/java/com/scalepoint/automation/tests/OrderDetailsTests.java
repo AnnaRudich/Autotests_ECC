@@ -31,7 +31,6 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.BAS
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class OrderDetailsTests extends BaseTest {
 
     /**
@@ -180,7 +179,6 @@ public class OrderDetailsTests extends BaseTest {
                 .isEqualTo(0.0);
     }
 
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")
     public void orderDetailsInvisibilityTest(@UserAttributes(company = BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
@@ -210,7 +208,6 @@ public class OrderDetailsTests extends BaseTest {
                         )));
     }
 
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should only be visible when having VIEW_CUSTOMER_ORDERS permission")
     public void orderDetailsVisibilityTest(User user, Claim claim, ClaimItem claimItem) {
