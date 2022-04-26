@@ -23,6 +23,7 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
+import com.scalepoint.automation.tests.widget.FeatureToggle;
 import com.scalepoint.automation.tests.widget.LoginFlow;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
@@ -71,7 +72,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class, LoginFlow.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class, LoginFlow.class, FeatureToggle.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
@@ -137,6 +138,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected LoginFlow loginFlow;
+
+    @Autowired
+    protected FeatureToggle featureToggle;
 
     @DataProvider(name = TEST_DATA_PROVIDER)
     public static Object[][] provide(Method method) {
@@ -251,17 +255,19 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    protected void rollbackToggleSetting(FeatureToggleSetting toggleSetting) {
-
-        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
-        if (toggleSetting == null) {
-            return;
-        }
-
-        FeatureIds toggleSettingType = toggleSetting.type();
-        Boolean initialState = featureTogglesDefaultState.get(toggleSettingType);
-        featuresToggleAdminApi.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(initialState), toggleSettingType);
-    }
+//    protected void rollbackToggleSetting(FeatureToggleSetting toggleSetting) {
+//
+//        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
+//
+//        if (toggleSetting == null) {
+//
+//            return;
+//        }
+//
+//        FeatureIds toggleSettingType = toggleSetting.type();
+//        Boolean initialState = featureTogglesDefaultState.get(toggleSettingType);
+//        featuresToggleAdminApi.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(initialState), toggleSettingType);
+//    }
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     protected void takeScreenshot(Method method, ITestResult iTestResult) {
@@ -298,24 +304,24 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
 
-    protected void updateFeatureToggle(FeatureToggleSetting toggleSetting) {
-
-        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
-
-        if (toggleSetting == null) {
-
-            return;
-        }
-
-        boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
-        boolean toggleExpectedState = toggleSetting.enabled();
-
-        if (toggleActualState != toggleExpectedState) {
-
-            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
-            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(toggleExpectedState), toggleSetting.type());
-        }
-    }
+//    protected void updateFeatureToggle(FeatureToggleSetting toggleSetting) {
+//
+//        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
+//
+//        if (toggleSetting == null) {
+//
+//            return;
+//        }
+//
+//        boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
+//        boolean toggleExpectedState = toggleSetting.enabled();
+//
+//        if (toggleActualState != toggleExpectedState) {
+//
+//            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
+//            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(toggleExpectedState), toggleSetting.type());
+//        }
+//    }
 
 
     private void updateFunctionalTemplate(List<RequiredSetting> allSettings, User user) {
@@ -336,7 +342,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                             .filter(ftOperation ->
                                     !ftOperation.getSetting().equals(settingType))
                             .collect(Collectors.toList());
-                    
+
                     switch (settingType.getOperationType()) {
                         case CHECKBOX:
                             defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));

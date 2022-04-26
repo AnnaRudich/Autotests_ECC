@@ -231,7 +231,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails")
@@ -243,7 +242,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails with attachments")
@@ -255,7 +253,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = ORDER_CONFIRMATION_DATA_PROVIDER,
             description = "Use communication designer to prepare order confirmation mails")
     public void orderConfirmationTest(User user, Claim claim, ClaimItem claimItem,
@@ -292,7 +289,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = REPLACEMENT_MAIL_DATA_PROVIDER,
             description = "Use communication designer to prepare replacement mail")

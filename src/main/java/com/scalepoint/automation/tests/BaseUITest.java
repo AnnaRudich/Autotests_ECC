@@ -42,7 +42,7 @@ public class BaseUITest extends BaseTest {
 
         if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
 
-            updateFeatureToggle(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
+            featureToggle.updateFeatureToggle(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
         }
     }
 
@@ -56,7 +56,7 @@ public class BaseUITest extends BaseTest {
 
             if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
 
-                rollbackToggleSetting(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
+                featureToggle.rollbackToggleSetting(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
             }
         }
     }
@@ -81,7 +81,6 @@ public class BaseUITest extends BaseTest {
 
             JavascriptHelper.initializeCommonFunctions();
 
-
             Configuration.savePageSource = false;
 
             log.info("Initialization completed for : {}", method.getName());
@@ -98,7 +97,7 @@ public class BaseUITest extends BaseTest {
 
                 if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
 
-                    updateFeatureToggle(getToggleSetting(method));
+                    featureToggle.updateFeatureToggle(getToggleSetting(method));
                 }
             }
 
@@ -145,7 +144,7 @@ public class BaseUITest extends BaseTest {
 
                     if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
 
-                        rollbackToggleSetting(getToggleSetting(method));
+                        featureToggle.rollbackToggleSetting(getToggleSetting(method));
                     }
                 }
 

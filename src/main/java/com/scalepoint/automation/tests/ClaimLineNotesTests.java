@@ -8,7 +8,6 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.Test;
 
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimLineNotesTests extends BaseUITest {
 
     String firstItemName = "item1";

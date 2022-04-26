@@ -33,7 +33,6 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends ClaimSharedTests {
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
