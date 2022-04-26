@@ -38,7 +38,6 @@ public class VoucherPredictionTest extends BaseUITest {
                         .get(0).getPredictedVoucher().getVoucherName()));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(groups = {TestGroups.VOUCHER_PREDICTION}, dataProvider = "testDataProvider",
             description = "MIKE-42 - call Improved voucher match service in SelfService")

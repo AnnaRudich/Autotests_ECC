@@ -43,7 +43,6 @@ public enum FTSetting {
 
     //Settings for Self Service
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='1']", CHECKBOX),
-    USE_SELF_SERVICE2("input[name=ftSelfServiceFlag][value='65536']", CHECKBOX),
     INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='256']", CHECKBOX),
     INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='32']", CHECKBOX),
     INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='64']", CHECKBOX),

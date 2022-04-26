@@ -86,7 +86,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
             dataProvider = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEM_DATA_PROVIDER,
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void itemizationSubmitAndSaveLossItemsTest(User user, Claim claim, ClaimItem claimItem,
@@ -102,7 +101,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
             dataProvider = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEMS_WITH_ATTACHMENTS_DATA_PROVIDER,
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email with attachments")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void itemizationSubmitAndSaveLossItemsWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem,
