@@ -233,6 +233,7 @@ public class SelfService2Page extends Page {
     public SelfService2Page saveItem() {
 
         saveItem.click();
+        waitForAjaxCompletedAndJsRecalculation();
         return at(SelfService2Page.class);
     }
 
