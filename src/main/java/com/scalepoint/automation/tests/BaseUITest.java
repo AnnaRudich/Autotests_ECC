@@ -11,7 +11,6 @@ import com.scalepoint.automation.utils.SystemUtils;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverHelper;
 import com.scalepoint.automation.utils.driver.DriversFactory;
-import com.scalepoint.automation.utils.listeners.FeatureToggleSettingsUtils;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -21,8 +20,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
@@ -31,34 +30,13 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
-
 public class BaseUITest extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void updateFeatureToggle(ITestContext context){
 
         ServiceData.init(databaseApi);
-
-        if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
-
-            featureToggle.updateFeatureToggle(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
-        }
-    }
-
-    @AfterClass(alwaysRun = true)
-    public void rollbackFeatureToggle(ITestContext context){
-
-        if (featureTogglesDefaultState.isEmpty()) {
-
-            log.info("No feature toggle to rollback");
-        } else {
-
-            if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
-
-                featureToggle.rollbackToggleSetting(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
-            }
-        }
+        featureToggle.updateFeatureToggles(context);
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -86,6 +64,7 @@ public class BaseUITest extends BaseTest {
             log.info("Initialization completed for : {}", method.getName());
 
             if (Browser.hasDriver()) {
+
                 log.info("Using driver type: " + Browser.getDriverType());
                 log.info("Start from: " + SystemUtils.getHostname());
                 gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
@@ -95,13 +74,11 @@ public class BaseUITest extends BaseTest {
 
                 retryUpdateFtTemplate(method, optionalUser);
 
-                if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
-
-                    featureToggle.updateFeatureToggle(getToggleSetting(method));
-                }
+                featureToggle.updateFeatureToggles(method);
             }
 
         }catch (Exception e){
+
             Browser.quit();
             Window.cleanUp();
             CurrentUser.cleanUp();
@@ -116,11 +93,14 @@ public class BaseUITest extends BaseTest {
         log.info("Clean up after: {}", method.toString());
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
+
             Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
         } catch (Exception e) {
+
             log.info(e.getMessage());
         }
         if (Browser.hasDriver()) {
+
             try {
 
                 takeScreenshot(method, iTestResult);
@@ -134,19 +114,9 @@ public class BaseUITest extends BaseTest {
 
                 log.info("Left tests: {}", left);
 
-
                 cleanUpCDTemplates(method, objects);
 
-                if (featureTogglesDefaultState.isEmpty()) {
-
-                    log.info("No feature toggle to rollback");
-                } else {
-
-                    if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
-
-                        featureToggle.rollbackToggleSetting(getToggleSetting(method));
-                    }
-                }
+                featureToggle.rollbackToggleSetting(method);
 
                 Browser.open(com.scalepoint.automation.utils.Configuration.getLogoutUrl());
                 Page.to(LoginPage.class);
@@ -162,6 +132,12 @@ public class BaseUITest extends BaseTest {
         Page.PagesCache.cleanUp();
         ThreadContext.clearMap();
         log.info("Clean up completed after: {} ", method.getName());
+    }
+
+    @AfterSuite(alwaysRun = true)
+    public void rollbackFeatureToggle(ITestContext context){
+
+        featureToggle.rollbackToggleSetting(context);
     }
 }
 

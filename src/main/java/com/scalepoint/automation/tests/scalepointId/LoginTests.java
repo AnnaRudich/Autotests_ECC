@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 import java.util.Collections;
 
-import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureId.SCALEPOINTID_LOGIN_ENABLED;
 
 public class LoginTests extends BaseUITest {
 

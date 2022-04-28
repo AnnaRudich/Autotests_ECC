@@ -10,7 +10,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureId.SCALEPOINTID_LOGIN_ENABLED;
 
 @SuppressWarnings("AccessStaticViaInstance")
 

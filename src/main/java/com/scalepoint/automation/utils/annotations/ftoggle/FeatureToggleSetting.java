@@ -1,6 +1,6 @@
 package com.scalepoint.automation.utils.annotations.ftoggle;
 
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureId;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface FeatureToggleSetting {
 
-    FeatureIds type();
+    FeatureId type();
 
     boolean enabled() default true;
 }
