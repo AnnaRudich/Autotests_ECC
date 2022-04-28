@@ -5,7 +5,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 @RequiredSetting(type = FTSetting.ENABLE_BULK_UPDATE_CATEGORY)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
 @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-6693")
-public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseTest {
+public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseUITest {
 
     ClaimLinesHelper claimLinesHelper = new ClaimLinesHelper();
 

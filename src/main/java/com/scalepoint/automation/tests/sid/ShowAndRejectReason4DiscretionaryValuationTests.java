@@ -8,7 +8,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -30,7 +30,7 @@ import static com.scalepoint.automation.utils.Constants.TEXT_LINE;
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
+public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseUITest {
 
     /**
      * WHEN:FT is OFF

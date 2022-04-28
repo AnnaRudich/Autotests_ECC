@@ -11,7 +11,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-521")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-522")
-public class SupplierTests extends BaseTest {
+public class SupplierTests extends BaseUITest {
 
     /**
      * GIVEN: User with Supply Manager credentials

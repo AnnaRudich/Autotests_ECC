@@ -9,7 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -25,7 +25,7 @@ import static com.scalepoint.automation.utils.Constants.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-512")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-public class SidTests extends BaseTest {
+public class SidTests extends BaseUITest {
 
     @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
             dataProvider = "testDataProvider",

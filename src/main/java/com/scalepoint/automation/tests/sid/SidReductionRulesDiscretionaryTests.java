@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-613")
-public class SidReductionRulesDiscretionaryTests extends BaseTest {
+public class SidReductionRulesDiscretionaryTests extends BaseUITest {
 
     /**
      * GIVEN: User logs in as alkauser1

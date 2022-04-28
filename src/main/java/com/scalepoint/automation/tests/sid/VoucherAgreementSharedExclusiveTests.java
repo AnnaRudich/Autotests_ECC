@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -15,7 +15,7 @@ import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-548")
-public class VoucherAgreementSharedExclusiveTests extends BaseTest {
+public class VoucherAgreementSharedExclusiveTests extends BaseUITest {
     /**
      * GIVEN: IC1 parent user U1, IC1 child user U2, SP admin user U3, IC2 user U4
      * WHEN: U1 creates supplier S1 and it's voucher V1

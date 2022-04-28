@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.scalepointId;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -18,7 +18,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.at;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-509")
-public class InsCompanyScalepointIdTest extends BaseTest {
+public class InsCompanyScalepointIdTest extends BaseUITest {
 
     @BeforeMethod(alwaysRun = true)
     public void toInsCompaniesPage(Object[] objects) {

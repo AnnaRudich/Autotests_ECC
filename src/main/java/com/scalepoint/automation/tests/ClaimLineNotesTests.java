@@ -6,7 +6,7 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.Test;
 
-public class ClaimLineNotesTests extends BaseTest {
+public class ClaimLineNotesTests extends BaseUITest {
 
     String firstItemName = "item1";
     String secondItemName = "item2";

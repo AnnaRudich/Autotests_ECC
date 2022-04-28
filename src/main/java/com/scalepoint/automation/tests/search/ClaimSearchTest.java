@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.search;
 import com.scalepoint.automation.pageobjects.pages.ClaimSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.shared.ClaimStatus.*;
 
 
-public class ClaimSearchTest extends BaseTest {
+public class ClaimSearchTest extends BaseUITest {
 
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
             description = "Search for claim by multiple fields")

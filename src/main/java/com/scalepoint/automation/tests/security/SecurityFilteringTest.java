@@ -2,14 +2,14 @@ package com.scalepoint.automation.tests.security;
 
 import com.scalepoint.automation.services.restService.SecurityService;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 public class SecurityFilteringTest extends BaseApiTest {
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void outputManagementStatusAuthorizedTest(User user){
 
         new SecurityService()
@@ -18,7 +18,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertAuthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void outputManagementStatusUnauthorizedTest(){
 
         new SecurityService()
@@ -26,7 +26,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void getInsuranceCompaniesAuthorizedTest(User user){
 
         new SecurityService()
@@ -35,7 +35,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertAuthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void insuranceCompaniesUnauthorized(){
 
         new SecurityService()
@@ -43,7 +43,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void requestOutstandingAmountsAuthorizedTest(User user){
 
         new SecurityService()
@@ -52,14 +52,14 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertAuthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void requestOutstandingAmountsUnauthorizedTest(){
 
         new SecurityService()
                 .requestOutstandingAmounts()
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void getListOfInsuranceCompaniesAuthorizedTest(User user){
 
         new SecurityService()
@@ -68,7 +68,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertAuthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void getListOfInsuranceCompaniesUnauthorizedTest(){
 
         new SecurityService()
@@ -76,7 +76,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void getVouchersDataAuthorizedTest(User user){
 
         new SecurityService()
@@ -85,7 +85,7 @@ public class SecurityFilteringTest extends BaseApiTest {
                 .doAssert(adminService -> adminService.assertAuthorized());
     }
 
-    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
+    @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseUITest.class, dataProvider = BaseUITest.TEST_DATA_PROVIDER)
     public void getVouchersDataUnauthorizedTest(){
 
         new SecurityService()

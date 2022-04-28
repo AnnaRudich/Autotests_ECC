@@ -7,7 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -19,7 +19,7 @@ import java.util.Collections;
 
 import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 
-public class LoginTests extends BaseTest {
+public class LoginTests extends BaseUITest {
 
     private static final String INVALID_DATA_CREDENTIALS_DATA_PROVIDER = "invalidCredentialsDataProvider";
     private static final String USERS_CREDENTIAL_DATA_PROVIDER = "usersCredentialDataProvider";

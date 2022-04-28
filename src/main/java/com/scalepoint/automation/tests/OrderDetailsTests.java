@@ -31,7 +31,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.BAS
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
-public class OrderDetailsTests extends BaseTest {
+public class OrderDetailsTests extends BaseUITest {
 
     /**
      * GIVEN: SP User

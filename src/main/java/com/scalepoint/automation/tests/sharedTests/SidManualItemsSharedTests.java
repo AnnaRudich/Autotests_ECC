@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.sharedTests;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -13,7 +13,7 @@ import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
-public class SidManualItemsSharedTests extends BaseTest {
+public class SidManualItemsSharedTests extends BaseUITest {
 
     /**
      * WHEN: Include in claim option is ON

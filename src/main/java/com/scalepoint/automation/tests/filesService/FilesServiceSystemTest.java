@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
@@ -23,7 +23,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOP
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 
-public class FilesServiceSystemTest extends BaseTest {
+public class FilesServiceSystemTest extends BaseUITest {
 
     private String[] lineDescriptions = new String[]{"item1", "item2"};
     private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");

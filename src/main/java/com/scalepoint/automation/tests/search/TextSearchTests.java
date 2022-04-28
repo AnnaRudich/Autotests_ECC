@@ -6,7 +6,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
@@ -18,7 +18,7 @@ import static com.scalepoint.automation.pageobjects.modules.textSearch.Attribute
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.TOUCH_SCREEN_NEJ;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
-public class TextSearchTests extends BaseTest {
+public class TextSearchTests extends BaseUITest {
 
     private static final String SAMSUNG_GALAXY_S_7 = "samsung galaxy s7";
 

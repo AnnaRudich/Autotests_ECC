@@ -18,7 +18,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 import static com.scalepoint.automation.utils.Constants.PRICE_100;
 
 @RequiredSetting(type = FTSetting.ENABLE_VOUCHER_PREDICTION)
-public class VoucherPredictionTest extends BaseTest {
+public class VoucherPredictionTest extends BaseUITest {
 
     private static final String lineDescription = "claimLine1";
 

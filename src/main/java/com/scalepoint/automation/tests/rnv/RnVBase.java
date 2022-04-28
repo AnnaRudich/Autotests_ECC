@@ -10,7 +10,7 @@ import com.scalepoint.automation.pageobjects.pages.rnv.tabs.OverviewTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.DefaultSettingsPage;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -19,7 +19,7 @@ import com.scalepoint.automation.utils.data.entity.input.Translations;
 
 import java.math.BigDecimal;
 
-public class RnVBase extends BaseTest {
+public class RnVBase extends BaseUITest {
 
     protected static final BigDecimal ZERO = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
 

@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.CwaTaskLog;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -24,7 +24,7 @@ import java.time.Year;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
+public class EccIntegrationsWithCwaClaimSSTests extends BaseUITest {
 
     private String claimToken;
     private Integer userIdByClaimToken;

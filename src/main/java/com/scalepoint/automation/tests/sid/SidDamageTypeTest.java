@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -15,7 +15,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
-public class SidDamageTypeTest extends BaseTest {
+public class SidDamageTypeTest extends BaseUITest {
 
     private static final String SONY_HDR_CX450 = "HDR-CX450";
 

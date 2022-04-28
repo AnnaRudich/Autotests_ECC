@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.fraudAlert;
 
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeClass;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 
-public class FraudAlertBase extends BaseTest {
+public class FraudAlertBase extends BaseUITest {
 
     static final String SONY_HDR_CX450 = "Sony Handycam HDR-CX450";
     static final String IPHONE = "iPhone 8";

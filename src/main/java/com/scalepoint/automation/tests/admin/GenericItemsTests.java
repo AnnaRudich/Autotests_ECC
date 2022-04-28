@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.admin;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -19,7 +19,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
-public class GenericItemsTests extends BaseTest {
+public class GenericItemsTests extends BaseUITest {
 
     @BeforeMethod(alwaysRun = true)
     public void toGenericItemsAdminPage(Object[] objects) {

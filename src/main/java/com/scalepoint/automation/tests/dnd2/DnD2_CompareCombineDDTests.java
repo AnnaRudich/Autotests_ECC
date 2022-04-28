@@ -9,7 +9,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -35,7 +35,7 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-586")
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
-public class DnD2_CompareCombineDDTests extends BaseTest {
+public class DnD2_CompareCombineDDTests extends BaseUITest {
 
     private static final String ADD_FROM_CATALOG_WHERE_PRODUCT_PRICE_IS_HIGHER_THAN_MARKET_PRIDE_DATA_PROVIDER = "addFromCatalogWhereProductPriceIsHigherThanMarketPriceTest";
     private static final String DEPRECATION_DATA_PROVIDER = "deprecationDataProvider";

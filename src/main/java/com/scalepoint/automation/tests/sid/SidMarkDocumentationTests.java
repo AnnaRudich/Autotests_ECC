@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SUFFICIENT_DOCUMENTATION_CHECKBOX;
 
 @SuppressWarnings("AccessStaticViaInstance")
-public class SidMarkDocumentationTests extends BaseTest {
+public class SidMarkDocumentationTests extends BaseUITest {
 
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(groups = {TestGroups.SID, TestGroups.SID_MARK_DOCUMENTATION},

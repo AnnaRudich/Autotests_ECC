@@ -11,7 +11,6 @@ import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.Customer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
@@ -25,7 +24,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
         waitForAjaxCompletedAndJsRecalculation();
         email.should(Condition.visible);
-        $(getOkButton()).should(Condition.visible);
+        getOkButton().should(Condition.visible);
     }
 
     @FindBy(name = "email")
@@ -50,9 +49,9 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
         return new ExtCheckboxTypeDiv($(By.id("closeAutomatically-bodyEl")));
     }
 
-    private Button getOkButton(){
+    private SelenideElement getOkButton(){
 
-        return new Button($(By.xpath(OK_BUTTON_PATH)));
+        return $(By.xpath(OK_BUTTON_PATH));
     }
 
     public SendSelfServiceRequestDialog fill(Claim claim, String password) {
@@ -130,8 +129,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     public SettlementPage send() {
 
-        SelenideElement element = $(getOkButton());
-        element.click();
+        getOkButton().click();
         BaseDialog.at(GdprConfirmationDialog.class)
                 .confirm();
         return Page.at(SettlementPage.class);
@@ -139,9 +137,9 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     public SettlementPage sendWithoutGdpr() {
 
-        SelenideElement element = $(getOkButton());
+        SelenideElement element = getOkButton();
         element.click();
-        element.should(Condition.not(Condition.visible));
+        element.shouldNot(Condition.visible);
         return Page.at(SettlementPage.class);
     }
 }
