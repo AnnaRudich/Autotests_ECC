@@ -116,7 +116,7 @@ public class BaseUITest extends BaseTest {
 
                 cleanUpCDTemplates(method, objects);
 
-                featureToggle.rollbackToggleSetting(method);
+                featureToggle.rollbackToggleSettingTestLevel();
 
                 Browser.open(com.scalepoint.automation.utils.Configuration.getLogoutUrl());
                 Page.to(LoginPage.class);
@@ -137,7 +137,7 @@ public class BaseUITest extends BaseTest {
     @AfterSuite(alwaysRun = true)
     public void rollbackFeatureToggle(ITestContext context){
 
-        featureToggle.rollbackToggleSetting(context);
+        featureToggle.rollbackToggleSettingSuiteLevel();
     }
 }
 

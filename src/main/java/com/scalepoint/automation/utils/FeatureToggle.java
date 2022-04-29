@@ -20,8 +20,8 @@ public class FeatureToggle {
 
     protected Logger logger = LogManager.getLogger(FeatureToggle.class);
 
-    private static Map<FeatureId, Boolean> featureTogglesStateMethodLevel = new HashMap<>();
-    private Map<FeatureId, Boolean> featureTogglesStateSuiteLevel = new HashMap<>();
+    private Map<FeatureId, Boolean> featureTogglesStateTestLevel = new HashMap<>();
+    private static Map<FeatureId, Boolean> featureTogglesStateSuiteLevel = new HashMap<>();
 
     FeaturesToggleAdministrationService featureToggleService;
 
@@ -38,26 +38,19 @@ public class FeatureToggle {
         List<FeatureToggleSetting> featureToggleSettingsToUpdate = getToggleSettingsFromClass(method.getDeclaringClass());
         featureToggleSettingsToUpdate.addAll(getToggleSettingsFromMethod(method));
 
-        updateAndStoreDefaultState(featureToggleSettingsToUpdate, featureTogglesStateMethodLevel);
+        updateAndStoreDefaultState(featureToggleSettingsToUpdate, featureTogglesStateTestLevel);
 
-        logger.info("Feature Toggle State Method level: {}", featureTogglesStateMethodLevel);
+        logger.info("Feature Toggle State Method level: {}", featureTogglesStateTestLevel);
     }
 
-    public void rollbackToggleSetting(ITestContext context) {
+    public void rollbackToggleSettingSuiteLevel() {
 
-        rollbackToDefaultState(getToggleSettingsFromSuite(context), featureTogglesStateSuiteLevel);
+        rollbackToDefaultState(featureTogglesStateSuiteLevel);
     }
 
-    public void rollbackToggleSetting(Method method) {
+    public void rollbackToggleSettingTestLevel() {
 
-        List<FeatureToggleSetting> settings = getToggleSettingsFromClass(method.getDeclaringClass());
-        settings.addAll(getToggleSettingsFromMethod(method));
-
-        List<FeatureToggleSetting> featureToggleSettingsToRollback = settings.stream()
-                .filter(featureToggleSetting -> !featureTogglesStateSuiteLevel.containsKey(featureToggleSetting.type()))
-                .collect(Collectors.toList());
-
-        rollbackToDefaultState(featureToggleSettingsToRollback, featureTogglesStateMethodLevel);
+        rollbackToDefaultState(featureTogglesStateTestLevel);
     }
 
     private void updateAndStoreDefaultState(List<FeatureToggleSetting> featureToggleSettings, Map<FeatureId, Boolean> defaultStates){
@@ -82,18 +75,11 @@ public class FeatureToggle {
                 });
     }
 
-    private void rollbackToDefaultState(List<FeatureToggleSetting> featureToggleSettings, Map<FeatureId, Boolean> defaultStates){
+    private void rollbackToDefaultState(Map<FeatureId, Boolean> defaultStates){
 
-        featureToggleSettings.stream().forEach(featureToggleSetting -> {
+        defaultStates.entrySet().stream().forEach(entry -> {
 
-            if (featureToggleSetting == null) {
-
-                return;
-            }
-
-            FeatureId toggleSettingType = featureToggleSetting.type();
-            Boolean initialState = defaultStates.get(toggleSettingType);
-            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(initialState), toggleSettingType);
+            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(entry.getValue()), entry.getKey());
         });
 
         logger.info("Rollback completed");
