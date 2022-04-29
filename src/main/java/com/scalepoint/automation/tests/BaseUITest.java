@@ -137,7 +137,12 @@ public class BaseUITest extends BaseTest {
     @AfterSuite(alwaysRun = true)
     public void rollbackFeatureToggle(ITestContext context){
 
-        featureToggle.rollbackToggleSettingSuiteLevel();
+        try {
+            featureToggle.rollbackToggleSettingSuiteLevel();
+        }catch (NullPointerException e){
+
+            log.warn("Feature toggle does not exists in {} context", context.getSuite().getName());
+        }
     }
 }
 
