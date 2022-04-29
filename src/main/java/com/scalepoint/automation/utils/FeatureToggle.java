@@ -106,6 +106,7 @@ public class FeatureToggle {
                 .getParameters()
                 .entrySet()
                 .stream()
+                .filter(entry -> FeatureId.isValid(entry.getKey()))
                 .map(entry ->
                         createFeatureToggleSetting(
                                 FeatureId.getByName(entry.getKey()),

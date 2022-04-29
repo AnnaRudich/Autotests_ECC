@@ -47,4 +47,10 @@ public enum FeatureId {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException(name));
     }
+
+    public static boolean isValid(String name){
+
+        return Arrays.stream(FeatureId.values())
+                .anyMatch(featureId -> featureId.getName().equals(name));
+    }
 }
