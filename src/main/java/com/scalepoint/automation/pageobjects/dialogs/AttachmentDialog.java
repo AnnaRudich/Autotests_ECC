@@ -1,69 +1,69 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementShould;
-import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
-import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static org.assertj.core.api.Assertions.*;
 
 public class AttachmentDialog extends BaseDialog {
 
-    @FindBy(id = "window-attachment-view_header-title-textEl")
-    private SelenideElement dialogHeader;
-
-    @FindBy(id = ".x-toolbar-footer a[role=button]")
-    private SelenideElement button;
+    private TreepanelAttachmentView treepanelAttachmentView = new TreepanelAttachmentView();
+    private ListpanelAttachmentView listpanelAttachmentView = new ListpanelAttachmentView();
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        dialogHeader.should(Condition.visible);
+        $("#window-attachment-view_header-title-textEl").should(Condition.visible);
     }
 
-    public TreepanelAttachmentView getTreepanelAttachmentView(){
-        return new TreepanelAttachmentView();
+    public AttachmentDialog selectLine(String lineDescription){
+
+        return treepanelAttachmentView.selectLine(lineDescription);
     }
 
-    public ListpanelAttachmentView getListpanelAttachmentView(){
-        return new ListpanelAttachmentView();
+    public AttachmentDialog deleteAttachment(String name){
+
+        return listpanelAttachmentView.deleteAttachment(name);
+    }
+
+    public AttachmentDialog unlinkAttachment(String name){
+
+        return listpanelAttachmentView.unlinkAttachment(name);
     }
 
     public AttachmentDialog uploadAttachment(File file){
-
-        ListpanelAttachmentView listpanelAttachmentView = new ListpanelAttachmentView();
 
         int currentSize = listpanelAttachmentView.attachmentsSize();
 
         $("input[name=attachmentName]").uploadFile(file);
 
-        Wait.waitForJavascriptRecalculation();
-        Wait.waitForAjaxCompleted();
-
-        listpanelAttachmentView.waitForNewAttachment(++currentSize, file.getName());
+        listpanelAttachmentView.waitForAttachmentSize(++currentSize);
 
         return at(AttachmentDialog.class);
     }
 
     public AttachmentDialog linkAttachment(String name, String lineDescription){
 
-        ListpanelAttachmentView.Attachment attachment = new ListpanelAttachmentView().getAttachmentByName(name);
-
-        TreepanelAttachmentView.Line line = new TreepanelAttachmentView().getLine(lineDescription);
+        ListpanelAttachmentView.Attachment attachment = listpanelAttachmentView.getAttachmentByName(name);
+        TreepanelAttachmentView.Line line = treepanelAttachmentView.getLine(lineDescription);
 
         dragAndDrop(attachment.getDragArea(), line.getDropArea());
+        waitForLoaded();
 
         return at(AttachmentDialog.class);
     }
@@ -77,12 +77,10 @@ public class AttachmentDialog extends BaseDialog {
 
     public class Asserts {
 
-        ListpanelAttachmentView listpanelAttachmentView = new ListpanelAttachmentView();
-
         public Asserts attachmentExists(String name) {
 
             assertThatCode(() -> listpanelAttachmentView.getAttachmentByName(name))
-                    .as(String.format("Attachement named %s doesn't exist", name))
+                    .as(String.format("Attachment named %s doesn't exist", name))
                     .doesNotThrowAnyException();
 
             return this;
@@ -91,7 +89,7 @@ public class AttachmentDialog extends BaseDialog {
         public Asserts attachmentNotExists(String name){
 
             assertThatThrownBy(() -> listpanelAttachmentView.getAttachmentByName(name))
-                    .as("Attachment named %s exists", name)
+                    .as(String.format("Attachment named %s exists", name))
                     .isInstanceOf(NoSuchElementException.class);
 
             return this;
@@ -107,152 +105,116 @@ public class AttachmentDialog extends BaseDialog {
 
             return this;
         }
-
-        public Asserts attachmentHasNotLink(String name, int id){
-
-            String links = listpanelAttachmentView.getAttachmentByName(name).getLinks();
-
-            assertThat(links)
-                    .as(String.format("Attachment named: %s doesn't have link to line id: %s", name, id))
-                    .doesNotContain(String.valueOf(id));
-
-            return this;
-        }
     }
 
-    public class TreepanelAttachmentView{
+    class TreepanelAttachmentView{
 
         private SelenideElement node;
-        private ElementsCollection claimLines;
+        private List<Line> claimLines;
 
         TreepanelAttachmentView(){
 
             node = $(".x-grid-tree-node-expanded");
-            claimLines = $$(".x-grid-tree-node-leaf");
+            claimLines = $$(".x-grid-tree-node-leaf").stream().map(Line::new).collect(Collectors.toList());
         }
 
         public TreepanelAttachmentView selectNode(){
 
             node.click();
-
             return this;
         }
 
         public AttachmentDialog selectLine(String lineDescription){
 
-            int tryCounter = 2;
-            ElementShould elementShould;
-            do {
-                try {
+            getLine(lineDescription)
+                    .select();
 
-                    getLine(lineDescription)
-                            .select();
-
-                    return AttachmentDialog.this;
-                } catch (ElementShould e) {
-
-                    elementShould = e;
-                }
-            }while (--tryCounter > 0);
-
-            throw elementShould;
+            return at(AttachmentDialog.class);
         }
 
         public Line getLine(String lineDescription){
 
-            SelenideElement element = claimLines
+            return claimLines
                     .stream()
-                    .filter(claimLine -> claimLine.find("span").getText().contains(lineDescription))
+                    .filter(claimLine -> claimLine.getLineDescription().contains(lineDescription))
                     .findFirst()
                     .orElseThrow(NoSuchElementException::new);
-
-            return new Line(element);
         }
 
         class Line{
 
+            private final int TIMEOUT = 3;
+
             private SelenideElement element;
-            private final int TIMEOUT = 3000;
+
             @Getter
             private String id;
             @Getter
             private SelenideElement dropArea;
+            @Getter
+            private String lineDescription;
 
             private Line(SelenideElement element){
 
                 this.element = element;
-                this.id = element.find(".x-tree-node-text").getText().substring(0,1);
+                id = element.find(".x-tree-node-text").getText().substring(0,1);
                 dropArea = element.find("td");
+                lineDescription = element.find("span").getText();
             }
 
             public void select(){
 
                 element.click();
-                element.should(Condition.attribute("aria-selected", "true"), Duration.ofMillis(TIMEOUT));
+                element.should(Condition.attribute("aria-selected", "true"), Duration.ofSeconds(TIMEOUT));
             }
         }
     }
 
-    public class ListpanelAttachmentView{
+    class ListpanelAttachmentView{
 
-        private static final String ATTACHMENT_NAME = "div > .file-name";
+        private ElementsCollection attachmentCollection;
 
-        private ElementsCollection attachments;
+        private List<Attachment> attachments;
 
         ListpanelAttachmentView(){
 
-            attachments = $$(".thumb-wrap");
+            attachmentCollection = $$(".thumb-wrap");
+            attachments = attachmentCollection.stream()
+                    .map(Attachment::new)
+                    .collect(Collectors.toList());
         }
 
         public AttachmentDialog deleteAttachment(String name){
 
-            int currentSize = attachmentsSize();
-
             getAttachmentByName(name)
                     .delete();
-
-            $$("div[role=alertdialog] a[role=button][aria-hidden=false]").get(0).click();
-
-            ElementsCollection elements = attachments;
-            elements.shouldHave(CollectionCondition.size(--currentSize));
 
             return at(AttachmentDialog.class);
         }
 
         public AttachmentDialog unlinkAttachment(String name){
 
-            int currentSize = attachmentsSize();
-
             getAttachmentByName(name)
                     .unlink();
-
-            ElementsCollection elements = attachments;
-            elements.shouldHave(CollectionCondition.size(--currentSize));
 
             return at(AttachmentDialog.class);
         }
 
         private Attachment getAttachmentByName(String name){
 
-            SelenideElement element = attachments
+            return attachments
                     .stream()
-                    .filter(e -> e.find(ATTACHMENT_NAME).getText().equals(name))
+                    .filter(e -> e.getName().equals(name))
                     .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
-
-            return new Attachment(element);
+                    .orElseThrow(() -> new NoSuchElementException(name));
         }
 
-        public void waitForNewAttachment(int newSize, String name){
+        private void waitForAttachmentSize(int newSize){
 
-            ElementsCollection elements = new ListpanelAttachmentView().attachments;
-            elements.shouldHave(CollectionCondition.size(newSize));
-            elements.get(newSize - 1)
-                    .find(ATTACHMENT_NAME)
-                    .should(Condition.matchText(name));
+            attachmentCollection.shouldHave(size(newSize));
         }
 
-        public int attachmentsSize(){
+        private int attachmentsSize(){
 
             return attachments.size();
         }
@@ -260,16 +222,20 @@ public class AttachmentDialog extends BaseDialog {
         class Attachment{
 
             private SelenideElement element;
+
+            @Getter
+            private String links;
             @Getter
             private SelenideElement dragArea;
             @Getter
-            private String links;
+            private String name;
 
-            private Attachment(SelenideElement element){
+            Attachment(SelenideElement element){
 
                 this.element = element;
                 dragArea = element.find(".thumb-view img");
-                links = element.find("td > .file-name span").getAttribute("title");
+                links = element.find("td > .file-name span").attr("title");
+                name = element.find("div > .file-name").getText();
             }
 
             public ListpanelAttachmentView delete(){
@@ -277,6 +243,10 @@ public class AttachmentDialog extends BaseDialog {
                 element.find("img[id^=\"img_delete\"]")
                         .should(Condition.visible)
                         .click();
+
+                $$("div[role=alertdialog] a[role=button][aria-hidden=false]").get(0).click();
+
+                element.shouldNot(Condition.exist);
 
                 return new ListpanelAttachmentView();
             }
@@ -287,16 +257,10 @@ public class AttachmentDialog extends BaseDialog {
                         .should(Condition.visible)
                         .click();
 
+                element.shouldNot(Condition.exist);
+
                 return new ListpanelAttachmentView();
-            }
-
-            public Attachment waitForLink(String id){
-
-                element.find("tr > td >.file-name span").should(Condition.text(id));
-
-                return this;
             }
         }
     }
-
 }
