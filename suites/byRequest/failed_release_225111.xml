@@ -1,0 +1,116 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="rerunOfFailed" configfailurepolicy="continue" parallel="methods">
+
+    <test verbose="1" name="fnol" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.api.fnol.FnolCorsWidgetTest"/>
+            <class name="com.scalepoint.automation.tests.api.fnol.FnolCorsStaticGetTest">
+                <methods>
+                    <include name="authTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="supplierManager" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.suppliermanager.VoucherAgreementTests"/>
+            <class name="com.scalepoint.automation.tests.suppliermanager.SupplierTests">
+                <methods>
+                    <include name="ecc3037_detailedOrder"/>
+                    <include name="ecc3039_sharedDataAreInViewModeForIC"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="intelligentRepair_plus_RnV" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.rnv2.IntelligentRepair2WebServiceTest"/>
+
+            <class name="com.scalepoint.automation.tests.rnv.SelfRiskCollectedByInsuranceCompanyTest">
+                <methods>
+                    <include name="selfRiskEqualToRepairPriceTest"/>
+                    <include name="selfRiskHigherThanRepairPriceTest"/>
+                    <include name="selfRiskLowerThanRepairPriceTest"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.rnv.SelfRiskCollectedByServicePartnerTest">
+                <methods>
+                    <include name="selfRiskLowerThanTotalAmountOfCompensationTest"/>
+                    <include name="selfRiskLowerThanTotalAmountOfCompensationTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="sid" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.sid.VoucherAgreementSharedExclusiveTests">
+                <methods>
+                    <include name="ecc3030_exclusiveVoucherInVouchersList"/>
+                    <include name="ecc3030_sharedVoucherInVouchersListForIC"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.SidTests">
+                <methods>
+                    <include name="ecc3025_voucherTradesTermsConditionsCorrectInfo"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+
+    <test verbose="1" name="ssAndWidget" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.selfservice.SelfService2Tests">
+                <methods>
+                    <include name="selfService2LogInWithNewPassword"/>
+                    <include name="SelfService2Tests.updateLossItemUpdate"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.widget.WidgetTest">
+                <methods>
+                    <include name="acceptanceCheckboxDisabledTest"/>
+                    <include name="acceptanceCheckboxEnabledTest"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+
+    <test verbose="1" name="OM" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests">
+                <methods>
+                    <include name="customerWelcomeWithOutstandingTest"/>
+                </methods>
+            </class>
+            <class name=" com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerFnolTests">
+                <methods>
+                    <include name="automaticCustomerWelcomeTest"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+
+
+    <test verbose="1" name="fraudAlert" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.fraudAlert.FraudAlertSystemTest">
+                <methods>
+                    <include name="fnolNoFraudSystemTest"/>
+                    <include name="selfServiceAddNoFraudSystemTest"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+
+</suite>
