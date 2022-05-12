@@ -87,13 +87,12 @@
                     <include name="customerWelcomeWithOutstandingTest"/>
                 </methods>
             </class>
-            <class name=" com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerFnolTests">
+            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerFnolTests">
                 <methods>
                     <include name="automaticCustomerWelcomeTest"/>
                 </methods>
             </class>
         </classes>
-
     </test>
 
 
