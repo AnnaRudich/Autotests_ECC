@@ -15,8 +15,13 @@ import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 public class AttachmentFiles {
 
     @XmlElement
+    private String jpgFile1;
+    @XmlElement
     private String jpgFile2;
 
+    public String getJpgFile1Loc() {
+        return getResourcePath(jpgFile1);
+    }
     public String getJpgFile2Loc() {
         return getResourcePath(jpgFile2);
     }

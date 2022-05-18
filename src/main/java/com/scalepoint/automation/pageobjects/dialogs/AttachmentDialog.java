@@ -3,10 +3,13 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 
 import java.io.File;
-import java.time.Duration;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -21,9 +24,6 @@ import static org.assertj.core.api.Assertions.*;
 
 public class AttachmentDialog extends BaseDialog {
 
-    private TreepanelAttachmentView treepanelAttachmentView = new TreepanelAttachmentView();
-    private ListpanelAttachmentView listpanelAttachmentView = new ListpanelAttachmentView();
-
     @Override
     protected void ensureWeAreAt() {
 
@@ -31,36 +31,67 @@ public class AttachmentDialog extends BaseDialog {
         $("#window-attachment-view_header-title-textEl").should(Condition.visible);
     }
 
+    public AttachmentDialog selectNode(){
+
+        return new TreepanelAttachmentView().selectNode();
+    }
+
     public AttachmentDialog selectLine(String lineDescription){
 
-        return treepanelAttachmentView.selectLine(lineDescription);
+        return new TreepanelAttachmentView().selectLine(lineDescription);
     }
 
     public AttachmentDialog deleteAttachment(String name){
 
-        return listpanelAttachmentView.deleteAttachment(name);
+        return new ListpanelAttachmentView().deleteAttachment(name);
     }
 
     public AttachmentDialog unlinkAttachment(String name){
 
-        return listpanelAttachmentView.unlinkAttachment(name);
+        return new ListpanelAttachmentView().unlinkAttachment(name);
     }
 
     public AttachmentDialog uploadAttachment(File file){
 
-        int currentSize = listpanelAttachmentView.attachmentsSize();
+        int currentSize = new ListpanelAttachmentView().attachmentsSize();
 
         $("input[name=attachmentName]").uploadFile(file);
+        Wait.waitForJavascriptRecalculation();
 
-        listpanelAttachmentView.waitForAttachmentSize(++currentSize);
+        new ListpanelAttachmentView().waitForAttachmentSize(++currentSize);
 
+        return at(AttachmentDialog.class);
+    }
+
+    public AttachmentDialog deleteDownloadAttachment(String name){
+
+        return new DownloadAttachmentsPanel().deleteAttachment(name);
+    }
+
+    public AttachmentDialog download(){
+
+        $("[data-componentid=button-download-attachments]").click();
+
+        return at(AttachmentDialog.class);
+    }
+
+    public AttachmentDialog clearAttachments(){
+
+        $("#button-clear-attachments").click();
+
+        return at(AttachmentDialog.class);
+    }
+
+    public AttachmentDialog addToDownloading(){
+
+        $("#button-add-all-attachments").click();
         return at(AttachmentDialog.class);
     }
 
     public AttachmentDialog linkAttachment(String name, String lineDescription){
 
-        ListpanelAttachmentView.Attachment attachment = listpanelAttachmentView.getAttachmentByName(name);
-        TreepanelAttachmentView.Line line = treepanelAttachmentView.getLine(lineDescription);
+        ListpanelAttachmentView.Attachment attachment = new ListpanelAttachmentView().getAttachmentByName(name);
+        TreepanelAttachmentView.Line line = new TreepanelAttachmentView().getLine(lineDescription);
 
         dragAndDrop(attachment.getDragArea(), line.getDropArea());
         waitForLoaded();
@@ -79,7 +110,7 @@ public class AttachmentDialog extends BaseDialog {
 
         public Asserts attachmentExists(String name) {
 
-            assertThatCode(() -> listpanelAttachmentView.getAttachmentByName(name))
+            assertThatCode(() -> new ListpanelAttachmentView().getAttachmentByName(name))
                     .as(String.format("Attachment named %s doesn't exist", name))
                     .doesNotThrowAnyException();
 
@@ -88,7 +119,7 @@ public class AttachmentDialog extends BaseDialog {
 
         public Asserts attachmentNotExists(String name){
 
-            assertThatThrownBy(() -> listpanelAttachmentView.getAttachmentByName(name))
+            assertThatThrownBy(() -> new ListpanelAttachmentView().getAttachmentByName(name))
                     .as(String.format("Attachment named %s exists", name))
                     .isInstanceOf(NoSuchElementException.class);
 
@@ -97,11 +128,47 @@ public class AttachmentDialog extends BaseDialog {
 
         public Asserts attachmentHasLink(String name, int id){
 
-            String links = listpanelAttachmentView.getAttachmentByName(name).getLinks();
+            String links = new ListpanelAttachmentView().getAttachmentByName(name).getLinks();
 
             assertThat(links)
                     .as(String.format("Attachment named: %s doesn't have link to line id: %s", name, id))
                     .containsIgnoringCase(String.valueOf(id));
+
+            return this;
+        }
+
+        public Asserts attachmentExistsOnDownloadList(String name) {
+
+            assertThatCode(() -> new DownloadAttachmentsPanel().getAttachmentByName(name))
+                    .as(String.format("Attachment named %s doesn't exist", name))
+                    .doesNotThrowAnyException();
+
+            return this;
+        }
+
+        public Asserts attachmentNotExistsOnDownloadList(String name){
+
+            assertThatThrownBy(() -> new DownloadAttachmentsPanel().getAttachmentByName(name))
+                    .as(String.format("Attachment named %s exists", name))
+                    .isInstanceOf(NoSuchElementException.class);
+
+            return this;
+        }
+
+        public Asserts attachmentDownloaded(String name){
+
+            try {
+
+                assertThat(JavascriptHelper.getZipEntries(JavascriptHelper.getFileContent(JavascriptHelper.getDownloadedFiles().get(0)))
+                        .stream()
+                        .anyMatch(zipEntry -> zipEntry.getName().equals(name)))
+                        .as(String.format("Attachment %s not found", name))
+                        .isTrue();
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(e);
+            }
 
             return this;
         }
@@ -114,20 +181,26 @@ public class AttachmentDialog extends BaseDialog {
 
         TreepanelAttachmentView(){
 
-            node = $(".x-grid-tree-node-expanded");
-            claimLines = $$(".x-grid-tree-node-leaf").stream().map(Line::new).collect(Collectors.toList());
+            ElementsCollection items = $$("#treepanel-attachment-view-body table");
+            node = items.first();
+            claimLines = items.stream().skip(1).map(Line::new).collect(Collectors.toList());
         }
 
-        public TreepanelAttachmentView selectNode(){
+        public AttachmentDialog selectNode(){
 
             node.click();
-            return this;
+
+            waitForAjaxCompletedAndJsRecalculation();
+
+            return at(AttachmentDialog.class);
         }
 
         public AttachmentDialog selectLine(String lineDescription){
 
             getLine(lineDescription)
                     .select();
+
+            waitForAjaxCompletedAndJsRecalculation();
 
             return at(AttachmentDialog.class);
         }
@@ -142,8 +215,6 @@ public class AttachmentDialog extends BaseDialog {
         }
 
         class Line{
-
-            private final int TIMEOUT = 3;
 
             private SelenideElement element;
 
@@ -165,7 +236,7 @@ public class AttachmentDialog extends BaseDialog {
             public void select(){
 
                 element.click();
-                element.should(Condition.attribute("aria-selected", "true"), Duration.ofSeconds(TIMEOUT));
+                element.should(Condition.cssClass("x-grid-item-selected"));
             }
         }
     }
@@ -174,11 +245,12 @@ public class AttachmentDialog extends BaseDialog {
 
         private ElementsCollection attachmentCollection;
 
-        private List<Attachment> attachments;
+        private List<Attachment> attachments = new LinkedList<>();
 
         ListpanelAttachmentView(){
 
             attachmentCollection = $$(".thumb-wrap");
+
             attachments = attachmentCollection.stream()
                     .map(Attachment::new)
                     .collect(Collectors.toList());
@@ -254,6 +326,66 @@ public class AttachmentDialog extends BaseDialog {
             public ListpanelAttachmentView unlink(){
 
                 element.find("img[id^=\"img_link\"]")
+                        .should(Condition.visible)
+                        .click();
+
+                element.shouldNot(Condition.exist);
+
+                return new ListpanelAttachmentView();
+            }
+        }
+    }
+
+    class DownloadAttachmentsPanel{
+
+        private List<DownloadAttachment> attachments;
+
+        DownloadAttachmentsPanel(){
+
+            attachments = $$("#form-panel-download-attachments table [role=row]").stream()
+                    .map(DownloadAttachment::new)
+                    .collect(Collectors.toList());
+        }
+
+        public AttachmentDialog deleteAttachment(String name){
+
+            getAttachmentByName(name)
+                    .delete();
+
+            return at(AttachmentDialog.class);
+        }
+
+        private DownloadAttachmentsPanel.DownloadAttachment getAttachmentByName(String name){
+
+            return attachments
+                    .stream()
+                    .filter(e -> e.getName().equals(name))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException(name));
+        }
+
+        class DownloadAttachment{
+
+            private SelenideElement element;
+
+            @Getter
+            private String links;
+            @Getter
+            private String name;
+
+            SelenideElement deleteColumn;
+
+            DownloadAttachment(SelenideElement element){
+
+                this.element = element;
+                String[] qtip = element.find("[data-qtip]").attr("data-qtip").split("<br>ID:");
+                name = qtip[0];
+                links = qtip[1].trim();
+            }
+
+            public ListpanelAttachmentView delete(){
+
+                element.find(" [data-columnid=deleteColumn]")
                         .should(Condition.visible)
                         .click();
 

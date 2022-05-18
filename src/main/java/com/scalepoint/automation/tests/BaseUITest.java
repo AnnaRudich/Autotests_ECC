@@ -137,7 +137,7 @@ public class BaseUITest extends BaseTest {
     @AfterSuite(alwaysRun = true)
     public void rollbackFeatureToggle(ITestContext context){
 
-            featureToggle.rollbackToggleSettingSuiteLevel();
+        featureToggle.rollbackToggleSettingSuiteLevel();
     }
 }
 
