@@ -21,7 +21,7 @@ public class GetBalanceService extends BaseService {
     private Token token;
 
     public GetBalanceService(Token token){
-
+        super();
         this.token = token;
     }
     public GetBalanceService getBalance(String claimNumber) {

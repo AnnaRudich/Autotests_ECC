@@ -28,7 +28,7 @@ public class CreateOrderService extends BaseService {
     private Token token;
 
     public CreateOrderService(Token token){
-
+        super();
         this.token = token;
     }
 
