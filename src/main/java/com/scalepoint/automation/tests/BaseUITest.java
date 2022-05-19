@@ -133,11 +133,5 @@ public class BaseUITest extends BaseTest {
         ThreadContext.clearMap();
         log.info("Clean up completed after: {} ", method.getName());
     }
-
-    @AfterSuite(alwaysRun = true)
-    public void rollbackFeatureToggle(ITestContext context){
-        
-            featureToggle.rollbackToggleSettingSuiteLevel();
-    }
 }
 
