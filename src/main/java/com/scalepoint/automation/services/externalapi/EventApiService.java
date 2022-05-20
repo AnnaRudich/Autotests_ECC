@@ -24,7 +24,7 @@ public class EventApiService{
 
     public EventApiService() {
 
-        this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.EVENTS_INTERNAL).getToken();
+        token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.EVENTS_INTERNAL).getToken();
     }
 
     public void scheduleSubscription(String id) {

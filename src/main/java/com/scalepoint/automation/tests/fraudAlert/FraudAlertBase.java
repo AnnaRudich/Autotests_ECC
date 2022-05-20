@@ -28,8 +28,9 @@ public class FraudAlertBase extends BaseUITest {
 
         fraudAlertStubs = fraudAlertMock.addStub(TENANT);
 
-        new EventApiService().scheduleSubscription(claimLineChangedSubscriptionId);
-        new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
+        EventApiService eventApiService = new EventApiService();
+        eventApiService.scheduleSubscription(claimLineChangedSubscriptionId);
+        eventApiService.scheduleSubscription(fraudStatusSubscriptionId);
     }
 
     String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
