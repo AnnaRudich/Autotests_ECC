@@ -1,7 +1,7 @@
 package com.scalepoint.automation.tests.sidQUnit;
 
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.driver.DriverType;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class SidQunitTests extends BaseTest {
+public class SidQunitTests extends BaseUITest {
 
     @RunOn(DriverType.CHROME_REMOTE)
     @Test(groups = {TestGroups.SID_QUNIT}, dataProvider = "qunitTests", description = "Check results from qunit test in ecc")

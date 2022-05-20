@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.TimeoutException;
 import com.scalepoint.automation.utils.Wait;
@@ -22,11 +23,12 @@ public class ScalepointIdLoginPage extends Page {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        Wait.waitForVisibleAndEnabled(getPasswordField());
-        Wait.waitForVisibleAndEnabled(getUsernameField());
-        Wait.waitForVisibleAndEnabled(getLoginButton());
+        $(getPasswordField()).should(Condition.visible);
+        $(getUsernameField()).should(Condition.visible);
+        $(getLoginButton()).should(Condition.visible);
     }
 
     @Override
@@ -42,6 +44,7 @@ public class ScalepointIdLoginPage extends Page {
     }
 
     public MyPage login(User user) {
+
         return login(user.getLogin(), user.getPassword());
     }
 
@@ -50,11 +53,13 @@ public class ScalepointIdLoginPage extends Page {
     }
 
     public <T extends Page> T login(String userLogin, String userPassword, Class<T> pageClass) {
+
         loginWithoutExpectedPage(userLogin, userPassword);
-        return at(pageClass);
+        return to(pageClass);
     }
 
     public void loginWithoutExpectedPage(String userLogin, String userPassword) {
+
         getUsernameField().setValue(userLogin);
         getPasswordField().setValue(userPassword);
         Wait.waitMillis(1000);

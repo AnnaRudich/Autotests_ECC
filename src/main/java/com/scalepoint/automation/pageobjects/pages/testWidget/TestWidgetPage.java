@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.testWidget;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
@@ -11,14 +12,17 @@ import static com.codeborne.selenide.Selenide.$;
 public class TestWidgetPage extends SelfService2Page {
 
     public TestWidgetPage saveItem() {
-        $(saveItem).click();
+
+        saveItem.click();
         Wait.waitForSpinnerToDisappear();
 
         TestWidgetPage testWidgetPage;
 
         try {
+
             testWidgetPage = TestWidgetPage.class.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
+
             throw new RuntimeException(e);
         }
         return testWidgetPage;
@@ -31,6 +35,7 @@ public class TestWidgetPage extends SelfService2Page {
     }
 
     public TestWidgetPage selectPurchaseYear(String year){
+
         super.selectPurchaseYear(year);
         return this;
     }
@@ -54,11 +59,13 @@ public class TestWidgetPage extends SelfService2Page {
     }
 
     public SelfService2Page sendResponseToEcc() {
-        Wait.waitForVisibleAndEnabled($(SEND_BUTTON_PATH)).click();
+
+        $(SEND_BUTTON_PATH).should(Condition.visible).click();
         return this;
     }
 
     public TestWidgetPage doAssert(Consumer<SelfService2Page.Asserts> assertFunc) {
+
         super.doAssert(assertFunc);
         return this;
     }

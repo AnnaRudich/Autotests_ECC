@@ -2,11 +2,12 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.EditPreferencesPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -22,7 +23,7 @@ import java.util.List;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
-public class UserPasswordTests extends BaseTest {
+public class UserPasswordTests extends BaseUITest {
 
     private static final String DEFAULT_PASSWORD_RULE_DATA_PROVIDER = "defaultPasswordRuleDataProvider";
     private static final String PASSWORD_RULE_DATA_PROVIDER = "passwordRuleDataProvider";
@@ -33,7 +34,7 @@ public class UserPasswordTests extends BaseTest {
     @BeforeMethod(alwaysRun = true)
     public void toEditReasonPage(Object[] objects) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage();
     }
 
@@ -72,7 +73,7 @@ public class UserPasswordTests extends BaseTest {
             description = "CHARLIE-534 generate password from prefs")
     public void generatePasswordFromPreferencesTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        EditPreferencesPage editPreferencesPage = at(UserAddEditPage.class)
+        EditPreferencesPage editPreferencesPage = Page.at(UserAddEditPage.class)
                 .createUser(user, userTypes)
                 .toMatchingEngine()
                 .openEditPreferences();
@@ -98,7 +99,7 @@ public class UserPasswordTests extends BaseTest {
 
         systemUser.setPassword(password);
 
-        at(UserAddEditPage.class).createUser(systemUser, userTypes)
+        Page.at(UserAddEditPage.class).createUser(systemUser, userTypes)
                 .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
                 .logout()
                 .login(User.builder()

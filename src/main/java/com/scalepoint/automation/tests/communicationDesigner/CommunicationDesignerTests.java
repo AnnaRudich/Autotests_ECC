@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
@@ -20,6 +21,7 @@ import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
+import com.scalepoint.automation.utils.data.response.Token;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -51,7 +53,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
         Claim claim = getLisOfObjectByClass(parameters, Claim.class).get(0);
 
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
     }
 
     @CommunicationDesignerCleanUp
@@ -84,7 +86,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
             dataProvider = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEM_DATA_PROVIDER,
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void itemizationSubmitAndSaveLossItemsTest(User user, Claim claim, ClaimItem claimItem,
@@ -100,7 +101,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
             dataProvider = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEMS_WITH_ATTACHMENTS_DATA_PROVIDER,
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email with attachments")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void itemizationSubmitAndSaveLossItemsWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem,
@@ -229,7 +229,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails")
@@ -241,7 +240,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails with attachments")
@@ -253,13 +251,14 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = ORDER_CONFIRMATION_DATA_PROVIDER,
             description = "Use communication designer to prepare order confirmation mails")
     public void orderConfirmationTest(User user, Claim claim, ClaimItem claimItem,
                                       CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                       CommunicationDesigner communicationDesigner) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        CreateOrderService createOrderService = new CreateOrderService(token);
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
         String orderConfirmationTitle = communicationDesignerEmailTemplates
@@ -276,7 +275,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim();
 
-        new CreateOrderService().createOrderForProductExtraPay
+        createOrderService.createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
         new CustomerDetailsPage().toMailsPage()
@@ -288,7 +287,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = REPLACEMENT_MAIL_DATA_PROVIDER,
             description = "Use communication designer to prepare replacement mail")

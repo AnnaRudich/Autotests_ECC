@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.admin;
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.input.Assignment;
 import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
@@ -16,7 +16,7 @@ import static org.testng.Assert.assertEquals;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-546")
-public class ReductionRulesTest extends BaseTest {
+public class ReductionRulesTest extends BaseUITest {
 
     private static String sufficientDocumentation = "Sufficient documentation";
     private static String undefined = "Undefined";
@@ -749,6 +749,8 @@ public class ReductionRulesTest extends BaseTest {
     }
 
     private AddEditReductionRulePage toNewReductionRulePage() {
-        return login(getSystemUser(), AdminPage.class).to(AddEditReductionRulePage.class);
+        return loginFlow
+                .login(getSystemUser(), AdminPage.class)
+                .to(AddEditReductionRulePage.class);
     }
 }

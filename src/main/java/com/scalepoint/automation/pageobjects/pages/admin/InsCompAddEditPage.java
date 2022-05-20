@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -11,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -25,77 +26,64 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class InsCompAddEditPage extends AdminBasePage {
 
     @FindBy(name = "id")
-    private WebElement companyIDField;
-
+    private SelenideElement companyIDField;
     @FindBy(name = "CompanyCode")
-    private WebElement companyCodeField;
-
+    private SelenideElement companyCodeField;
     @FindBy(name = "icname")
-    private WebElement companyNameField;
-
+    private SelenideElement companyNameField;
     @FindBy(name = "tenant")
-    private WebElement tenant;
-
+    private SelenideElement tenant;
     @FindBy(name = "omTenantAlias")
-    private WebElement omTenantAlias;
-
+    private SelenideElement omTenantAlias;
     @FindBy(name = "unifiedCompanyCode")
-    private WebElement unifiedCompanyCode;
-
+    private SelenideElement unifiedCompanyCode;
     @FindBy(name = "icaddr1")
-    private WebElement addressField;
-
+    private SelenideElement addressField;
     @FindBy(name = "iczipc")
-    private WebElement zipCodeField;
-
+    private SelenideElement zipCodeField;
     @FindBy(name = "iccity")
-    private WebElement cityField;
-
+    private SelenideElement cityField;
     @FindBy(name = "iccommail")
-    private WebElement icCommonMailField;
-
+    private SelenideElement icCommonMailField;
     @FindBy(tagName = "option")
-    private List<WebElement> options;
-
+    private ElementsCollection options;
     @FindBy(xpath = "//input[contains(@id,'icContactNo')]")
-    private WebElement companyContactNumberField;
-
+    private SelenideElement companyContactNumberField;
     @FindBy(xpath = "//textarea[contains(@id,'icOfficeHour')]")
-    private WebElement companyOfficeHoursField;
-
+    private SelenideElement companyOfficeHoursField;
     @FindBy(id = "btnOk")
-    private WebElement saveButton;
-
+    private SelenideElement saveButton;
     @FindBy(name = "auditSendTimeFrom")
-    private WebElement sendTimeFromField;
-
+    private SelenideElement sendTimeFromField;
     @FindBy(name = "auditSendTimeTo")
-    private WebElement sendTimeToField;
-
+    private SelenideElement sendTimeToField;
     @FindBy(xpath = "//input[contains(@id, 'localizedName')]")
-    private WebElement localizedNameInput;
+    private SelenideElement localizedNameInput;
 
     private String byFTPath = "select[name='icftnbr']";
-
     private String byICCulturePath = "select[name='icCulture']";
-
     private String byAuditPath = "select[name='auditEnabled']";
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(companyIDField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        companyIDField.should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/insurance_company_edit.jsp";
     }
 
     public void selectSaveOption(boolean gdpr) {
+
         $("#btnOk").click();
+
         if(gdpr) {
+
             BaseDialog
                     .at(GdprConfirmationDialog.class)
                     .confirm();
@@ -103,12 +91,12 @@ public class InsCompAddEditPage extends AdminBasePage {
     }
 
     public InsCompaniesPage createCompany(InsuranceCompany insuranceCompany) {
+
         companyIDField.sendKeys(insuranceCompany.getIcID());
         tenant.sendKeys(insuranceCompany.getIcCode());
         omTenantAlias.sendKeys(insuranceCompany.getIcCode());
         companyCodeField.sendKeys(insuranceCompany.getIcCode().toUpperCase());
         unifiedCompanyCode.sendKeys(insuranceCompany.getIcCode().toUpperCase());
-
         companyNameField.sendKeys(insuranceCompany.getIcName());
         addressField.sendKeys(insuranceCompany.getAddress());
         zipCodeField.sendKeys(insuranceCompany.getZipCode());
@@ -117,10 +105,12 @@ public class InsCompAddEditPage extends AdminBasePage {
         localizedNameInput.sendKeys(insuranceCompany.getIcName());
 
         if (StringUtils.isEmpty(sendTimeFromField.getAttribute("value"))) {
+
             sendTimeFromField.sendKeys(insuranceCompany.getSendTimeFrom());
         }
 
         if (StringUtils.isEmpty(sendTimeFromField.getAttribute("value"))) {
+
             sendTimeToField.sendKeys(insuranceCompany.getSendTimeTo());
         }
 
@@ -134,6 +124,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     }
 
     public InsCompaniesPage updateNameAndSave(InsuranceCompany insuranceCompany) {
+
         companyNameField.clear();
         companyNameField.sendKeys(insuranceCompany.getIcName());
         selectSaveOption(false);
@@ -141,6 +132,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     }
 
     public void enableAuditOptionAndSave() {
+
         $(byAuditPath).selectOption("Enabled");
         selectSaveOption(true);
     }
@@ -193,38 +185,47 @@ public class InsCompAddEditPage extends AdminBasePage {
 //        boolean omItemizationCustomerMail;
 
         public CommunicationDesigner setSelfServiceCustomerWelcome(boolean omPDF, String omPDFText) {
+
             return addToEmails(new SelfServiceCustomerWelcome(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setCustomerWelcome(boolean omPDF, String omPDFText) {
+
             return addToEmails(new CustomerWelcome(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setItemizationSubmitLossItems(boolean omPDF, String omPDFText) {
+
             return addToEmails(new ItemizationSubmitLossItems(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setItemizationSaveLossItems(boolean omPDF, String omPDFText) {
+
             return addToEmails(new ItemizationSaveLossItems(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setCustomerWelcomeRejectionMail(boolean omPDF, String omPDFText) {
+
             return addToEmails(new CustomerWelcomeRejectionMail(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setCustomerWelcomeWithOutstanding(boolean omPDF, String omPDFText) {
+
             return addToEmails(new CustomerWelcomeWithOutstanding(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setOrderConfirmation(boolean omPDF, String omPDFText) {
+
             return addToEmails(new OrderConfirmation(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setReplacementMail(boolean omPDF, String omPDFText) {
+
             return addToEmails(new ReplacementMail(), omPDF, omPDFText);
         }
 
         public CommunicationDesigner setAutomaticCustomerWelcome(boolean omPDF, String omPDFText) {
+
             return addToEmails(new AutomaticCustomerWelcome(), omPDF, omPDFText);
         }
 
@@ -251,6 +252,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         }
 
         private CommunicationDesigner addToEmails(OMEmail omEmail, boolean omPDF, String omPDFText){
+
             omEmail = omEmail
                     .setOmEmail(true)
                     .setOmPDF(omPDF)
@@ -260,6 +262,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         }
 
         private CommunicationDesigner resetEmails(OMEmail omEmail){
+
             omEmail = omEmail
                     .setOmEmail(false);
             emailList.add(omEmail);
@@ -270,6 +273,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class SelfServiceCustomerWelcome extends OMEmail{
 
         public SelfServiceCustomerWelcome() {
+
             super("[name=OM_SelfServiceCustomerWelcome]",
                     "[name=OM_PDF_SelfServiceCustomerWelcome]",
                     "#OM_PDF_TEXT_SelfServiceCustomerWelcome");
@@ -279,6 +283,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class CustomerWelcome extends OMEmail{
 
         public CustomerWelcome() {
+
             super("[name=OM_CustomerWelcome]",
                     "[name=OM_PDF_CustomerWelcome]",
                     "#OM_PDF_TEXT_CustomerWelcome");
@@ -288,6 +293,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class ItemizationSubmitLossItems extends OMEmail{
 
         public ItemizationSubmitLossItems() {
+
             super("[name=OM_ItemizationSubmitLossItems]",
                     "[name=OM_PDF_ItemizationSubmitLossItems]",
                     "#OM_PDF_TEXT_ItemizationSubmitLossItems");
@@ -297,6 +303,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class ItemizationSaveLossItems extends OMEmail{
 
         public ItemizationSaveLossItems() {
+
             super("[name=OM_ItemizationSaveLossItems]",
                     "[name=OM_PDF_ItemizationSaveLossItems]",
                     "#OM_PDF_TEXT_ItemizationSaveLossItems");
@@ -306,6 +313,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class CustomerWelcomeRejectionMail extends OMEmail{
 
         public CustomerWelcomeRejectionMail() {
+
             super("[name=OM_CustomerWelcomeRejectionMail]",
                     "[name=OM_PDF_CustomerWelcomeRejectionMail]",
                     "#OM_PDF_TEXT_CustomerWelcomeRejectionMail");
@@ -315,6 +323,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class CustomerWelcomeWithOutstanding extends OMEmail{
 
         public CustomerWelcomeWithOutstanding() {
+
             super("[name=OM_CustomerWelcomeWithOutstanding]",
                     "[name=OM_PDF_CustomerWelcomeWithOutstanding]",
                     "#OM_PDF_TEXT_CustomerWelcomeWithOutstanding");
@@ -324,6 +333,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class ReplacementMail extends OMEmail{
 
         public ReplacementMail() {
+
             super("[name=OM_ReplacementMail]",
                     "[name=OM_PDF_ReplacementMail]",
                     "#OM_PDF_TEXT_ReplacementMail");
@@ -333,6 +343,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class OrderConfirmation extends OMEmail{
 
         public OrderConfirmation() {
+
             super("[name=OM_OrderConfirmation]",
                     "[name=OM_PDF_OrderConfirmation]",
                     "#OM_PDF_TEXT_OrderConfirmation");
@@ -342,6 +353,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public static class AutomaticCustomerWelcome extends OMEmail{
 
         public AutomaticCustomerWelcome() {
+
             super("[name=OM_AutomaticCustomerWelcome]",
                     "[name=OM_PDF_AutomaticCustomerWelcome]",
                     "#OM_PDF_TEXT_AutomaticCustomerWelcome");
@@ -351,6 +363,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     @RequiredArgsConstructor
     @Accessors(chain = true)
     public static class OMEmail{
+
         @NonNull
         protected String omEmailPath;
         @NonNull
@@ -365,9 +378,12 @@ public class InsCompAddEditPage extends AdminBasePage {
         protected String omPDFText;
 
         public void setSettings(){
+
             $(omEmailPath).setSelected(omEmail);
             $(omPDFPath).setSelected(omPDF);
+
             if(omEmail && omPDF) {
+
                 $(omPDFTextPath).setValue(omPDFText);
             }
         }

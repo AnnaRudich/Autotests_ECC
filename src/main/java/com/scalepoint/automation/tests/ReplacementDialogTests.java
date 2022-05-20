@@ -19,7 +19,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
 
 @SuppressWarnings("AccessStaticViaInstance")
-public class ReplacementDialogTests extends BaseTest {
+public class ReplacementDialogTests extends BaseUITest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",
@@ -28,7 +28,7 @@ public class ReplacementDialogTests extends BaseTest {
         Double newVoucherFaceValue = Constants.PRICE_500;
         Integer voucherDiscount = Constants.VOUCHER_DISCOUNT_10;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withNewPrice(Constants.PRICE_2400)
@@ -55,7 +55,7 @@ public class ReplacementDialogTests extends BaseTest {
     public void contents592_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_500;
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(newPrice)
                         .withCategory(claimItem.getCategoryOther()))
@@ -75,7 +75,7 @@ public class ReplacementDialogTests extends BaseTest {
             description = "CONTENTS-601 allow shop access to remaining amount")
     public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLinesForChosenCategories(claimItem.getCategoryBabyItems().getGroupName(), claimItem.getCategoryBicycles().getGroupName());
 
 
@@ -100,7 +100,7 @@ public class ReplacementDialogTests extends BaseTest {
             description = "CONTENTS-592 ReplacementButton can be invisible")
     public void contents592_turnOffReplacementOption(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .doAssert(CompleteClaimPage.Asserts::assertReplacementButtonIsNotVisible);
 
@@ -113,7 +113,7 @@ public class ReplacementDialogTests extends BaseTest {
             description = "CONTENTS-592 Replacement through the shop is disabled")
     public void contents592_turnOffReplacementThroughTheShop(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard(true)

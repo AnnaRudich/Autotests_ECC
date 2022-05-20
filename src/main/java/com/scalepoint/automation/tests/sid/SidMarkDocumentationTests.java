@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,13 +16,14 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SUFFICIENT_DOCUMENTATION_CHECKBOX;
 
 @SuppressWarnings("AccessStaticViaInstance")
-public class SidMarkDocumentationTests extends BaseTest {
+public class SidMarkDocumentationTests extends BaseUITest {
+
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(groups = {TestGroups.SID, TestGroups.SID_MARK_DOCUMENTATION},
             dataProvider = "testDataProvider",
             description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeChecked(User user, Claim claim, GenericItem genericItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(
                         SettlementDialog.Asserts::assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked
@@ -51,7 +52,7 @@ public class SidMarkDocumentationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeUnchecked(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(
                         SettlementDialog.Asserts::assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked

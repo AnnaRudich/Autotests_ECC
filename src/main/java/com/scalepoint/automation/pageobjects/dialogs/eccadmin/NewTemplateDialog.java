@@ -16,7 +16,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class NewTemplateDialog extends BaseDialog {
 
     ElementsCollection buttons = $$(".addUploadTemplateWindow [id^=toolbar] a");
-    
+
     @Override
     protected void ensureWeAreAt() {
 

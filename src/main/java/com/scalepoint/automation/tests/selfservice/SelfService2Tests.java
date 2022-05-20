@@ -9,7 +9,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -23,8 +23,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-@RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-public class SelfService2Tests extends BaseTest {
+public class SelfService2Tests extends BaseUITest {
 
     private static final String IPHONE = "iPhone";
     private static final String CYKLER = "cykler";
@@ -39,7 +38,6 @@ public class SelfService2Tests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -49,7 +47,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -85,11 +83,10 @@ public class SelfService2Tests extends BaseTest {
         //assert Acquired in not implemented on Settlement page
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "SelfService2 password reset, login and logout")
     public void selfService2LogInWithNewPassword(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -108,7 +105,6 @@ public class SelfService2Tests extends BaseTest {
         new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -119,7 +115,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -157,7 +153,6 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemIsPresent(description[0]));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -168,7 +163,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[2];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -211,7 +206,6 @@ public class SelfService2Tests extends BaseTest {
                         .assertItemNotPresent(description[0]));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -222,7 +216,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -259,7 +253,6 @@ public class SelfService2Tests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
@@ -270,7 +263,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -294,7 +287,6 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE, enabled = false)
@@ -305,7 +297,7 @@ public class SelfService2Tests extends BaseTest {
 
         String[] description = new String[1];
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
@@ -359,7 +351,7 @@ public class SelfService2Tests extends BaseTest {
     private void sendSMSandVerifyResponse(User user, Claim claim, int httpStatus){
 
         claim.setCellNumber(mailserviceStub.getTestMobileNumberForStatusCode(httpStatus));
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
 
         databaseApi.waitForFailedMailServiceRequest(claim.getClaimId(), httpStatus);

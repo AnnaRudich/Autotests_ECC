@@ -21,29 +21,34 @@ public class InvoiceTab extends BaseClaimPage {
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $("#grid-invoice-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+        $("#grid-invoice-body").should(visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/projects.jsp";
     }
 
     public InvoiceDialog openInvoiceDialogForLineWithIndex(int index){
+
         return toInvoiceGrid()
                 .getGridLine(index)
                 .clickViewInvoiceActive();
     }
 
     public InvoiceTab doAssert(Consumer<InvoiceTab.Asserts> assertFunc) {
+
         assertFunc.accept(new InvoiceTab.Asserts());
         return InvoiceTab.this;
     }
 
     public class Asserts {
         public InvoiceTab.Asserts assertThereIsNoInvoiceGrid() {
+
             assertThat(toInvoiceGrid().gridSize())
                     .as("There should be no invoice lines")
                     .isEqualTo(0);
@@ -51,6 +56,7 @@ public class InvoiceTab extends BaseClaimPage {
         }
 
         public InvoiceTab.Asserts assertInvoiceGridSize(int expectedSize) {
+
             assertThat(toInvoiceGrid().gridSize())
                     .as(String .format("Invoice size should be %d", expectedSize))
                     .isEqualTo(expectedSize);
@@ -63,10 +69,12 @@ public class InvoiceTab extends BaseClaimPage {
     }
 
     public class InvoiceGrid{
+
         private SelenideElement invoiceGrid;
         private List<InvoiceGridLine> invoiceGridLines;
 
         InvoiceGrid(){
+
             invoiceGrid = $("#panel-main-body");
             invoiceGridLines = invoiceGrid
                     .findAll("#grid-invoice-body [role=row]")
@@ -76,10 +84,12 @@ public class InvoiceTab extends BaseClaimPage {
         }
 
         public InvoiceGridLine getGridLine(int index){
+
             return invoiceGridLines.get(index);
         }
 
         public int gridSize(){
+
             return invoiceGridLines.size();
         }
 
@@ -99,6 +109,7 @@ public class InvoiceTab extends BaseClaimPage {
             private SelenideElement viewInvoiceActive;
 
             InvoiceGridLine(SelenideElement invoiceGridLine){
+
                 ElementsCollection invoiceGridLineCells= invoiceGridLine.findAll("td");
                 taskNo = invoiceGridLineCells.get(0).getText();
                 servicePartner = invoiceGridLineCells.get(1).getText();
@@ -120,12 +131,15 @@ public class InvoiceTab extends BaseClaimPage {
             }
 
             public InvoiceGridLine doAssert(Consumer<Asserts> assertFunc) {
+
                 assertFunc.accept(new InvoiceGridLine.Asserts());
                 return InvoiceGridLine.this;
             }
 
             public class Asserts {
+
                 public InvoiceGridLine.Asserts assertTotal(BigDecimal total) {
+
                     assertThat(getTotal())
                             .as(String.format("Total value should be %s", total))
                             .isEqualTo(total);

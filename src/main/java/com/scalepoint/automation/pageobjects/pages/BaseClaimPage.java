@@ -20,7 +20,8 @@ public abstract class BaseClaimPage extends BaseSupplierAdminNavigation {
     public MailsPage toMailsPage() {
 
         Wait.waitForAjaxCompletedAndJsRecalculation();
-        return claimNavigationMenu.toMailsPage();
+        return claimNavigationMenu
+                .toMailsPage();
     }
 
     public MailsPage toEmptyMailsPage() {
@@ -30,33 +31,40 @@ public abstract class BaseClaimPage extends BaseSupplierAdminNavigation {
     }
 
     public OrderDetailsPage toOrdersDetailsPage() {
+
         return claimNavigationMenu.toOrderDetailsPage();
     }
 
     public CustomerDetailsPage toCustomerDetails() {
+
         return claimNavigationMenu.toCustomerDetailsPage();
     }
 
     public AdminPage toAdminPage() {
+
         mainMenu.toAdminPage();
-        return at(AdminPage.class);
+        return Page.at(AdminPage.class);
     }
 
     public ClaimSearchPage toClaimSearchPage() {
+
         mainMenu.openClaimSearch();
         return at(ClaimSearchPage.class);
     }
 
     public ProjectsPage toRepairValuationProjectsPage() {
+
         return claimNavigationMenu.toRepairValuationProjectsPage();
     }
 
     public SettlementPage toSettlementPageUsingNavigationMenu() {
+
         claimNavigationMenu.toSettlementPage();
         return at(SettlementPage.class);
     }
 
     public SettlementPage toSettlementPage() {
+
         return claimNavigationMenu.toSettlementPage();
     }
 }

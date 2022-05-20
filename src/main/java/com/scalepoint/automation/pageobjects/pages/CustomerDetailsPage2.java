@@ -9,7 +9,6 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,41 +26,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredParameters("shnbr=%s")
 public class CustomerDetailsPage2 extends BaseClaimPage {
 
-    @FindBy(id = "genoptag")
-    private Button reopenClaim;
-
     @FindBy(id = "annuller_sag")
-    private WebElement cancelClaimButton;
-
+    private SelenideElement cancelClaimButton;
     @FindBy(id = "damage_date_value")
-    private WebElement damageDate;
-
+    private SelenideElement damageDate;
     @FindBy(id = "claim_no")
-    private WebElement claimNumber;
-
+    private SelenideElement claimNumber;
     @FindBy(xpath = "//a[@href='javascript:EditDamageDate()']")
-    private WebElement damageDateEdit;
-
+    private SelenideElement damageDateEdit;
     @FindBy(xpath = "//button[contains(@onclick, 'newPassword')]")
-    private WebElement newPasswordButton;
-
+    private SelenideElement newPasswordButton;
     @FindBy(id = "firstname")
-    private WebElement firstName;
-
+    private SelenideElement firstName;
     @FindBy(id = "lastname")
-    private WebElement lastName;
-
+    private SelenideElement lastName;
     @FindBy(id = "address1")
-    private WebElement address1;
-
+    private SelenideElement address1;
     @FindBy(id = "zipcode")
-    private WebElement zipCode;
-
+    private SelenideElement zipCode;
     @FindBy(id = "city")
-    private WebElement city;
-
+    private SelenideElement city;
     @FindBy(id = "policy_type")
-    private WebElement policyType;
+    private SelenideElement policyType;
+
+    private Button getReopenClaim(){
+
+        return new Button($(By.id("genoptag")));
+    }
 
     private CustomerDetails customerDetails = new CustomerDetails();
 
@@ -98,8 +88,7 @@ public class CustomerDetailsPage2 extends BaseClaimPage {
 
         cancelClaimButton.click();
         By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
-        verifyElementVisible($(alertMessageBy));
-        $(alertMessageBy).click();
+        $(alertMessageBy).should(Condition.visible).click();
         return at(CustomerDetailsPage2.class);
     }
 
@@ -184,6 +173,8 @@ public class CustomerDetailsPage2 extends BaseClaimPage {
 
     @Override
     protected String getRelativeUrl() {
+
+
         return "webshop/jsp/matching_engine/customer_details.jsp";
     }
 
@@ -192,11 +183,14 @@ public class CustomerDetailsPage2 extends BaseClaimPage {
 
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
+
         if (driver.getCurrentUrl().contains(getRelativeUrl())) {
-            $(reopenClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-            $(cancelClaimButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+
+            $(getReopenClaim()).should(Condition.visible);
+            cancelClaimButton.should(Condition.visible);
         } else {
-            $(claimNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+
+            claimNumber.should(Condition.visible);
         }
     }
 
@@ -214,11 +208,13 @@ public class CustomerDetailsPage2 extends BaseClaimPage {
         }
 
         public Asserts assertClaimNumber(String expectedClaimNumber) {
+
             assertThat(claimsInformation.getClaimsNumber()).isEqualTo(expectedClaimNumber);
             return this;
         }
 
         public Asserts assertThatDraftIsEmpty() {
+
             assertThat(getLossItemsInDraft().size()).isZero();
             return this;
         }

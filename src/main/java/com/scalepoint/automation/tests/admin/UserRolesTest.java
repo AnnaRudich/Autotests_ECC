@@ -7,7 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
@@ -26,7 +26,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-537")
-public class UserRolesTest extends BaseTest {
+public class UserRolesTest extends BaseUITest {
 
     private static final String LOGIN_AS_NEW_SP_ADMIN_DATA_PROVIDER = "loginAsNewSPAdminDataProvider";
     private static final String UPDATE_NEW_SP_ADMIN_USER_DATA_PROVIDER = "updateNewSPAdminUserDataProvider";
@@ -45,7 +45,7 @@ public class UserRolesTest extends BaseTest {
             description = "CHARLIE-537 It's possible to sign in as new SP Admin user")
     public void loginAsNewSPAdminTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, userTypes)
                 .toMatchingEngine()
@@ -69,7 +69,7 @@ public class UserRolesTest extends BaseTest {
     public void updateNewSPAdminUserTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
         SystemUser newUser = TestData.getSystemUser();
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, userTypes)
                 .filterByIC(user.getCompany())
@@ -87,7 +87,7 @@ public class UserRolesTest extends BaseTest {
             description = "CHARLIE-537 It's possible to create SP admin user. Created user is displayed in Users list")
     public void createSPAdminUserTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, userTypes)
                 .doAssert(usersPage -> usersPage.assertUserExists(user));
@@ -101,7 +101,7 @@ public class UserRolesTest extends BaseTest {
             description = "CHARLIE-537 It's possible to create IC Supply manager and claim handler user. Created user is displayed in Users list")
     public void createICCHSMUserTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, userTypes)
                 .filterByIC(user.getCompany())
@@ -117,7 +117,7 @@ public class UserRolesTest extends BaseTest {
             description = "CHARLIE-537 IC SM only can sign in to Supply Management only")
     public void icSMOnlyLoginSupManOnlyTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, userTypes)
                 .toMatchingEngine()
@@ -143,7 +143,7 @@ public class UserRolesTest extends BaseTest {
                     "CH role can be enabled. In this case user logins to ME")
     public void updateICSMOnlyToCHTypeTest(SystemUser user, UserAddEditPage.UserType[] userTypes) {
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, userTypes)
                 .toMatchingEngine()
@@ -156,7 +156,7 @@ public class UserRolesTest extends BaseTest {
                         .build(), SuppliersPage.class)
                 .signOut();
 
-        login(getSystemUser(), UsersPage.class)
+        loginFlow.login(getSystemUser(), UsersPage.class)
                 .filterByIC(user.getCompany())
                 .openUserForEditing(user.getLogin())
                 .enableCHType()
@@ -181,7 +181,7 @@ public class UserRolesTest extends BaseTest {
 
         String roleName = translations.getRoles().getRoleName();
 
-        login(getSystemUser(), RolesPage.class)
+        loginFlow.login(getSystemUser(), RolesPage.class)
                 .toAddRolePage()
                 .createNewRoleAllRolesEnabled(roleName)
                 .assertRoleDisplayed(roleName);
@@ -200,7 +200,7 @@ public class UserRolesTest extends BaseTest {
 
         String roleName = translations.getRoles().getRoleName();
 
-        login(getSystemUser(), RolesPage.class)
+        loginFlow.login(getSystemUser(), RolesPage.class)
                 .toAddRolePage()
                 .createNewRoleAllRolesEnabled(roleName)
                 .to(AdminPage.class)

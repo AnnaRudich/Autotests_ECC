@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -15,7 +15,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
-public class SidDamageTypeTest extends BaseTest {
+public class SidDamageTypeTest extends BaseUITest {
 
     private static final String SONY_HDR_CX450 = "HDR-CX450";
 
@@ -27,7 +27,7 @@ public class SidDamageTypeTest extends BaseTest {
         PseudoCategory pseudoCategory = claimItem.getCategoryVideoCamera();
         String damageType = pseudoCategory.getDamageTypes().get(0);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .fill(formFiller -> {
                     formFiller.withText(claimItem.getTextFieldSP())
@@ -55,7 +55,7 @@ public class SidDamageTypeTest extends BaseTest {
         PseudoCategory pseudoCategory = claimItem.getCategoryVideoCamera();
         String damageType = pseudoCategory.getDamageTypes().get(0);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(SONY_HDR_CX450)
                 .chooseCategory(claimItem.getCategoryVideoCamera())
@@ -77,7 +77,7 @@ public class SidDamageTypeTest extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Verify damage type is grayed out if no reason(s) under the category under admin")
     public void damageTypeIfNoReasonUnderCategoryTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .fill(formFiller -> {
                     formFiller.withText(claimItem.getTextFieldSP())
@@ -103,7 +103,7 @@ public class SidDamageTypeTest extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Verify damage type is required if the item is damaged and the category has reasons")
     public void damageTypeRequiredTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(SONY_HDR_CX450)
                 .chooseCategory(claimItem.getCategoryVideoCamera())
@@ -122,7 +122,7 @@ public class SidDamageTypeTest extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Verify combo with damage types should contain only damage types relevant for current category")
     public void damageTypeRelevantForCategoryTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .fill(formFiller -> {
                     formFiller.withText(claimItem.getTextFieldSP())

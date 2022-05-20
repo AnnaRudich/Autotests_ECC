@@ -8,7 +8,7 @@ import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -20,7 +20,7 @@ import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-557")
-public class SidShowVoucherDetails extends BaseTest {
+public class SidShowVoucherDetails extends BaseUITest {
 
     /**
      * WHEN: Create claim
@@ -87,7 +87,7 @@ public class SidShowVoucherDetails extends BaseTest {
             description = "ECC-5519 Verify shared voucher")
     public void ecc5519_1_sharedVoucherAndTagsBrandInSID(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         checkBrandsAndTags(settlementPage, user, claimItem, voucher);
     }
@@ -106,7 +106,7 @@ public class SidShowVoucherDetails extends BaseTest {
             description = "ECC-5519 Verify exclusive voucher")
     public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserAttributes(company = CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
 
-        SettlementPage settlementPage = loginAndCreateClaimToEditPolicyDialog(user, claim)
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel();
 
         checkBrandsAndTags(settlementPage, user, claimItem, voucher);
@@ -143,7 +143,7 @@ public class SidShowVoucherDetails extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify 'Trade and conditions' buttons and window")
     public void ecc5519_2_voucherTradeTermsAndConditions(User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
@@ -183,7 +183,7 @@ public class SidShowVoucherDetails extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify that Brands and Tags are visible in compact mode")
     public void ecc5519_3_voucherBrandTagInSIDCompactMode(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
@@ -213,7 +213,7 @@ public class SidShowVoucherDetails extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify that discount distribution can be changed")
     public void ecc5519_4_discountDistributionIsChanged(User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
@@ -242,7 +242,7 @@ public class SidShowVoucherDetails extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify that user can re-select voucher")
     public void ecc5519_5_reselectVoucherInSID(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)

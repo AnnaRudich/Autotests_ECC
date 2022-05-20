@@ -3,8 +3,10 @@ package com.scalepoint.automation.tests.shop;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
@@ -12,19 +14,19 @@ import com.scalepoint.automation.services.ucommerce.GetBalanceService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.response.Token;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
-public class UCommerceShopTests extends BaseTest {
+public class UCommerceShopTests extends BaseUITest {
 
     private final Double orderedProductPrice = Constants.PRICE_100;
     private final Double orderedVoucherPrice = Constants.PRICE_100;
@@ -35,33 +37,33 @@ public class UCommerceShopTests extends BaseTest {
             description = "create order with product and verify orderTotals")
     public void orderProduct_positiveBalance(User user, Claim claim, ClaimItem claimItem) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         XpriceInfo productInfo = getXPriceInfoForProduct();
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(100.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
-        dialog.closeSidWithOk(SettlementPage.class)
+        OrderDetailsPage orderDetailsPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
-        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
+        new CreateOrderService(token)
+                .createOrderForProduct(productInfo, claim.getClaimNumber());
 
-
-
-        new OrderDetailsPage()
+        orderDetailsPage
                 .refreshPageToGetOrders()
-                .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);//voucher
-                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                .doAssert(odp -> {
+                    odp.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);//voucher
+                    odp.assertCompensationAmount(activeValuation);
                 });
     }
 
@@ -70,33 +72,33 @@ public class UCommerceShopTests extends BaseTest {
             description = "create order with product and verify orderTotals")
     public void orderProductVoucherOnly(User user, Claim claim, ClaimItem claimItem) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         XpriceInfo productInfo = getXpricesForConditions(DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY, DatabaseApi.PriceConditions.ORDERABLE);
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(100.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
-        dialog.closeSidWithOk(SettlementPage.class)
+        OrderDetailsPage orderDetailsPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
-        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
+        new CreateOrderService(token)
+                .createOrderForProduct(productInfo, claim.getClaimNumber());
 
-
-
-        new OrderDetailsPage()
+        orderDetailsPage
                 .refreshPageToGetOrders()
-                .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);//voucher
-                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                .doAssert(odp -> {
+                    odp.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);//voucher
+                    odp.assertCompensationAmount(activeValuation);
                 });
     }
 
@@ -104,10 +106,12 @@ public class UCommerceShopTests extends BaseTest {
     @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
     public void orderProductWithExtraPay(User user, Claim claim, ClaimItem claimItem) {
+
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -115,24 +119,25 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
-        dialog.closeSidWithOk(SettlementPage.class)
+        OrderDetailsPage orderDetailsPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
-        new CreateOrderService().createOrderForProductExtraPay(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+        new CreateOrderService(token)
+                .createOrderForProductExtraPay(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
-        new OrderDetailsPage()
+        orderDetailsPage
                 .refreshPageToGetOrders()
-                .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
-                    orderDetailsPage.assertAmountScalepointHasPaidToSupplier(orderedProductPrice+extraPayAmount);
-                    orderDetailsPage.assertAmountCustomerHasPaidToScalepoint(extraPayAmount);
-                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                .doAssert(odp -> {
+                    odp.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
+                    odp.assertAmountScalepointHasPaidToSupplier(orderedProductPrice+extraPayAmount);
+                    odp.assertAmountCustomerHasPaidToScalepoint(extraPayAmount);
+                    odp.assertCompensationAmount(activeValuation);
                 });
     }
 
@@ -140,10 +145,12 @@ public class UCommerceShopTests extends BaseTest {
     @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with physical voucher and verify orderTotals")
     public void orderPhysicalVoucher(User user, Claim claim, ClaimItem claimItem) {
+
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -151,22 +158,23 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
-        dialog.closeSidWithOk(SettlementPage.class)
+        OrderDetailsPage orderDetailsPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
-        new CreateOrderService().createOrderForVoucher(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+        new CreateOrderService(token)
+                .createOrderForVoucher(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
-        new OrderDetailsPage()
+        orderDetailsPage
                 .refreshPageToGetOrders()
-                .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedVoucherPrice);
-                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                .doAssert(odp -> {
+                    odp.assertRemainingCompensationTotal(activeValuation - orderedVoucherPrice);
+                    odp.assertCompensationAmount(activeValuation);
                 });
     }
 
@@ -174,10 +182,12 @@ public class UCommerceShopTests extends BaseTest {
     @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with Evoucher and verify orderTotals")
     public void orderEVoucher(User user, Claim claim, ClaimItem claimItem) {
+
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
         Boolean isEvoucher = true;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -185,22 +195,23 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
-        dialog.closeSidWithOk(SettlementPage.class)
+        OrderDetailsPage orderDetailsPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
-        new CreateOrderService().createOrderForVoucher(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+        new CreateOrderService(token)
+                .createOrderForVoucher(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
-        new OrderDetailsPage()
+        orderDetailsPage
                 .refreshPageToGetOrders()
-                .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedVoucherPrice);
-                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                .doAssert(odp -> {
+                    odp.assertRemainingCompensationTotal(activeValuation - orderedVoucherPrice);
+                    odp.assertCompensationAmount(activeValuation);
                 });
     }
 
@@ -209,7 +220,9 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint")
     public void verifyGetBalance(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        GetBalanceService getBalanceService = new GetBalanceService(token);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -218,14 +231,14 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double activeValuation = dialog.getCashCompensationValue();
+        Double activeValuation = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true);
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(activeValuation);
     }
@@ -236,7 +249,9 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for cancelled claim")
     public void verifyGetBalanceCancelledClaim(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        GetBalanceService getBalanceService = new GetBalanceService(token);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -245,21 +260,21 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         MyPage myPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithoutEmail();
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
 
         myPage.openRecentClaim()
                 .cancelClaim();
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(0.0);
     }
@@ -269,16 +284,18 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for cancelled order")
     public void verifyGetBalanceCancelledItem(User user, Claim claim, ClaimItem claimItem) {
 
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        GetBalanceService getBalanceService = new GetBalanceService(token);
         XpriceInfo productInfo = getXPriceInfoForProduct();
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(100.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -287,20 +304,21 @@ public class UCommerceShopTests extends BaseTest {
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
 
-        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
+        new CreateOrderService(token)
+                .createOrderForProduct(productInfo, claim.getClaimNumber());
 
-        OrderDetailsPage orderDetailsPage =  new OrderDetailsPage()
+        OrderDetailsPage orderDetailsPage =  Page.at(OrderDetailsPage.class)
                 .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage1 -> {
                     orderDetailsPage1.assertRemainingCompensationTotal(balance - orderedProductPrice);//voucher
                     orderDetailsPage1.assertCompensationAmount(balance);
                 });
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(0.0);
 
@@ -309,7 +327,7 @@ public class UCommerceShopTests extends BaseTest {
                 .cancelItemByIndex(0)
                 .addInternalNote("Autotest", OrderDetailsPage.class);
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
     }
@@ -319,7 +337,9 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for reopened claim")
     public void verifyGetBalanceReopenClaim(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        GetBalanceService getBalanceService = new GetBalanceService(token);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -328,7 +348,7 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         MyPage myPage = dialog
                 .closeSidWithOk(SettlementPage.class)
@@ -336,7 +356,7 @@ public class UCommerceShopTests extends BaseTest {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true);
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
 
@@ -345,7 +365,7 @@ public class UCommerceShopTests extends BaseTest {
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
 
@@ -358,7 +378,7 @@ public class UCommerceShopTests extends BaseTest {
                                 .withValuation(NEW_PRICE)
                 );
 
-        balance = balance + dialog.getCashCompensationValue();
+        balance = balance + dialog.getCashCompensation();
 
         dialog
                 .closeSidWithOk()
@@ -366,7 +386,7 @@ public class UCommerceShopTests extends BaseTest {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, false);
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
     }
@@ -377,7 +397,9 @@ public class UCommerceShopTests extends BaseTest {
             description = "verify data received from getBalance endpoint for saved claim")
     public void verifyGetBalanceSavedClaim(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.SHOP).getToken();
+        GetBalanceService getBalanceService = new GetBalanceService(token);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
 
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -386,14 +408,14 @@ public class UCommerceShopTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
-        Double balance = dialog.getCashCompensationValue();
+        Double balance = dialog.getCashCompensation();
 
         MyPage myPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithoutEmail();
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
 
@@ -402,7 +424,7 @@ public class UCommerceShopTests extends BaseTest {
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
 
@@ -421,7 +443,7 @@ public class UCommerceShopTests extends BaseTest {
                 .fillClaimForm(claim)
                 .saveClaim(false);
 
-        new GetBalanceService()
+        getBalanceService
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(balance);
     }

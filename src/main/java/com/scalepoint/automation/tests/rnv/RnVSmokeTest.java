@@ -44,7 +44,7 @@ public class RnVSmokeTest extends RnVBase {
         Translations translations = getLisOfObjectByClass(parameters, Translations.class).get(0);
         String lineDescription = getLisOfObjectByClass(parameters, String.class).get(0);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)

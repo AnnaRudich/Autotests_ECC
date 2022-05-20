@@ -8,7 +8,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -30,7 +30,7 @@ import static com.scalepoint.automation.utils.Constants.TEXT_LINE;
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
+public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseUITest {
 
     /**
      * WHEN:FT is OFF
@@ -43,7 +43,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
     public void charlie_508_1_verifyDiscretionaryAndRejectReasonFTOFF(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(sid -> {
                     sid.assertRejectReasonDisabled();
@@ -65,7 +65,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
     public void charlie_508_2_verifyDiscretionaryAndRejectReasonFTOFF(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(sid -> {
                     sid.assertRejectReasonDisabled();
@@ -85,7 +85,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is ON")
     public void charlie_508_3_verifyDiscretionaryAndRejectReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(sid -> {
                     sid.assertRejectReasonVisible();
@@ -108,7 +108,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify drop down for choosing reason is enabled after adding discretionary valuation.FT=ON")
     public void charlie_508_4_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), claimItem.getTrygNewPrice())
@@ -133,7 +133,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
                     " after adding Input manually discretionary depreciation.FT=ON")
     public void charlie_508_5_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeNewPrice(), claimItem.getTrygNewPrice())
@@ -157,7 +157,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             description = "CHARLIE-508 Verify drop down for choosing reason is greyed out" +
                     " when the voucher is selected and adding the manual discretionary depreciation (combine checkbox is unchecked).FT=ON")
     public void charlie_508_6_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryBicycles())
@@ -185,7 +185,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
                     " adding the manual discretionary depreciation (combine checkbox is checked).FT=ON")
     public void charlie_508_7_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryBicycles())
@@ -215,7 +215,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_8_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem,
                                                             Translations translations) {
         String reasonText = translations.getDiscretionaryReason().getMaxCoverage();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryJewelry(), sid -> {
                     sid
                             .withDiscountAndDepreciation(false)
@@ -262,7 +262,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_9_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                             Claim claim,
                                                             ClaimItem claimItem) {
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCategory(claimItem.getCategoryMusic())
@@ -289,7 +289,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_10_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
                         .withCategory(claimItem.getCategoryMusic())
                         .withNewPrice(PRICE_500)
@@ -316,7 +316,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_11_verifyDiscretionaryReasonFTON(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCategory(claimItem.getCategoryMusic())
@@ -350,7 +350,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  ClaimItem claimItem,
                                                                  Translations translations) {
         String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToLackOfDocumentation();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryShoes())
@@ -391,7 +391,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  Claim claim, ClaimItem claimItem,
                                                                  Translations translations) {
         String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToConsumption();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryShoes())
@@ -535,7 +535,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .getClaimMenu()
                 .logout();
 
-        login(getSystemUser())
+        loginFlow.login(getSystemUser())
                 .getMainMenu()
                 .toAdminPage();
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
@@ -543,7 +543,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .getClaimMenu()
                 .logout();
 
-        login(user, MyPage.class)
+        loginFlow.login(user, MyPage.class)
                 .openRecentClaim()
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
@@ -558,7 +558,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
 
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
-        return loginAndCreateClaim(user, claim)
+        return loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryShoes())

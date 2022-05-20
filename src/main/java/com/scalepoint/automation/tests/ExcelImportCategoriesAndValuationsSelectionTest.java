@@ -10,7 +10,7 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.Test;
 
-public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
+public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseUITest {
 
     @Test(groups = {TestGroups.EXCEL_IMPORT_CATEGORIES_AND_VALUATIONS_SELECTION}, dataProvider = "testDataProvider",
             description = "Import Excel where categories are not specified, but line description is meaningful " +
@@ -23,7 +23,7 @@ public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
     public void autoCategorizationInExcelImport(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = "iphone";
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPathWithoutCatAuto())
                 .findClaimLine(claimLineDescription)
                 .doAssert(claimLine -> claimLine.assertCategory(claimItem.getCategoryMobilePhones().getGroupName(), claimItem.getCategoryMobilePhones().getCategoryName()));
@@ -40,7 +40,7 @@ public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
     public void selectCategoryManuallyInExcelImportDialog(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = "abrakadabra1";
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .startImportExcelFile(claimItem.getExcelPathWithoutCatNoAuto())
                 .selectCategoryAndSubcategoryForTheErrorLine(claimItem.getCategoryBicycles().getGroupName(),
                         claimItem.getCategoryBicycles().getCategoryName(), claimLineDescription)

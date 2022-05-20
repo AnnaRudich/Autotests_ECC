@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class FeaturesToggleAdministrationService extends BaseService {
-    private String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
 
+    private String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
 
     public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId) {
 
@@ -43,6 +43,7 @@ public class FeaturesToggleAdministrationService extends BaseService {
     }
 
     public enum ActionsOnToggle {
+
         ENABLE(true),
         DISABLE(false);
 

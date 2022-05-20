@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.PastedData;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-public class ManualCreateClaimTest extends BaseTest {
+public class ManualCreateClaimTest extends BaseUITest {
 
     private static final String CREATE_CLAIM_USING_COPY_PASTE_ON_CREATE_CLAIM_PAGE_DATA_PROVIDER = "createClaimUsingCopyPasteOnCreateClaimPageDataProvider";
     private static final String CREATE_CLAIM_USING_COPY_PASTE_ON_CREATE_CLAIM_PAGE_EMPTY_TEXT_AREA_DATA_PROVIDER = "createClaimUsingCopyPasteOnCreateClaimPageEmptyTextAreaDataProvider";
@@ -31,7 +31,7 @@ public class ManualCreateClaimTest extends BaseTest {
 
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
 
-        login(user)
+        loginFlow.login(user)
                 .clickCreateNewCase();
     }
 

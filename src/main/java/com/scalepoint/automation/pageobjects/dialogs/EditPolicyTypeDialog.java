@@ -1,30 +1,32 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxDivBoundList;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
-public class EditPolicyTypeDialog extends BaseDialog{
+public class EditPolicyTypeDialog extends BaseDialog {
 
     @FindBy(css = ".x-window")
-    private WebElement editPolicyTypeDialog;
+    private SelenideElement editPolicyTypeDialog;
 
+    private ExtComboBoxDivBoundList getPolicyTypeCombobox(){
 
-    @FindBy(id = "edit-policy-combo")
-    private ExtComboBoxDivBoundList policyTypeCombobox;
+        return new ExtComboBoxDivBoundList($(By.id("edit-policy-combo")));
+    }
 
     @Override
     protected void ensureWeAreAt() {
 
         waitForAjaxCompletedAndJsRecalculation();
-        $(editPolicyTypeDialog).waitUntil(Condition.visible, 5000);
+        editPolicyTypeDialog.should(Condition.visible);
     }
 
     @Override
@@ -32,7 +34,7 @@ public class EditPolicyTypeDialog extends BaseDialog{
 
         try {
 
-            return policyTypeCombobox.isDisplayed();
+            return getPolicyTypeCombobox().isDisplayed();
         } catch (NoSuchElementException e){
 
             return false;
@@ -53,7 +55,7 @@ public class EditPolicyTypeDialog extends BaseDialog{
 
     public EditPolicyTypeDialog selectPolicyType(String policyType){
 
-        policyTypeCombobox.select(policyType);
+        getPolicyTypeCombobox().select(policyType);
         return this;
     }
 }

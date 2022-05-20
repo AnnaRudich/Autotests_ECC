@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +16,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-509")
-public class InsCompanyTest extends BaseTest {
+public class InsCompanyTest extends BaseUITest {
 
 
     @BeforeMethod(alwaysRun = true)
@@ -26,7 +26,7 @@ public class InsCompanyTest extends BaseTest {
 
         InsuranceCompany insuranceCompany = getLisOfObjectByClass(parameters, InsuranceCompany.class).get(0);
 
-        login(getSystemUser())
+        loginFlow.login(getSystemUser())
                 .to(InsCompaniesPage.class)
                 .toAddNewCompanyPage()
                 .createCompany(insuranceCompany);

@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -19,6 +20,7 @@ public class ProductDetailsDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
         switchToFrame();
     }
@@ -34,40 +36,47 @@ public class ProductDetailsDialog extends BaseDialog {
     }
 
     public TextSearchPage closeProductDetails() {
+
         switchToParentFrame();
         $(CLOSE_BUTTON).click();
         return Page.at(TextSearchPage.class);
     }
 
     public ProductDetailsDialog doAssert(Consumer<Asserts> assertsFunc) {
+
         assertsFunc.accept(new Asserts());
         return ProductDetailsDialog.this;
     }
 
     public class Asserts {
+
         public Asserts assertMarketPriceSupplierVisible() {
-            assertThat(getMarketPriceSupplier().waitUntil(Condition.visible, WAIT_TIMEOUT).isDisplayed())
+
+            assertThat(getMarketPriceSupplier().should(Condition.visible, Duration.ofMillis(WAIT_TIMEOUT)).isDisplayed())
                     .as("Market price supplier must be shown")
                     .isTrue();
             return this;
         }
 
         public Asserts assetMarketPriceSupplierInvisible() {
-            assertThat(getMarketPriceSupplier().waitUntil(Condition.not(Condition.visible), WAIT_TIMEOUT).isDisplayed())
+
+            assertThat(getMarketPriceSupplier().should(Condition.not(Condition.visible), Duration.ofMillis(WAIT_TIMEOUT)).isDisplayed())
                     .as("Market price supplier must be hidden")
                     .isFalse();
             return this;
         }
 
         public Asserts assertMarketPriceVisible() {
-            assertThat(getMarketPrice().waitUntil(Condition.visible, WAIT_TIMEOUT).isDisplayed())
+
+            assertThat(getMarketPrice().should(Condition.visible, Duration.ofMillis(WAIT_TIMEOUT)).isDisplayed())
                     .as("Market price must be shown")
                     .isTrue();
             return this;
         }
 
         public Asserts assertMarketPriceInvisible() {
-            assertThat(getMarketPrice().waitUntil(Condition.not(Condition.exist), WAIT_TIMEOUT).exists())
+
+            assertThat(getMarketPrice().should(Condition.not(Condition.exist), Duration.ofMillis(WAIT_TIMEOUT)).exists())
                     .as("Market price must be hidden")
                     .isFalse();
             return this;

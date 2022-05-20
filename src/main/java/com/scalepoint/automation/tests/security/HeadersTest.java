@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.services.restService.common.BaseService.*;
-import static com.scalepoint.automation.tests.BaseTest.provide;
+import static com.scalepoint.automation.tests.BaseUITest.provide;
 import static com.scalepoint.automation.utils.Configuration.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;

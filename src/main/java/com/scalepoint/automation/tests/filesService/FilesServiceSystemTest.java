@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
@@ -23,7 +23,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOP
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 
-public class FilesServiceSystemTest extends BaseTest {
+public class FilesServiceSystemTest extends BaseUITest {
 
     private String[] lineDescriptions = new String[]{"item1", "item2"};
     private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");
@@ -34,8 +34,8 @@ public class FilesServiceSystemTest extends BaseTest {
     public void attachmentAddedFromClaimLineLevelToClaimLineLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        String token = createCwaClaimAndGetClaimToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
+        String token = loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
@@ -62,8 +62,8 @@ public class FilesServiceSystemTest extends BaseTest {
             description = "attachmentAddedFromClaimLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLevelToClaimLineLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        String token = createCwaClaimAndGetClaimToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
@@ -88,8 +88,8 @@ public class FilesServiceSystemTest extends BaseTest {
             description = "attachmentDeletedFromClaimLevel")
     public void attachmentDeletedFromClaimLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        String token = createCwaClaimAndGetClaimToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
@@ -114,8 +114,8 @@ public class FilesServiceSystemTest extends BaseTest {
             description = "attachmentUnlinkedFromClaimLineLevel")
     public void attachmentUnlinkedFromClaimLineLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        String token = createCwaClaimAndGetClaimToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
@@ -143,8 +143,8 @@ public class FilesServiceSystemTest extends BaseTest {
     public void attachmentImportedFromSelfServiceSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        String token = createCwaClaimAndGetClaimToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -171,8 +171,8 @@ public class FilesServiceSystemTest extends BaseTest {
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
 
-        String token = createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)

@@ -2,36 +2,29 @@ package com.scalepoint.automation.tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.EditPolicyTypeDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
-import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
-import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.testWidget.GenerateWidgetPage;
 import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
-import com.scalepoint.automation.services.restService.*;
-import com.scalepoint.automation.services.restService.common.ServiceData;
+import com.scalepoint.automation.services.restService.CaseSettlementDataService;
+import com.scalepoint.automation.services.restService.EccIntegrationService;
+import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
+import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
-import com.scalepoint.automation.utils.GridInfoUtils;
-import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.SystemUtils;
+import com.scalepoint.automation.tests.widget.FeatureToggle;
+import com.scalepoint.automation.tests.widget.LoginFlow;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -39,26 +32,13 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.data.response.Token;
-import com.scalepoint.automation.utils.driver.DriverHelper;
 import com.scalepoint.automation.utils.driver.DriverType;
-import com.scalepoint.automation.utils.driver.DriversFactory;
-import com.scalepoint.automation.utils.listeners.FeatureToggleSettingsUtils;
 import com.scalepoint.automation.utils.listeners.OrderRandomizer;
 import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import com.scalepoint.automation.utils.threadlocal.CurrentUser;
-import com.scalepoint.automation.utils.threadlocal.Window;
-import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,9 +47,9 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -80,18 +60,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
-import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
-import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static com.scalepoint.automation.utils.Configuration.getEccUrl;
-import static com.scalepoint.automation.utils.DateUtils.ISO8601;
-import static com.scalepoint.automation.utils.DateUtils.format;
-import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
+import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
 import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getDefaultFTSettings;
 
 @SpringBootTest(classes = Application.class)
@@ -99,7 +72,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class, LoginFlow.class, FeatureToggle.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
@@ -118,9 +91,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger log = LogManager.getLogger(BaseTest.class);
 
-    private String gridNode;
+    protected String gridNode;
 
-    private Map<FeatureIds, Boolean> featureTogglesDefaultState = new HashMap<>();
+    protected Map<FeatureIds, Boolean> featureTogglesDefaultState = new HashMap<>();
 
     @Autowired
     protected DatabaseApi databaseApi;
@@ -143,7 +116,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Value("${subscription.fraud_status.id}")
     protected String fraudStatusSubscriptionId;
 
-    private DriverType driverType = null;
+    protected DriverType driverType = null;
 
     @Autowired
     protected RnVMock.RnvStub rnvStub;
@@ -163,137 +136,15 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected MailserviceMock.MailserviceStub mailserviceStub;
 
-    @BeforeClass(alwaysRun = true)
-    public void updateFeatureToggle(ITestContext context){
+    @Autowired
+    protected LoginFlow loginFlow;
 
-        ServiceData.init(databaseApi);
-
-        if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
-
-            updateFeatureToggle(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
-        }
-    }
-
-    @AfterClass(alwaysRun = true)
-    public void rollbackFeatureToggle(ITestContext context){
-
-        if (featureTogglesDefaultState.isEmpty()) {
-
-            log.info("No feature toggle to rollback");
-        } else {
-
-            if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
-
-                rollbackToggleSetting(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
-            }
-        }
-    }
-
-    @BeforeMethod(alwaysRun = true)
-    public void baseInit(Method method, ITestContext context, Object[] objects) {
-
-        try {
-            Thread.currentThread().setName("Thread " + method.getName());
-            ThreadContext.put("sessionid", method.getName());
-            log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
-
-            driverType = new DriverHelper().getDriverType(method, browserMode);
-
-            WebDriver driver = DriversFactory.getDriver(driverType, method);
-
-            Browser.init(driver, driverType);
-            Window.init(driver);
-            WebDriverRunner.setWebDriver(driver);
-            ServiceData.init(databaseApi);
-
-            JavascriptHelper.initializeCommonFunctions();
-
-
-            Configuration.savePageSource = false;
-
-            log.info("Initialization completed for : {}", method.getName());
-
-            if (Browser.hasDriver()) {
-                log.info("Using driver type: " + Browser.getDriverType());
-                log.info("Start from: " + SystemUtils.getHostname());
-                gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
-                log.info("Running on grid node: " + gridNode);
-
-                Optional<User> optionalUser = getLisOfObjectByClass(Arrays.asList(objects), User.class).stream().findFirst();
-
-                retryUpdateFtTemplate(method, optionalUser);
-
-                if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
-
-                    updateFeatureToggle(getToggleSetting(method));
-                }
-            }
-
-        }catch (Exception e){
-            Browser.quit();
-            Window.cleanUp();
-            CurrentUser.cleanUp();
-            Page.PagesCache.cleanUp();
-            ThreadContext.clearMap();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @AfterMethod(alwaysRun = true)
-    public void cleanup(Method method, ITestResult iTestResult, ITestContext context, Object[] objects) {
-        log.info("Clean up after: {}", method.toString());
-        Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
-        try {
-            Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
-        } catch (Exception e) {
-            log.info(e.getMessage());
-        }
-        if (Browser.hasDriver()) {
-            try {
-
-                takeScreenshot(method, iTestResult);
-
-                log.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
-                printErrorStackTraceIfAny(iTestResult);
-
-                int left = TestCountdown.countDown(method.getDeclaringClass().getSimpleName()
-                        + "." + method.getName()
-                );
-
-                log.info("Left tests: {}", left);
-
-
-                cleanUpCDTemplates(method, objects);
-
-                if (featureTogglesDefaultState.isEmpty()) {
-
-                    log.info("No feature toggle to rollback");
-                } else {
-
-                    if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
-
-                        rollbackToggleSetting(getToggleSetting(method));
-                    }
-                }
-
-                Browser.open(com.scalepoint.automation.utils.Configuration.getLogoutUrl());
-                Page.to(LoginPage.class);
-            } catch (Exception e) {
-                /* if not caught it breaks the call of AfterMethod*/
-                log.error(e.getMessage(), e);
-
-            }
-        }
-        Browser.quit();
-        Window.cleanUp();
-        CurrentUser.cleanUp();
-        Page.PagesCache.cleanUp();
-        ThreadContext.clearMap();
-        log.info("Clean up completed after: {} ", method.getName());
-    }
+    @Autowired
+    protected FeatureToggle featureToggle;
 
     @DataProvider(name = TEST_DATA_PROVIDER)
     public static Object[][] provide(Method method) {
+
         Thread.currentThread().setName("Thread " + method.getName());
         Object[][] params = new Object[1][];
         try {
@@ -325,119 +176,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return functionalTemplatesApi.updateTemplate(user, returnPageClass, operations);
     }
 
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
-
-        LoginPage loginPage = Page.to(LoginPage.class);
-
-        if(user.getType().equals(SCALEPOINT_ID))
-        {
-
-            loginPage
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword());
-
-            ClaimApi.createClaim(claim, 1);
-            return Page.to(SettlementPage.class);
-
-        }else {
-
-            ClaimApi claimApi = new ClaimApi(user);
-            claimApi.createClaim(claim, policyType);
-            return redirectToSettlementPage(user);
-        }
-
-
-    }
-
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
-        return loginAndCreateClaim(user, claim, null);
-    }
-
-    protected EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
-        loginAndCreateClaim(user, claim, null);
-        return BaseDialog.at(EditPolicyTypeDialog.class);
-    }
-
-    protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
-        Token token = new OauthTestAccountsApi().sendRequest().getToken();
-
-        Response response = new CreateClaimService(token).addClaim(claimRequest).getResponse();
-
-        CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
-
-        return response.jsonPath().get("token");
-    }
-
-    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
-        Token token = new OauthTestAccountsApi().sendRequest().getToken();
-        return new CreateClaimService(token).addClaim(claimRequest);
-    }
-
-    protected String createFNOLClaimAndGetClaimToken(ClaimRequest itemizationRequest, ClaimRequest createClaimRequest){
-        itemizationRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
-        String test = unifiedIntegrationService.createItemizationCaseFNOL(createClaimRequest.getCountry(), createClaimRequest.getTenant(), itemizationRequest);
-        createClaimRequest.setItemizationCaseReference(test);
-        createClaimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        return unifiedIntegrationService.createClaimFNOL(createClaimRequest, databaseApi);
-    }
-
-    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
-
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            Page.to(LoginPage.class)
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword(), MyPage.class);
-
-        }else {
-
-            login(user, null);
-        }
-
-        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
-
-        return new SettlementPage();
-    }
-
-    protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
-
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            Page.to(LoginPage.class)
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword(), MyPage.class);
-        }else {
-
-            login(user, null);
-        }
-
-        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
-
-        return Page.at(returnPageClass);
-    }
-
-    protected MyPage login(User user) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, MyPage.class);
-    }
-
-    protected <T extends Page> T login(User user, Class<T> returnPageClass) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass);
-    }
-
-    protected <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass, parameters);
-    }
-
-    protected SuppliersPage loginToEccAdmin(User user) {
-        return login(user)
-                .getMainMenu()
-                .toEccAdminPage();
-    }
-
     protected GenerateWidgetPage openGenerateWidgetPage(){
 
         Browser.open(com.scalepoint.automation.utils.Configuration.getWidgetUrl());
@@ -447,22 +185,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected GenerateWidgetPage openGenerateWidgetPageNonAuth(){
         Browser.open(com.scalepoint.automation.utils.Configuration.getNonAuthWidgetUrl());
         return Page.at(GenerateWidgetPage.class);
-    }
-
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
-        return openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
-    }
-
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
-        return login(getSystemUser(), AdminPage.class)
-                .to(EditReasonsPage.class)
-                .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
-                .assertEditReasonsFormVisible();
-    }
-    protected SettlementPage redirectToSettlementPage(User user){
-
-        return login(user)
-                .to(SettlementPage.class);
     }
 
     public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {
@@ -487,7 +209,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return databaseApi.getVoucherInfo(isEvoucher);
     }
 
-    private void retryUpdateFtTemplate(Method method, Optional<User> optionalUser) {
+    protected void retryUpdateFtTemplate(Method method, Optional<User> optionalUser) {
 
         int attempt = 0;
         /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
@@ -533,20 +255,22 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    private void rollbackToggleSetting(FeatureToggleSetting toggleSetting) {
-
-        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
-        if (toggleSetting == null) {
-            return;
-        }
-
-        FeatureIds toggleSettingType = toggleSetting.type();
-        Boolean initialState = featureTogglesDefaultState.get(toggleSettingType);
-        featuresToggleAdminApi.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(initialState), toggleSettingType);
-    }
+//    protected void rollbackToggleSetting(FeatureToggleSetting toggleSetting) {
+//
+//        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
+//
+//        if (toggleSetting == null) {
+//
+//            return;
+//        }
+//
+//        FeatureIds toggleSettingType = toggleSetting.type();
+//        Boolean initialState = featureTogglesDefaultState.get(toggleSettingType);
+//        featuresToggleAdminApi.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(initialState), toggleSettingType);
+//    }
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
-    private void takeScreenshot(Method method, ITestResult iTestResult) {
+    protected void takeScreenshot(Method method, ITestResult iTestResult) {
         String fileName = getFileName(method);
         if (!iTestResult.isSuccess()) {
             try {
@@ -574,32 +298,33 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
 
-    private FeatureToggleSetting getToggleSetting(Method method) {
+    protected FeatureToggleSetting getToggleSetting(Method method) {
 
         return method.getDeclaredAnnotation(FeatureToggleSetting.class);
     }
 
 
-    private void updateFeatureToggle(FeatureToggleSetting toggleSetting) {
-        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
-
-        if (toggleSetting == null) {
-            return;
-        }
-
-        boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
-        boolean toggleExpectedState = toggleSetting.enabled();
-
-        if (toggleActualState != toggleExpectedState) {
-            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
-            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(toggleExpectedState), toggleSetting.type());
-        }
-    }
+//    protected void updateFeatureToggle(FeatureToggleSetting toggleSetting) {
+//
+//        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
+//
+//        if (toggleSetting == null) {
+//
+//            return;
+//        }
+//
+//        boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
+//        boolean toggleExpectedState = toggleSetting.enabled();
+//
+//        if (toggleActualState != toggleExpectedState) {
+//
+//            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
+//            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(toggleExpectedState), toggleSetting.type());
+//        }
+//    }
 
 
     private void updateFunctionalTemplate(List<RequiredSetting> allSettings, User user) {
-
-
 
         String companyCode = user.getCompanyCode();
 
@@ -608,13 +333,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
 
             if (!allSettings.isEmpty()) {
+
                 for (RequiredSetting setting : allSettings) {
+
                     FTSetting settingType = setting.type();
                     defaultList = defaultList
                             .stream()
                             .filter(ftOperation ->
                                     !ftOperation.getSetting().equals(settingType))
                             .collect(Collectors.toList());
+
                     switch (settingType.getOperationType()) {
                         case CHECKBOX:
                             defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
@@ -637,7 +365,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         functionalTemplatesApi.updateTemplate(user, LoginPage.class, ftOperations.toArray(new FtOperation[0]));
     }
 
-    private void printErrorStackTraceIfAny(ITestResult iTestResult) {
+    protected void printErrorStackTraceIfAny(ITestResult iTestResult) {
         Throwable e = iTestResult.getThrowable();
         if (e != null) {
             log.error(e.getMessage(), e);
@@ -683,6 +411,28 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return (List<T>) objects
                 .stream()
                 .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
+    }
+
+    protected CaseSettlementDataService getSettlementData(ClaimRequest claimRequest) {
+        return new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+                .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()), claimRequest.getTenant());
+    }
+
+    protected static  <T> List<T> getObjectByClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(object -> object.getClass().equals(clazz))
+                .map(object -> (T)object)
+                .collect(Collectors.toList());
+    }
+
+    protected static  <T> List<T> getObjectBySuperClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(object -> object.getClass().getSuperclass().equals(clazz))
+                .collect(Collectors.toList());
     }
 }
 

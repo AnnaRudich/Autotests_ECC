@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.Arrays;
@@ -22,29 +21,32 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class TaskWizardPage1 extends Page {
 
     @FindBy(css = "input[name='name']")
-    private WebElement nameField;
+    private SelenideElement nameField;
     @FindBy(css = "#button-next")
-    private WebElement nextBtn;
-
+    private SelenideElement nextBtn;
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(nameField).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+        nameField.should(visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "/?orderToken";
     }
 
     public TaskWizardPage2 nextRnVstep() {
+
         hoverAndClick($(nextBtn));
         return at(TaskWizardPage2.class);
     }
 
     public TaskWizardPage1 selectRnvType(String lineDescription, String rnvType) {
+
         getServiceLineByDescription(lineDescription).clickTaskType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(rnvType);
@@ -53,6 +55,7 @@ public class TaskWizardPage1 extends Page {
     }
 
     public TaskWizardPage1 selectDamageType(String lineDescription, String damageType) {
+
         getServiceLineByDescription(lineDescription).clickDamageType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(damageType);
@@ -61,6 +64,7 @@ public class TaskWizardPage1 extends Page {
     }
 
     private void selectValue(String valueToSelect) {
+
         $$(".x-boundlist")
                 .findBy(visible)
                 .findAll("[role=option]")
@@ -94,6 +98,7 @@ public class TaskWizardPage1 extends Page {
         private SelenideElement taskType;
 
         public ServiceLine(SelenideElement serviceLine){
+
             ElementsCollection serviceLines = serviceLine
                     .findAll(By.cssSelector("td"))
                     .filter(not(cssClass("x-action-col-cell")));
@@ -109,11 +114,13 @@ public class TaskWizardPage1 extends Page {
         }
 
         public ServiceLine clickDamageType() {
+
             hoverAndClick(damageType);
             return this;
         }
 
         public ServiceLine clickTaskType() {
+
             hoverAndClick(taskType);
             return this;
         }
@@ -130,10 +137,12 @@ public class TaskWizardPage1 extends Page {
         private String text;
 
         ServiceLineHeader(String text) {
+
             this.text = text;
         }
 
         public String getText() {
+
             return text;
         }
 

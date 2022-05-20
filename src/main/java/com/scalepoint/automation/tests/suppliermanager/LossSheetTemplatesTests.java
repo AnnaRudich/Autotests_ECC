@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.suppliermanager;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 @RequiredSetting(type = FTSetting.SELF_SERVICE_EXCEL_CHOICE)
-public class LossSheetTemplatesTests extends BaseTest {
+public class LossSheetTemplatesTests extends BaseUITest {
 
     @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.LOSS_SHEET_TEMPLATES}, dataProvider = "testDataProvider",
             description = "Verifies single template available for company")
@@ -23,7 +23,7 @@ public class LossSheetTemplatesTests extends BaseTest {
         File claimSheetDKExcel2003v1 = new File(lossSheetTemplates.getClaimSheetDKExcel2003v1());
         String claimSheetDKExcel2003v1TemplateName = RandomUtils.randomName(claimSheetDKExcel2003v1.getName());
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .toLossSheetTemplates()
                 .uploadNewTemplate()
                 .setTemplateName(claimSheetDKExcel2003v1TemplateName)
@@ -52,7 +52,7 @@ public class LossSheetTemplatesTests extends BaseTest {
         File claimSheetDKExcel2003v11 = new File(lossSheetTemplates.getClaimSheetDKExcel2007v11());
         String claimSheetDKExcel2003v11TemplateName = RandomUtils.randomName(claimSheetDKExcel2003v11.getName());
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .toLossSheetTemplates()
                 .uploadTemplate(claimSheetDKExcel2003v1TemplateName, claimSheetDKExcel2003v1)
                 .doAssert(lstPage ->
@@ -93,7 +93,7 @@ public class LossSheetTemplatesTests extends BaseTest {
         File excel400DK = new File(lossSheetTemplates.getExcel400DK());
         String excel400DKTemplateName = RandomUtils.randomName(excel400DK.getName());
 
-        loginToEccAdmin(user2)
+        loginFlow.loginToEccAdmin(user2)
                 .toLossSheetTemplates()
                 .uploadTemplate(claimSheetDKExcel2003v11TemplateName, claimSheetDKExcel2003v11)
                 .doAssert(lstPage ->
@@ -133,7 +133,7 @@ public class LossSheetTemplatesTests extends BaseTest {
                         lstPage.assertInUse())
                 .logout();
 
-        loginToEccAdmin(user1)
+        loginFlow.loginToEccAdmin(user1)
                 .toLossSheetTemplates()
                 .uploadTemplate(claimSheetDKExcel2003v1TemplateName, claimSheetDKExcel2003v1)
                 .doAssert(lstPage ->
@@ -179,7 +179,7 @@ public class LossSheetTemplatesTests extends BaseTest {
 
     public void verifyLossAdjusterSheet(User user, Claim claim, String templateName){
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .getClaimOperationsMenu()
                 .requestSelfService()
                 .setSendLossAdjusterSheet(templateName)

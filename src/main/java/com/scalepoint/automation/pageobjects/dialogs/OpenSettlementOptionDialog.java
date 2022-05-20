@@ -2,25 +2,30 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.By;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
-public class OpenSettlementOptionDialog extends BaseDialog{
+public class OpenSettlementOptionDialog extends BaseDialog {
 
-    @FindBy(id = "btn_reopen")
-    private Button reopen;
+    private Button getReopen(){
 
-    @FindBy(id = "btn_cancel")
-    private Button cancel;
+        return new Button($(By.id("btn_reopen")));
+    }
+
+    private Button getCancel(){
+
+        return new Button($(By.id("btn_cancel")));
+    }
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        $(reopen).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        $(cancel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(getReopen()).should(Condition.visible);
+        $(getCancel()).should(Condition.visible);
     }
 }

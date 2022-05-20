@@ -5,7 +5,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 @RequiredSetting(type = FTSetting.ENABLE_BULK_UPDATE_CATEGORY)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
 @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-6693")
-public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseTest {
+public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseUITest {
 
     ClaimLinesHelper claimLinesHelper = new ClaimLinesHelper();
 
@@ -47,7 +47,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
         PseudoCategory categoryWithReductionRulesMapped = claimItem.getCategoryMobilePhones();
 
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
 
         Integer depreciationPercentageFromReductionRule =
                 claimLinesHelper.startAddLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
@@ -73,7 +73,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithNoReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
+                .getValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected)
                 .toSettlementDialog()
                 .closeSidWithOk()
@@ -96,7 +96,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .getValuationRow(ValuationGrid.Valuation.NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected);
     }
 
@@ -121,7 +121,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
         PseudoCategory categoryWithReductionRulesMapped = claimItem.getCategoryMobilePhones();
 
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
 
         Integer depreciationPercentageFromReductionRule =
                 claimLinesHelper
@@ -148,7 +148,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithNoReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .getValuationRow(ValuationGrid.Valuation.NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected)
                 .toSettlementDialog()
                 .closeSidWithOk()
@@ -171,7 +171,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .getValuationRow(ValuationGrid.Valuation.NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected);
     }
 }

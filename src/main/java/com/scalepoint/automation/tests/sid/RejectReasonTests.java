@@ -7,7 +7,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.*;
 
-public class RejectReasonTests extends BaseTest {
+public class RejectReasonTests extends BaseUITest {
 
     private ITestResult iTestResult;
 
@@ -35,7 +35,7 @@ public class RejectReasonTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Check if reject reason dropdown is disabled if there is 0 or 1 reason available for IC")
     public void charlie_549_checkIsRejectReasonDropdownDisabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -57,13 +57,13 @@ public class RejectReasonTests extends BaseTest {
         String location = createClaimAndLineUsingEccIntegration(user, eccIntegration).getResponse().extract().header("Location");
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        login(user);
+        loginFlow.login(user);
         Browser.driver().get(location);
         new SettlementPage()
                 .editFirstClaimLine()
@@ -83,13 +83,13 @@ public class RejectReasonTests extends BaseTest {
                                           ClaimItem claimItem, InsuranceCompany insuranceCompany, Claim claim) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -102,13 +102,13 @@ public class RejectReasonTests extends BaseTest {
                 .getMainMenu()
                 .logOut();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
                 .findReason(reason)
                 .disable()
                 .assertReasonDisabled(reason)
                 .logout();
 
-        login(user)
+        loginFlow.login(user)
                 .openRecentClaim()
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
@@ -128,13 +128,13 @@ public class RejectReasonTests extends BaseTest {
                                                       Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -168,13 +168,13 @@ public class RejectReasonTests extends BaseTest {
                                                                       Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -225,13 +225,13 @@ public class RejectReasonTests extends BaseTest {
                                                                                  Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -256,13 +256,13 @@ public class RejectReasonTests extends BaseTest {
                                                                                               Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -307,13 +307,13 @@ public class RejectReasonTests extends BaseTest {
                                                                                         Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -339,13 +339,13 @@ public class RejectReasonTests extends BaseTest {
                                                                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -387,7 +387,7 @@ public class RejectReasonTests extends BaseTest {
             description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithoutReasons(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                 Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -412,13 +412,13 @@ public class RejectReasonTests extends BaseTest {
                                                                                   Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -444,13 +444,13 @@ public class RejectReasonTests extends BaseTest {
                                                                                          Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
@@ -471,19 +471,19 @@ public class RejectReasonTests extends BaseTest {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
                 .logout();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
                 .logout();
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)

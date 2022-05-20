@@ -53,7 +53,6 @@ public class CompaniesMappingDialog extends BaseDialog {
 
     public Company getCompanyByName(String name){
 
-
         List<Company> test = getAvailableCompaniesList();
         return test
                 .stream()

@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -36,11 +36,10 @@ import org.testng.annotations.Test;
  * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
  */
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
 @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-public class DepreciationDeductedCombinedTests extends BaseTest {
+public class DepreciationDeductedCombinedTests extends BaseUITest {
 
     private static final VoucherValuationWithDepreciation VOUCHER_VALUATION_WITH_DEPRECIATION = SidCalculator.calculateVoucherValuation(
             Constants.PRICE_2400,
@@ -69,7 +68,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
     }
 
     private void verify(User user, Claim claim, ClaimItem claimItem, double expectedNewPrice, double expectedCashValue, boolean setDiscountAndDepreciation) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), sidForm -> {
                     sidForm.withText(Constants.TEXT_LINE)
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
@@ -96,7 +95,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
-        login(user).openRecentClaim()
+        loginFlow.login(user).openRecentClaim()
                 .doAssert(customerDetailsPage -> {
                     customerDetailsPage.assertCustomerCashValueIs(expectedCashValue);
                     customerDetailsPage.assertCustomerFaceValueTooltipIs(expectedNewPrice);

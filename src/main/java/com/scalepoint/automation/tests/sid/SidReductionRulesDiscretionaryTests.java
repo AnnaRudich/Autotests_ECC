@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-613")
-public class SidReductionRulesDiscretionaryTests extends BaseTest {
+public class SidReductionRulesDiscretionaryTests extends BaseUITest {
 
     /**
      * GIVEN: User logs in as alkauser1
@@ -81,7 +81,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                Claim claim,
                                                                ClaimItem claimItem,
                                                                ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -133,7 +133,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                         Claim claim,
                                                                         ClaimItem claimItem,
                                                                         ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -175,7 +175,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                       Claim claim,
                                       ClaimItem claimItem,
                                       ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -231,7 +231,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                          Claim claim,
                                                          ClaimItem claimItem,
                                                          ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -277,7 +277,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                            Claim claim,
                                                            ClaimItem claimItem,
                                                            ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF())
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeAF())
                 .openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
@@ -330,7 +330,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                     Claim claim,
                                                                     ClaimItem claimItem,
                                                                     ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF()).openSid()
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim, claim.getPolicyTypeAF()).openSid()
                 .automaticDepreciation(false)
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)

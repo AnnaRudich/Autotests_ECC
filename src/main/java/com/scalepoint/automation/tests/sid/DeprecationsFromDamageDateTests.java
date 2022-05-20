@@ -7,7 +7,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -25,7 +25,7 @@ import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeprecationsFromDamageDateTests extends BaseTest {
+public class DeprecationsFromDamageDateTests extends BaseUITest {
 
     private static final String API_FORMAT = "yyyy-MM-dd";
 
@@ -41,7 +41,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         LocalDate threeDaysBefore = LocalDate.now().minusDays(3);
         LocalDate fiveDaysBefore = LocalDate.now().minusDays(5);
 
-        login(user)
+        loginFlow.login(user)
                 .clickCreateNewCase()
                 .enterClaimNumber(claim.getClaimNumber())
                 .enterFirstName(claim.getFirstName())
@@ -144,7 +144,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Check if damage date is not editable after adding claim line")
     public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -160,7 +160,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Check if damage date is not editable after adding claim line")
     public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCustomerDetails()
                 .doAssert(
                         CustomerDetailsPage.Asserts::assertIsDamageDateEditAvailable
@@ -181,7 +181,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             description = "Create claim using unified integration")
     public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest) {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, loginFlow.createCwaClaimAndGetClaimToken(claimRequest))
                 .toCustomerDetails()
                 .doAssert(
                         asserts -> asserts.assertDamageDateIs(LocalDate.now().minusDays(2L))
@@ -193,7 +193,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             description = "Creating claim without damageDate should set it to now")
     public void charlie_554_createClaimUsingUnifiedIntegrationWithNoDamageDate(User user, ClaimRequest claimRequest) {
         claimRequest.setAccidentDate(null);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, loginFlow.createCwaClaimAndGetClaimToken(claimRequest))
                 .toCustomerDetails()
                 .doAssert(
                         asserts -> asserts.assertDamageDateIs(LocalDate.now())
@@ -205,7 +205,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             description = "Creating claim without damageDate should set it to now")
     public void charlie_554_createClaimUsingUnifiedIntegrationWithWrongDamageDate(ClaimRequest claimRequest) {
         claimRequest.setAccidentDate("2017-19-01");
-        String response = createCwaClaim(claimRequest).getResponse().body().asString();
+        String response = loginFlow.createCwaClaim(claimRequest).getResponse().body().asString();
         assertThat(response).contains("Failure: Invalid damageDate");
     }
 

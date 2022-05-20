@@ -10,7 +10,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import lombok.Data;
 import lombok.Getter;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -22,27 +22,30 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 
 public class AddGenericItemDialog extends BaseDialog {
 
-    @FindBy(id = "generic-item-dialog-category-combo")
-    private ExtComboBoxBoundView category;
+    @Override
+    protected void ensureWeAreAt() {
+
+        waitForAjaxCompletedAndJsRecalculation();
+        getCategory().should(Condition.visible);
+        ok.should(Condition.visible);
+        genericItemDialogGrid = new GenericItemDialogGrid();
+    }
 
     @FindBy(id = "generic-item-dialog-add-button")
-    private WebElement ok;
-
+    private SelenideElement ok;
     @FindBy(id = "generic-item-dialog-close-button")
-    private WebElement cancel;
+    private SelenideElement cancel;
+
+    public ExtComboBoxBoundView getCategory(){
+
+        return new ExtComboBoxBoundView($(By.id("generic-item-dialog-category-combo")));
+    }
 
     @Getter
     private GenericItemDialogGrid genericItemDialogGrid;
 
-    @Override
-    protected void ensureWeAreAt() {
-        waitForAjaxCompletedAndJsRecalculation();
-        $(category).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        genericItemDialogGrid = new GenericItemDialogGrid();
-    }
-
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {
+
         selectCategory(categoryGroup, category);
         genericItemDialogGrid
                 .findRowByDescription(itemName)
@@ -53,17 +56,21 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     private AddGenericItemDialog selectCategory(String categoryGroup, String category) {
-        this.category.select(categoryGroup + " - " + category);
+
+        getCategory().select(categoryGroup + " - " + category);
         Wait.waitForAjaxCompleted();
         genericItemDialogGrid = new GenericItemDialogGrid();
         return this;
     }
 
     public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
+
         try {
+
             selectCategory(categoryGroup, category);
             genericItemDialogGrid.findRowByDescription(itemName);
         }catch (ElementNotFound|NoSuchElementException e){
+
             return false;
         }
         return true;
@@ -75,6 +82,7 @@ public class AddGenericItemDialog extends BaseDialog {
         List<GenericItemDialogGridRow> list;
 
         public GenericItemDialogGrid(){
+
             list = element.findAll(".generic-item-row").stream()
                     .map(GenericItemDialogGridRow::new)
                     .collect(Collectors.toList());
@@ -87,6 +95,7 @@ public class AddGenericItemDialog extends BaseDialog {
                     .findFirst()
                     .orElseThrow(java.util.NoSuchElementException::new);
         }
+
         @Data
         public class GenericItemDialogGridRow{
 

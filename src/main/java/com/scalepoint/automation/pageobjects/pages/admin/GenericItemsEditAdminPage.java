@@ -5,7 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
@@ -18,73 +18,94 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 @RequiredParameters("shrfnbr=%s")
 public class GenericItemsEditAdminPage extends AdminBasePage {
 
-    @FindBy(xpath = ".//*[contains(@id,'itemdescription_')]")
-    private TextInput descriptionField;
-
-    @FindBy(name = "defaultprice")
-    private TextInput priceField;
-
     @FindBy(id = "btnOk")
-    private WebElement saveOption;
+    private SelenideElement saveOption;
 
-    @FindBy(name = "ispublished")
-    private CheckBox publishedCheckBox;
+    private CheckBox getPublishedCheckBox(){
 
-    @FindBy(id = "categorygroup")
-    private Select categoryGroup;
+        return new CheckBox($(By.name("ispublished")));
+    }
 
-    @FindBy(id = "category")
-    private Select category;
+    private Select getCategoryGroup(){
 
-    @FindBy(name = "icompanyid")
-    private Select ic;
+        return new Select($(By.id("categorygroup")));
+    }
+
+    private Select getCategory(){
+
+        return new Select($(By.id("category")));
+    }
+
+    private Select getIc(){
+
+        return new Select($(By.name("icompanyid")));
+    }
+
+    private TextInput getDescriptionField(){
+
+        return new TextInput($(By.xpath(".//*[contains(@id,'itemdescription_')]")));
+    }
+
+    private TextInput getPriceField(){
+
+        return new TextInput($(By.name("defaultprice")));
+    }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(descriptionField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(getDescriptionField()).should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/Admin/generic_items_edit.jsp";
     }
 
     public void save() {
-        hoverAndClick($(saveOption));
+
+        hoverAndClick(saveOption);
     }
 
     public GenericItemsEditAdminPage selectGroup(String groupName) {
-        categoryGroup.selectByVisibleText(groupName);
+
+        getCategoryGroup().selectByVisibleText(groupName);
         return this;
     }
 
     public GenericItemsEditAdminPage selectCategory(String categoryName) {
-        category.selectByVisibleText(categoryName);
+
+        getCategory().selectByVisibleText(categoryName);
         return this;
     }
 
     public GenericItemsEditAdminPage selectCompany(String companyName) {
-        ic.selectByVisibleText(companyName);
+
+        getIc().selectByVisibleText(companyName);
         return this;
     }
 
     public GenericItemsEditAdminPage setDescription(String description) {
-        SelenideElement element = $(descriptionField);
+
+        SelenideElement element = $(getDescriptionField());
         element.clear();
         element.sendKeys(description);
         return this;
     }
 
     public GenericItemsEditAdminPage addPrice(String price) {
-        SelenideElement element = $(priceField);
+
+        SelenideElement element = $(getPriceField());
         element.clear();
         element.sendKeys(price);
         return this;
     }
 
     public GenericItemsAdminPage addNewGenericItem(GenericItem genericItem, String company, boolean published) {
+
         selectGroup(genericItem.getGroup()).
                 selectCategory(genericItem.getCategory()).
                 selectCompany(company).
@@ -96,9 +117,11 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     }
 
     public GenericItemsEditAdminPage publish(boolean published) {
-        if (published && !isSelected(publishedCheckBox) ||
-                !published && isSelected(publishedCheckBox)) {
-            publishedCheckBox.click();
+
+        if (published && !isSelected(getPublishedCheckBox()) ||
+                !published && isSelected(getPublishedCheckBox())) {
+
+            getPublishedCheckBox().click();
         }
         return this;
     }

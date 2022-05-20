@@ -4,7 +4,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,7 +16,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRIC
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-526")
-public class DnD2_MarketPriceLogicTests extends BaseTest {
+public class DnD2_MarketPriceLogicTests extends BaseUITest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",
@@ -25,7 +25,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
 
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
@@ -45,7 +45,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
 
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
@@ -64,7 +64,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     public void charlie526_addProductWhenProductPriceLowerThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
@@ -96,7 +96,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     }
 
     private void addProductToClaimAndCheckPrices(User user, Claim claim, ProductInfo productInfo) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()

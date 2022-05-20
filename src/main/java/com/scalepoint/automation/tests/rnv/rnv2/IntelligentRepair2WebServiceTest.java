@@ -14,7 +14,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -37,7 +37,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUS
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
 
-public class IntelligentRepair2WebServiceTest extends BaseTest {
+public class IntelligentRepair2WebServiceTest extends BaseUITest {
 
     private static final String FEEDBACK_CLAIM_AUTO_COMPLETED_DATA_PROVIDER = "feedbackApprovedClaimAutoCompletedDataProvider";
     private static final String FEEDBACK_REJECTED_DATA_PROVIDER = "feedbackRejectedDataProvider";
@@ -55,7 +55,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
         Claim claim = getLisOfObjectByClass(parameters, Claim.class).get(0);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
@@ -111,12 +111,14 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .getAssertion()
                 .assertEvaluateTaskButtonIsDisabled();
 
-        new ProjectsPage().expandTopTaskDetails()
+        Page.at(ProjectsPage.class)
+                .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasCompletedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
 
-        new ProjectsPage().toInvoiceTab()
+        Page.at(ProjectsPage.class)
+                .toInvoiceTab()
                 .openInvoiceDialogForLineWithIndex(0)
                 .findInvoiceLineByIndex(1)
                 .assertTotalForTheLineWithIndex(1, repairPrice.doubleValue());
@@ -156,16 +158,19 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim().toMailsPage();
 
-        new CustomerDetailsPage().toRepairValuationProjectsPage()
+        new CustomerDetailsPage()
+                .toRepairValuationProjectsPage()
                 .getAssertion()
                 .assertEvaluateTaskButtonIsDisabled();
 
-        new ProjectsPage().expandTopTaskDetails()
+        Page.at(ProjectsPage.class)
+                .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasCompletedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
 
-        new ProjectsPage().toInvoiceTab()
+        Page.at(ProjectsPage.class)
+                .toInvoiceTab()
                 .doAssert(InvoiceTab.Asserts::assertThereIsNoInvoiceGrid);
 
     }
@@ -203,7 +208,9 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .assertEvaluateTaskButtonIsDisabled()
                 .assertTaskHasCompletedStatus(agreement);
 
-        new ProjectsPage().getAssertion().assertAuditResponseText(REJECT);
+        Page.at(ProjectsPage.class)
+                .getAssertion()
+                .assertAuditResponseText(REJECT);
     }
     /*
      * send line to RnV
@@ -234,7 +241,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         new RnvService()
                 .sendFeedbackWithInvoiceWithRepairPrice(repairPrice, claim, rnvStub);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+        new ClaimNavigationMenu()
+                .toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement)
@@ -301,7 +309,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsNotSentToRepair);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+        new ClaimNavigationMenu()
+                .toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFailStatus(agreement);

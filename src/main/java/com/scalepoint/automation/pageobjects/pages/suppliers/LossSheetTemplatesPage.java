@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,11 +31,12 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
 
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitElementVisible($("#lossSheetGridId-body"));
+        $("#lossSheetGridId-body").should(Condition.visible);
     }
 
     @Override
     protected String getRelativeUrl() {
+
         return "#lossSheetTemplates";
     }
 

@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.api;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import io.restassured.response.ValidatableResponse;
@@ -36,7 +36,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
             TestGroups.BACKEND,
             TestGroups.CLAIM_INTEGRATION},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void createClaimUsingXmlIntegration(User user, EccIntegration eccIntegration) {
 
         createClaimXmlIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
@@ -47,7 +47,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
             TestGroups.BACKEND,
             TestGroups.CLAIM_INTEGRATION},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void createClaimUsingXmlIntegrationWhenThisClaimWasPreviouslyClosed(User user, EccIntegration eccIntegration) {
 
         createClaimXmlIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
@@ -63,7 +63,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
             TestGroups.BACKEND,
             TestGroups.CLAIM_INTEGRATION},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void updateClaimUsingXmlIntegration(User user, EccIntegration eccIntegration) {
 
         createClaimXmlIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
@@ -77,7 +77,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
             TestGroups.BACKEND,
             TestGroups.CLAIM_INTEGRATION},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void createClaimUsingGetIntegration(User user, EccIntegration eccIntegration) {
 
         createClaimGetIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
@@ -87,7 +87,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
             TestGroups.BACKEND,
             TestGroups.CLAIM_INTEGRATION},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void createClaimUsingGetIntegrationWhenThisClaimWasPreviouslyClosed(User user, EccIntegration eccIntegration) {
 
         createClaimGetIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
@@ -103,7 +103,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
     @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
             TestGroups.BACKEND,
             TestGroups.CLAIM_INTEGRATION},
-            dataProvider = BaseTest.TEST_DATA_PROVIDER, dataProviderClass = BaseTest.class)
+            dataProvider = BaseUITest.TEST_DATA_PROVIDER, dataProviderClass = BaseUITest.class)
     public void updateClaimUsingGetIntegration(User user, EccIntegration eccIntegration) {
 
         createClaimGetIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);

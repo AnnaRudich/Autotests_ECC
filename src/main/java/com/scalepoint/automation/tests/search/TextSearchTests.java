@@ -6,21 +6,19 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.TOUCH_SCREEN_NEJ;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
-public class TextSearchTests extends BaseTest {
+public class TextSearchTests extends BaseUITest {
 
     private static final String SAMSUNG_GALAXY_S_7 = "samsung galaxy s7";
 
@@ -29,7 +27,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .doAssert(
@@ -42,7 +40,7 @@ public class TextSearchTests extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
             description = "Check if results are matching selected suggestion")
     public void charlie510_useSuggestionsToFindProduct(User user, Claim claim) {
-        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim)
+        TextSearchPage textSearchPage = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchProductAndSelectFirstSuggestion("samsung");
         String searchText = textSearchPage.getSearchInputText();
@@ -58,7 +56,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie510_selectBrandAndModel(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(SAMSUNG_GALAXY_S_7)
                 .chooseCategory(claimItem.getCategoryMobilePhones())
@@ -78,7 +76,7 @@ public class TextSearchTests extends BaseTest {
         Attributes[] attributes = {TOUCH_SCREEN_NEJ, NFC_NEJ};
         TextSearch textSearch = translations.getTextSearch();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(SAMSUNG_GALAXY_S_7)
                 .chooseCategory(claimItem.getCategoryMobilePhones())
@@ -96,7 +94,7 @@ public class TextSearchTests extends BaseTest {
             description = "Check if search results match to the selected group")
     public void charlie510_selectCategory(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(textSearch.getGroupChildren())
                 .chooseCategory(textSearch.getSubgroupChildrenEquipment())
@@ -108,7 +106,7 @@ public class TextSearchTests extends BaseTest {
     @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
             description = "Check if search results match to the selected group")
     public void charlie510_createClaimManuallyFromSearch(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .openSid()
                 .setBaseData(claimItem)
@@ -123,7 +121,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie516_checkSortingByPopularity(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         String product = SAMSUNG_GALAXY_S_7;
-        TextSearchPage tsp = loginAndCreateClaim(user, claim)
+        TextSearchPage tsp = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(product)
                 .chooseCategory(claimItem.getCategoryMobilePhones());
@@ -147,13 +145,13 @@ public class TextSearchTests extends BaseTest {
         /* selecting model we have only one result shown so we can check only icon presence*/
         tsp.selectModel(textSearch.getModelGalaxyS7())
                 .waitForResultsLoad()
-                .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
+                .doAssert(asserts -> asserts.assertAscendingPopularityChosen());
 
         /* new search should reset popularity sort so no icons will be present */
         tsp.searchByProductName(product)
                 .waitForResultsLoad()
                 .doAssert(
-                        TextSearchPage.Asserts::assertNoPopularitySortChosen);
+                        asserts -> asserts.assertNoPopularitySortChosen());
     }
 
     @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
@@ -161,7 +159,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie510_checkSearchBySku(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .doAssert(
@@ -175,7 +173,7 @@ public class TextSearchTests extends BaseTest {
             description = "Check if Did you mean appears. Misspelling")
     public void charlie510_checkDidYouMean(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(textSearch.getBrokenQuery1())
                 .doAssert(
@@ -193,7 +191,7 @@ public class TextSearchTests extends BaseTest {
             description = "Check if Did you mean appears. Special characters")
     public void charlie510_checkDidYouMeanWithSpecialCharacters(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(textSearch.getBrokenQueryWithSpecialSymbols1())
                 .doAssert(
@@ -213,7 +211,7 @@ public class TextSearchTests extends BaseTest {
             description = "Check category selection")
     public void charlie520_checkIfCorrectCategoryWasSelected(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(textSearch.getSubgroupVideocamera())
                 .waitForResultsLoad()
@@ -231,7 +229,7 @@ public class TextSearchTests extends BaseTest {
             description = "Check manual category selection")
     public void charlie520_checkIfManuallySelectedCategoryIsNotDiscardedAfterQuery(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(textSearch.getGroupChildren())
                 .chooseCategory(textSearch.getSubgroupChildrenEquipment())

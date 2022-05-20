@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.filesService;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOPDANMARK;
 
-public class FilesServiceTest extends BaseTest {
+public class FilesServiceTest extends BaseUITest {
 
     private static final String IPHONE = "iPhone";
 
@@ -26,8 +26,8 @@ public class FilesServiceTest extends BaseTest {
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
 
-        String token = createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)

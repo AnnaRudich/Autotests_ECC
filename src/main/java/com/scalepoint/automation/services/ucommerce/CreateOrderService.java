@@ -1,59 +1,40 @@
 package com.scalepoint.automation.services.ucommerce;
 
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.data.entity.order.Account;
-import com.scalepoint.automation.utils.data.entity.order.AgreementData;
-import com.scalepoint.automation.utils.data.entity.order.BasePurchasePrice;
-import com.scalepoint.automation.utils.data.entity.order.CreateOrderRequest;
-import com.scalepoint.automation.utils.data.entity.order.Deposit;
-import com.scalepoint.automation.utils.data.entity.order.Deposits;
-import com.scalepoint.automation.utils.data.entity.order.Freightprice;
-import com.scalepoint.automation.utils.data.entity.order.MarketPrice;
-import com.scalepoint.automation.utils.data.entity.order.Order;
-import com.scalepoint.automation.utils.data.entity.order.OrderLine;
-import com.scalepoint.automation.utils.data.entity.order.OrderLines;
-import com.scalepoint.automation.utils.data.entity.order.OrderTotalInvoicePrice;
-import com.scalepoint.automation.utils.data.entity.order.OrderTotalPurchasePrice;
-import com.scalepoint.automation.utils.data.entity.order.OrderedItem;
-import com.scalepoint.automation.utils.data.entity.order.PaymentGateway;
-import com.scalepoint.automation.utils.data.entity.order.Payments;
-import com.scalepoint.automation.utils.data.entity.order.Product;
-import com.scalepoint.automation.utils.data.entity.order.RecommendedPrice;
-import com.scalepoint.automation.utils.data.entity.order.ScalepointAccount;
-import com.scalepoint.automation.utils.data.entity.order.ShippingAddress;
-import com.scalepoint.automation.utils.data.entity.order.SubOrder;
-import com.scalepoint.automation.utils.data.entity.order.SubOrders;
-import com.scalepoint.automation.utils.data.entity.order.SubTotalInvoicePrice;
-import com.scalepoint.automation.utils.data.entity.order.SubTotalPurchasePrice;
-import com.scalepoint.automation.utils.data.entity.order.Supplier;
-import com.scalepoint.automation.utils.data.entity.order.SupplierShopPrice;
-import com.scalepoint.automation.utils.data.entity.order.TotalInvoicePrice;
-import com.scalepoint.automation.utils.data.entity.order.TotalPurchasePrice;
-import com.scalepoint.automation.utils.data.entity.order.Voucher;
+import com.scalepoint.automation.utils.data.entity.order.*;
+import com.scalepoint.automation.utils.data.response.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 /*
-* https://jira.scalepoint.com/browse/CLAIMSHOP-5907
+ * https://jira.scalepoint.com/browse/CLAIMSHOP-5907
  */
 public class CreateOrderService extends BaseService {
-    
+
     private final String TEST_DESCRIPTION = "Test description";
     private final Double compensationAmount = Constants.PRICE_100;
     private final Double extraPayAmount = Constants.PRICE_50;
     private final Double amountNet = 80.2;
     private final int quantity = 1;
     private final String locale = Configuration.getLocale().getValue().toUpperCase();
-            
+
+    private Token token;
+
+    public CreateOrderService(Token token){
+
+        this.token = token;
+    }
 
     public void createOrderForProduct(XpriceInfo xpriceInfo, String claimNumber){
         given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildProductOrderRequestBody(xpriceInfo, claimNumber))
                 .when()
@@ -63,6 +44,7 @@ public class CreateOrderService extends BaseService {
 
     public void createOrderForProductExtraPay(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
         given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildVoucherOrderExtraPayRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
                 .when()
@@ -72,6 +54,7 @@ public class CreateOrderService extends BaseService {
 
     public void createOrderForVoucher(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
         given().log().all()
+                .header(token.getAuthorizationHeader())
                 .contentType("application/xml")
                 .body(buildVoucherOrderRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
                 .when()
@@ -276,10 +259,10 @@ public class CreateOrderService extends BaseService {
 
     private Order buildOrder(Payments payments, OrderedItem orderedItem, String supplierId, Double compensation, Double extraPay){
         SubOrder suborder = SubOrder.builder()
-        .orderLines(buildOrderLines(orderedItem, quantity, TEST_DESCRIPTION, compensation *quantity+extraPay))
-        .subTotalInvoicePrice(buildSubTotalInvoicePrice(compensation *quantity+extraPay, amountNet*quantity))
-        .subTotalPurchasePrice(buildSubTotalPurchasePrice(compensation *quantity+extraPay, amountNet*quantity))
-        .supplier(buildSupplier(locale+supplierId)).build();
+                .orderLines(buildOrderLines(orderedItem, quantity, TEST_DESCRIPTION, compensation *quantity+extraPay))
+                .subTotalInvoicePrice(buildSubTotalInvoicePrice(compensation *quantity+extraPay, amountNet*quantity))
+                .subTotalPurchasePrice(buildSubTotalPurchasePrice(compensation *quantity+extraPay, amountNet*quantity))
+                .supplier(buildSupplier(locale+supplierId)).build();
 
         return Order.builder().orderTotalInvoicePrice(buildOrderTotalInvoicePrice(compensation, extraPay))
                 .orderTotalPurchasePrice(buildOrderTotalPurchasePrice(compensation, extraPay))
@@ -288,7 +271,7 @@ public class CreateOrderService extends BaseService {
 
 
     enum VoucherType{
-           PHYSICAL_VOUCHER,
-           EVOUCHER;
+        PHYSICAL_VOUCHER,
+        EVOUCHER;
     }
 }

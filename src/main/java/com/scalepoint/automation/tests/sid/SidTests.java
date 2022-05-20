@@ -9,7 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -25,14 +25,14 @@ import static com.scalepoint.automation.utils.Constants.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-512")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-public class SidTests extends BaseTest {
+public class SidTests extends BaseUITest {
 
     @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
             dataProvider = "testDataProvider",
             description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialogs")
     public void ecc3025_selectVoucherExistingCatAddDialog(User user, Claim claim, Voucher voucher) {
         PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(categoryInfo)
                 .doAssert(sid -> sid.assertVoucherListed(voucher.getVoucherNameSP()));
@@ -58,7 +58,7 @@ public class SidTests extends BaseTest {
         Double calculatedCashValue = expectedCalculations.getCashCompensationWithDepreciation();
         Double calculatedDepreciationValue = expectedCalculations.getDepreciatedAmount();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(categoryInfo, sid -> {
                     sid
                             .withCustomerDemandPrice(PRICE_100_000)
@@ -87,7 +87,7 @@ public class SidTests extends BaseTest {
     public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucherForDistances();
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryBabyItems())
@@ -134,7 +134,7 @@ public class SidTests extends BaseTest {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher();
         String existingVoucherShopName = "Test shop ÆæØøÅåß " + existingVoucher;
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryBabyItems())
@@ -245,7 +245,7 @@ public class SidTests extends BaseTest {
         String voucherName = voucher.getVoucherNameSP();
         String supplierPhone = supplier.getSupplierPhone();
 
-        SuppliersPage suppliersPage = login(getSystemUser())
+        SuppliersPage suppliersPage = loginFlow.login(getSystemUser())
                 .getMainMenu()
                 .toEccAdminPage();
 
@@ -258,7 +258,7 @@ public class SidTests extends BaseTest {
                 .saveSupplier()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(claimItem.getCategoryBabyItems())
@@ -286,11 +286,11 @@ public class SidTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-3025 Cash compensation without depreciation are New price if no vouchers selected in Add settlement dialogs")
     public void ecc3025_cashCompensationWithoutDepNoVoucher(User user, Claim claim, Category category) {
-        login(user, AdminPage.class)
+        loginFlow.login(user, AdminPage.class)
                 .createPsModelWithCategoryAndEnable(category, "All Categories")
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withNewPrice(PRICE_2400)
@@ -322,7 +322,7 @@ public class SidTests extends BaseTest {
                 0
         );
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
@@ -338,7 +338,7 @@ public class SidTests extends BaseTest {
 
 
     private void testDiscountDistributionUpdate(User user, Claim claim, ClaimItem item, String existingVoucher, int customerDiscount, SidCalculator.VoucherValuation voucherValuation, boolean dialogMode) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(item.getCategoryBabyItems(), sid -> {
                     sid
                             .withNewPrice(PRICE_2400)
@@ -361,7 +361,7 @@ public class SidTests extends BaseTest {
                     });
         }
 
-        settlementDialog.valuationGrid().parseValuationRow(VOUCHER)
+        settlementDialog.valuationGrid().getValuationRow(VOUCHER)
                 .doAssert(row -> {
                     row.assertCashCompensationIs(voucherValuation.getCashValue());
                 })

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
@@ -12,14 +13,12 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,80 +27,83 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CompleteClaimPage extends Page {
 
     @FindBy(name = "policy_number")
-    private WebElement policyNumber;
-
+    private SelenideElement policyNumber;
     @FindBy(name = "claim_number")
-    private WebElement claimNumber;
-
+    private SelenideElement claimNumber;
     @FindBy(name = "phone")
-    private WebElement phoneField;
-
+    private SelenideElement phoneField;
     @FindBy(name = "cellPhoneNumber")
-    private WebElement cellPhoneField;
-
+    private SelenideElement cellPhoneField;
     @FindBy(name = "adr1")
-    private WebElement addressField;
-
+    private SelenideElement addressField;
     @FindBy(name = "adr2")
-    private WebElement address2Field;
-
+    private SelenideElement address2Field;
     @FindBy(name = "city")
-    private WebElement cityField;
-
+    private SelenideElement cityField;
     @FindBy(name = "zipcode")
-    private WebElement zipcodeField;
-
+    private SelenideElement zipcodeField;
     @FindBy(name = "email")
-    private WebElement emailField;
-
+    private SelenideElement emailField;
     @FindBy(name = "password")
-    private WebElement customerPasswordField;
-
-    @FindBy(id = "sendPasswordSMSspan")
-    private ExtCheckboxTypeDiv spSMSCheckBOX;
-
-    @FindBy(id = "send")
-    private Button compWthMailButton;
-
-    @FindBy(id = "nosend")
-    private Button compWithoutMailButton;
-
-    @FindBy(id = "externally")
-    private Button compExternallyButton;
-
-    @FindBy(id = "gem")
-    private Button saveClaim;
-
+    private SelenideElement customerPasswordField;
     @FindBy(id = "genlever")
-    private WebElement replace;
-
-    @FindBy(xpath = "//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")
-    private Button goToShop;
-
+    private SelenideElement replace;
     @FindBy(name = "agent_name")
-    private WebElement agentName;
-
+    private SelenideElement agentName;
     @FindBy(name = "agent_email")
-    private WebElement agentEmail;
-
+    private SelenideElement agentEmail;
     @FindBy(name = "send_agent_email")
-    private WebElement sendAgentEmail;
+    private SelenideElement sendAgentEmail;
+
+    private ExtCheckboxTypeDiv getSpSMSCheckBOX(){
+
+        return new ExtCheckboxTypeDiv($(By.id("sendPasswordSMSspan")));
+    }
+
+    private Button getCompWthMailButton(){
+
+        return new Button($(By.id("send")));
+    }
+
+    private Button getCompWithoutMailButton(){
+
+        return new Button(($(By.id("nosend"))));
+    }
+
+
+    private Button getCompExternallyButton(){
+
+        return new Button($(By.id("externally")));
+    }
+
+    private Button getSaveClaim(){
+
+        return new Button($(By.id("gem")));
+    }
+
+    private Button getGoToShop(){
+
+        return new Button($(By.id("//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")));
+    }
 
     @Override
     protected String getRelativeUrl() {
+
         return "webshop/jsp/matching_engine/enter_base_info.jsp";
     }
 
     @Override
     protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        $(saveClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(getSaveClaim()).should(Condition.visible);
     }
 
     By replacementButtonByXpath = By.id("genlever");
 
     public CompleteClaimPage fillClaimForm(Claim claim) {
+
         enterPhone(claim.getPhoneNumber()).
                 enterCellPhone(claim.getCellNumber()).
                 enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode()).
@@ -111,6 +113,7 @@ public class CompleteClaimPage extends Page {
     }
 
     public CompleteClaimPage fillClaimFormWithAgent(Claim claim) {
+
         fillClaimForm(claim)
                 .enterAgentName(claim.getAgentName())
                 .enterAgentEmail(claim.getAgentEmail());
@@ -118,85 +121,103 @@ public class CompleteClaimPage extends Page {
     }
 
     public CompleteClaimPage fillClaimFormWithPassword(Claim claim) {
+
         return fillClaimForm(claim).enterPassword(Constants.DEFAULT_PASSWORD);
     }
 
     public CompleteClaimPage enterPhone(String phone) {
-        $(phoneField).setValue(phone);
+
+        phoneField.setValue(phone);
         return this;
     }
 
     public CompleteClaimPage enterCellPhone(String phone) {
-        $(cellPhoneField).setValue(phone);
+
+        cellPhoneField.setValue(phone);
         return this;
     }
 
     public CompleteClaimPage enterAddress(String addr, String addr2, String city, String zip) {
-        $(addressField).setValue(addr);
-        $(address2Field).setValue(addr2);
-        $(cityField).setValue(city);
-        $(zipcodeField).setValue(zip);
+
+        addressField.setValue(addr);
+        address2Field.setValue(addr2);
+        cityField.setValue(city);
+        zipcodeField.setValue(zip);
         return this;
     }
 
     public CompleteClaimPage enterZipCode(String zip) {
-        $(zipcodeField).setValue(zip);
+
+        zipcodeField.setValue(zip);
         return this;
     }
 
     public CompleteClaimPage enterEmail(String email) {
-        $(emailField).setValue(email);
+
+        emailField.setValue(email);
         return this;
     }
 
     public CompleteClaimPage enterPassword(String pass) {
-        $(customerPasswordField).setValue(pass);
+
+        customerPasswordField.setValue(pass);
         return this;
     }
 
     public CompleteClaimPage enterAgentName(String name) {
-        $(agentName).setValue(name);
+
+        agentName.setValue(name);
         return this;
     }
 
     public CompleteClaimPage enterAgentEmail(String email) {
-        $(agentEmail).setValue(email);
+
+        agentEmail.setValue(email);
         return this;
     }
 
     public CompleteClaimPage sendSMS(boolean state) {
-        spSMSCheckBOX.set(state);
+
+        getSpSMSCheckBOX().set(state);
         return this;
     }
 
     public CompleteClaimPage sendAgendEmail(boolean state) {
-        $(sendAgentEmail).setSelected(state);
+
+        sendAgentEmail.setSelected(state);
         return this;
     }
 
     public CompleteClaimPage enterPolicyNumber(String policyNumber) {
-        $(this.policyNumber).setValue(policyNumber);
+
+        this.policyNumber.setValue(policyNumber);
         return this;
     }
 
     public CompleteClaimPage enterClaimNumber(String claimNumber) {
-        $(this.claimNumber).setValue(claimNumber);
+
+        this.claimNumber.setValue(claimNumber);
         return this;
     }
 
     public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi, boolean gdpr) {
-        compWthMailButton.click();
+
+        getCompWthMailButton().click();
+
         if(gdpr) {
+
             BaseDialog.
                     at(GdprConfirmationDialog.class)
                     .confirm();
         }
+
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
 
     public MyPage completeWithoutEmail() {
-        compWithoutMailButton.click();
+
+        getCompWithoutMailButton().click();
         BaseDialog.
                 at(GdprConfirmationDialog.class)
                 .confirm();
@@ -204,7 +225,8 @@ public class CompleteClaimPage extends Page {
     }
 
     public MyPage completeExternally(Claim claim, DatabaseApi databaseApi) {
-        compExternallyButton.click();
+
+        getCompExternallyButton().click();
         BaseDialog
                 .at(GdprConfirmationDialog.class)
                 .confirm();
@@ -213,8 +235,10 @@ public class CompleteClaimPage extends Page {
     }
 
     public MyPage saveClaim(boolean gdpr) {
-        saveClaim.click();
+        getSaveClaim().click();
+
         if(gdpr) {
+
             BaseDialog
                     .at(GdprConfirmationDialog.class)
                     .confirm();
@@ -223,10 +247,12 @@ public class CompleteClaimPage extends Page {
     }
 
     public ReplacementDialog openReplacementWizard(boolean gdpr) {
+
         Wait.waitForAjaxCompleted();
         Wait.waitForJavascriptRecalculation();
         hoverAndClick($(replace));
         if(gdpr) {
+
             BaseDialog
                     .at(GdprConfirmationDialog.class)
                     .confirm();
@@ -235,13 +261,16 @@ public class CompleteClaimPage extends Page {
     }
 
     public CompleteClaimPage doAssert(Consumer<Asserts> assertFunc) {
+
         assertFunc.accept(new Asserts());
         return CompleteClaimPage.this;
     }
 
     public class Asserts {
+
         public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
-            assertThat(verifyElementVisible($(replacementButtonByXpath))).as("replacement button should should not be present").isFalse();
+
+            assertThat($(replacementButtonByXpath).has(Condition.visible)).as("replacement button should should not be present").isFalse();
             return this;
         }
 

@@ -33,7 +33,6 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends ClaimSharedTests {
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
@@ -71,7 +70,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Verifies integration with agent info, send email to agent enabled")
     public void includeAgentDataSendEmailEnabledTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimFormWithAgent(claim)
                 .sendAgendEmail(true)
@@ -88,7 +87,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Verifies integration with agent info, send email to agent disabled")
     public void includeAgentDataSendEmailDisabledTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimFormWithAgent(claim)
                 .sendAgendEmail(false)
@@ -106,7 +105,7 @@ public class ClaimTests extends ClaimSharedTests {
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim externally. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void charlie544_2629_completeClaimExternally(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeExternally(claim, databaseApi)
@@ -118,7 +117,7 @@ public class ClaimTests extends ClaimSharedTests {
             description = "CHARLIE-544 It's possible to save claim without completing from Enter base info page. " +
                     "Saved claim is added to the latest claims list with Saved status")
     public void charlie544_saveClaimFromBaseInfo(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .saveClaim(true)
@@ -131,7 +130,7 @@ public class ClaimTests extends ClaimSharedTests {
             description = "CONTENTS-3332 Be able to settle a claim without sending an e-mail to customer. " +
                     "The new close method in history")
     public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
 
@@ -147,12 +146,11 @@ public class ClaimTests extends ClaimSharedTests {
 
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void loginToSelfService2_0(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -166,14 +164,13 @@ public class ClaimTests extends ClaimSharedTests {
      */
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, enabled = false, dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approves claim")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, Claim claim) {
-        login(getSystemUser());
+        loginFlow.login(getSystemUser());
         new InsCompaniesPage().enableAuditForIc(user.getCompanyName());
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode())
                 .saveClaim(true)
@@ -189,7 +186,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .saveItem()
                 .sendResponseToEcc();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim()
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
         new SettlementSummary().ensureAuditInfoPanelVisible()
@@ -206,7 +203,7 @@ public class ClaimTests extends ClaimSharedTests {
         String customerNote = "Customer note!";
         String internalNote = "Internal note!";
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toNotesPage()
                 .addCustomerNote(customerNote)
                 .addInternalNote(internalNote)
@@ -245,7 +242,7 @@ public class ClaimTests extends ClaimSharedTests {
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPath1())
                 .doAssert(sid -> sid.assertItemIsPresent(claimItem.getXlsDescr1()))
                 .findClaimLine(claimLineDescription)
@@ -257,7 +254,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().getValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -271,7 +268,6 @@ public class ClaimTests extends ClaimSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
@@ -280,7 +276,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -294,7 +290,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .saveItem()
                 .sendResponseToEcc();
 
-        SettlementDialog settlementDialog = login(user)
+        SettlementDialog settlementDialog = loginFlow.login(user)
                 .openActiveRecentClaim()
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
                 .findClaimLine(claimLineDescription)
@@ -306,7 +302,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().getValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -336,7 +332,7 @@ public class ClaimTests extends ClaimSharedTests {
     public void ecc2631_addMatchedProductFromCatalog(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimLineDescription)
                 .sortOrderableFirst()
@@ -344,7 +340,7 @@ public class ClaimTests extends ClaimSharedTests {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().getValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -364,7 +360,7 @@ public class ClaimTests extends ClaimSharedTests {
             description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_2632_completeClaimUsingReplacementWizard(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -380,7 +376,7 @@ public class ClaimTests extends ClaimSharedTests {
             description = "CONTENTS-173 - after setting description the category and " +
                     "pseudo-category in SID is auto selected")
     public void contents173_autoCategorization(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescriptionAndWaitForCategoriesToAutoSelect("iphone")
                 .doAssert(claimLine -> {
@@ -395,7 +391,7 @@ public class ClaimTests extends ClaimSharedTests {
     public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
         String noteText = Long.toString(System.currentTimeMillis());
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, "item1")
                 .getToolBarMenu()
                 .openClaimLineNotes()
@@ -412,7 +408,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void nonZeroAmountDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -431,7 +427,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void confirmInDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -447,7 +443,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void cancelInDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -467,7 +463,7 @@ public class ClaimTests extends ClaimSharedTests {
     public void searchProductDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimLineDescription)
                 .openSidForFirstProduct()
@@ -484,7 +480,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     public void cancelEditPolicyTypeDialogTest(User user, Claim claim) {
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .selectPolicyType(POLICY_TYPE)
                 .cancel()
                 .toCustomerDetails()
@@ -497,7 +493,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     public void setPolicyTypeInEditPolicyTypeDialogTest(User user, Claim claim) {
 
-        loginAndCreateClaimToEditPolicyDialog(user, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .selectPolicyType(POLICY_TYPE)
                 .confirm()
                 .toCustomerDetails()
@@ -510,7 +506,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     public void setPolicyTypeUsingCreateUserEndpointTest(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim, POLICY_TYPE)
+        loginFlow.loginAndCreateClaim(user, claim, POLICY_TYPE)
                 .doAssert(settlmentPage ->
                         settlmentPage.assertEditPolicyTypeDialogIsNotPresent())
                 .toCustomerDetails()
@@ -523,7 +519,7 @@ public class ClaimTests extends ClaimSharedTests {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     public void editPolicyTypeDialogWithDisabledShowPolicyTypeTest(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .doAssert(settlmentPage ->
                         settlmentPage.assertEditPolicyTypeDialogIsNotPresent())
                 .toCustomerDetails()
@@ -535,7 +531,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "verify cancel open the claim")
     public void cancelOpenClaim(User user, Claim claim){
-        loginAndCreateClaim(user, claim).
+        loginFlow.loginAndCreateClaim(user, claim).
                 toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
@@ -549,7 +545,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
     public void viewClaimIsOff(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
@@ -563,7 +559,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "verify Settlement page in view mode")
     public void claimViewModeE2eTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, "lineDescription")
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -597,7 +593,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "verify it's possible to close claim from view mode")
     public void closeClaimInViewMode(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, "lineDescription")
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)

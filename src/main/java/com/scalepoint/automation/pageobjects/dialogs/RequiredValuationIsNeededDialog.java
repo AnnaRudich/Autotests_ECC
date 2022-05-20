@@ -11,6 +11,7 @@ public class RequiredValuationIsNeededDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
-        $(".required-valuation-is-needed-dialog").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+
+        $(".required-valuation-is-needed-dialog").should(Condition.visible);
     }
 }

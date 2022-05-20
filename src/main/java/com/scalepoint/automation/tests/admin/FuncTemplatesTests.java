@@ -3,10 +3,8 @@ package com.scalepoint.automation.tests.admin;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -20,7 +18,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-555")
-public class FuncTemplatesTests extends BaseTest {
+public class FuncTemplatesTests extends BaseUITest {
 
     private static final String CREATE_NEW_FT_DATA_PROVIDER = "createNewFtDataProvider";
     private static final String DELETE_NEW_FT_DATA_PROVIDER = "deleteNewFtDataProvider";
@@ -96,7 +94,7 @@ public class FuncTemplatesTests extends BaseTest {
     }
 
     private FunctionalTemplatesPage createNewTemplate(String ftName) {
-        return login(getSystemUser()).
+        return loginFlow.login(getSystemUser()).
                 to(FunctionalTemplatesPage.class).
                 copyTemplate(DEFAULT_COPY_TEMPLATE).
                 setName(ftName).

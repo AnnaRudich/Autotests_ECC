@@ -18,8 +18,9 @@ public class InvoiceDialog extends BaseDialog {
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompleted();
-        $("#panel-invoice-view-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $("#panel-invoice-view-body").should(Condition.visible);
     }
 
     public InvoiceDialog doAssert(Consumer<InvoiceDialog.Asserts> assertFunc) {
@@ -43,7 +44,7 @@ public class InvoiceDialog extends BaseDialog {
         }
 
         public InvoiceDialog.Asserts assertRepairPriceForTheFirstTaskIs(Double expectedRepairPrice) {
-            Double actualRepairPrice = new Double($(By.xpath("//td[@id = 'repairPrice0']/div/span[1]")).getText());
+            Double actualRepairPrice = Double.valueOf($(By.xpath("//td[@id = 'repairPrice0']/div/span[1]")).getText());
             assertThat(actualRepairPrice).as("Repair price should be: " + expectedRepairPrice + "but was: " + actualRepairPrice)
                     .isEqualTo(expectedRepairPrice);
             return this;
@@ -54,37 +55,37 @@ public class InvoiceDialog extends BaseDialog {
     public InvoiceLine findInvoiceLineByIndex(int lineIndex) {
         return new InvoiceLine(lineIndex);
     }
-        @Getter
-        public class InvoiceLine {
-            SelenideElement invoiceLine;
+    @Getter
+    public class InvoiceLine {
+        SelenideElement invoiceLine;
 
-            String description;
-            int number;
+        String description;
+        int number;
 
-            int unit;
-            Double unitPrice;
-            Double price;
-            Double VAT;
-            Double lineTotal;
+        int unit;
+        Double unitPrice;
+        Double price;
+        Double VAT;
+        Double lineTotal;
 
-            InvoiceLine(int lineIndex) {
-                this.invoiceLine = $(By.xpath("(//div[contains(@id, 'invoiceRowList')]//table/tbody/tr)[" + lineIndex + "]"));
-                this.description = invoiceLine.find(By.xpath("td[1]/div")).getText();
-                this.number = Integer.valueOf(invoiceLine.find(By.xpath("td[2]/div")).getText());
-                this.unit = Integer.valueOf(invoiceLine.find(By.xpath("td[3]/div")).getText());
-                this.unitPrice = Double.valueOf(invoiceLine.find(By.xpath("td[4]/div")).getText());
-                this.price = Double.valueOf(invoiceLine.find(By.xpath("td[5]/div")).getText());
-                this.VAT = Double.valueOf(invoiceLine.find(By.xpath("td[6]/div")).getText());
-                this.lineTotal = Double.valueOf(invoiceLine.find(By.xpath("td[7]/div")).getText());
-            }
+        InvoiceLine(int lineIndex) {
+            this.invoiceLine = $(By.xpath("(//div[contains(@id, 'invoiceRowList')]//table/tbody/tr)[" + lineIndex + "]"));
+            this.description = invoiceLine.find(By.xpath("td[1]/div")).getText();
+            this.number = Integer.valueOf(invoiceLine.find(By.xpath("td[2]/div")).getText());
+            this.unit = Integer.valueOf(invoiceLine.find(By.xpath("td[3]/div")).getText());
+            this.unitPrice = Double.valueOf(invoiceLine.find(By.xpath("td[4]/div")).getText());
+            this.price = Double.valueOf(invoiceLine.find(By.xpath("td[5]/div")).getText());
+            this.VAT = Double.valueOf(invoiceLine.find(By.xpath("td[6]/div")).getText());
+            this.lineTotal = Double.valueOf(invoiceLine.find(By.xpath("td[7]/div")).getText());
+        }
 
-           public InvoiceLine assertTotalForTheLineWithIndex(int lineIndex, Double expectedLineTotal) {
-                Double actualLineTotal = this.getLineTotal();
-                assertThat(actualLineTotal)
-                                .as("the total for line with index: " + lineIndex + " is: " + expectedLineTotal + " but was: " + actualLineTotal + "")
-                                .isEqualTo(expectedLineTotal);
-                    return this;
-            }
+        public InvoiceLine assertTotalForTheLineWithIndex(int lineIndex, Double expectedLineTotal) {
+            Double actualLineTotal = this.getLineTotal();
+            assertThat(actualLineTotal)
+                    .as("the total for line with index: " + lineIndex + " is: " + expectedLineTotal + " but was: " + actualLineTotal + "")
+                    .isEqualTo(expectedLineTotal);
+            return this;
         }
     }
+}
 

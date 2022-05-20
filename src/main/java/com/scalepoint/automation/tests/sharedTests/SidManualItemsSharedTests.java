@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.sharedTests;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -13,14 +13,14 @@ import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
-public class SidManualItemsSharedTests extends BaseTest {
+public class SidManualItemsSharedTests extends BaseUITest {
 
     /**
      * WHEN: Include in claim option is ON
      * THEN:Amount of claim line is summed up to the total amount of claim
      */
     public void setIncludeInClaimCheckboxSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setNewPrice(Constants.PRICE_2400)
                 .includeInClaim(true)
@@ -36,11 +36,11 @@ public class SidManualItemsSharedTests extends BaseTest {
      */
     public void inputCustomDemandSharedTest(User user, Claim claim, ClaimItem claimItem) {
         Double customerDemand = Constants.PRICE_500;
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCustomerDemand(customerDemand)
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(customerDemand));
     }
 
@@ -50,16 +50,16 @@ public class SidManualItemsSharedTests extends BaseTest {
      */
     public void inputNewPriceSharedTest(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_2400;
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setNewPrice(newPrice)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(newPrice));
     }
 
     public void depreciationFromSuggestionShouldBeNotUpdatedAfterChangingSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setNewPrice(Constants.PRICE_500)
@@ -83,7 +83,7 @@ public class SidManualItemsSharedTests extends BaseTest {
     }
 
     public void depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setNewPrice(Constants.PRICE_500)
@@ -118,7 +118,7 @@ public class SidManualItemsSharedTests extends BaseTest {
     public void saveAllEnteredResultsSharedTest(User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -128,9 +128,9 @@ public class SidManualItemsSharedTests extends BaseTest {
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
@@ -147,7 +147,7 @@ public class SidManualItemsSharedTests extends BaseTest {
     public void cancelEnteredResultsSharedTest(User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -158,9 +158,9 @@ public class SidManualItemsSharedTests extends BaseTest {
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400))
                 .toSettlementDialog()
                 .setBaseData(claimItem)
@@ -172,9 +172,9 @@ public class SidManualItemsSharedTests extends BaseTest {
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .valuationGrid()
-                .parseValuationRow(CUSTOMER_DEMAND)
+                .getValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(claimItem.getCustomerDemand()))
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
@@ -186,14 +186,14 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: New valuation appears in SID
      */
     public void addNewValuationSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .setReviewed(true)
                 .includeInClaim(false)
                 .setValuation(NEW_PRICE)
                 .valuationGrid()
-                .parseValuationRow(NEW_PRICE)
+                .getValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
@@ -206,7 +206,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: Claim sum value CSV = 0.00
      */
     public void disableIncludeInClaimSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .setReviewed(true)
@@ -230,7 +230,7 @@ public class SidManualItemsSharedTests extends BaseTest {
     public void enableIncludeInClaimSecondClaimSharedTest(User user, Claim claim, ClaimItem claimItem) {
         String secondClaimDescription = claimItem.getTextFieldSP().concat("second");
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementPage settlementPage = loginFlow.loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.openSid()
                 .setBaseData(claimItem)
                 .setReviewed(false)
@@ -262,7 +262,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: description D1 of claim line CL1 is colored in pink
      */
     public void disableIncludeInClaimAndReviewedSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .setReviewed(false)
@@ -279,7 +279,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: "Complete claim" button is enabled
      */
     public void completeClaimIsEnabledSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .setReviewed(false)
@@ -294,7 +294,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN "Reviewed" option is not displayed in SID
      */
     public void reviewedBoxNotDisplayedSharedTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(SettlementDialog.Asserts::assertReviewedNotPresent);
     }
@@ -306,7 +306,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: "Complete claim" button is enabled
      */
     public void completeClaimIsEnabled2SharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .setReviewed(false)
@@ -321,7 +321,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: Cancelled claim line is not added to the claim
      */
     public void cancelledClaimNotAddedSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .cancel()
@@ -335,7 +335,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      */
 
     public void cashCompensationEqualV1SharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()));
@@ -349,7 +349,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: Add valuation dialogs is displayed
      */
     public void openAddValuationDialogInSidSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .openAddValuationForm();
@@ -367,7 +367,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: CC is equal to V2
      */
     public void addNewValuationPriceInAddValuationDialogSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()))
@@ -388,7 +388,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: CC is equal to V2
      */
     public void addNewValuationPriceInAddValuationDialog2SharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()))
@@ -409,7 +409,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: CC is equal to V2
      */
     public void addNewValuationPriceInAddValuationDialog3SharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()))
@@ -425,7 +425,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: Months drop dwn menu is enabled
      */
     public void enableAgeOptionSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .enableAge()
@@ -448,7 +448,7 @@ public class SidManualItemsSharedTests extends BaseTest {
      * THEN: Y1 and M1 are displayed
      */
     public void addYearsAndMonthAndSaveSharedTest(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .enableAge("10")

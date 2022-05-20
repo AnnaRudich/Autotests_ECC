@@ -1,22 +1,21 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-589")
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-public class ShowScalepointSupplierTests extends BaseTest {
+public class ShowScalepointSupplierTests extends BaseUITest {
 
     /**
      * GIVEN: FT "Show Scalepoint Supplier" OFF
@@ -30,12 +29,13 @@ public class ShowScalepointSupplierTests extends BaseTest {
             description = "CHARLIE-589 FT 'Show Scalepoint Supplier' is OFF, Scalepoint Supplier name is not displayed in the SID")
     @RequiredSetting(type = FTSetting.SHOW_SCALEPOINT_SUPPLIER, enabled = false)
     public void charlie_589_1_showScalepointSupplierNameDisabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .doAssert(SettlementDialog.Asserts::assertScalepointSupplierNotVisible);
+                .doAssert(sid ->
+                        sid.assertScalepointSupplierNotVisible());
     }
 
     /**
@@ -50,13 +50,14 @@ public class ShowScalepointSupplierTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-589 FT 'Show Scalepoint Supplier' is ON, Scalepoint Supplier name is displayed in the SID")
     public void charlie_589_2_showScalepointSupplierNameEnabled(User user, Claim claim, ClaimItem claimItem) {
-        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim)
+        TextSearchPage textSearchPage = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst();
         ProductInfo product = SolrApi.findProduct(textSearchPage.getFirstProductId());
 
-        textSearchPage.openSidForFirstProduct()
+        textSearchPage
+                .openSidForFirstProduct()
                 .doAssert(sid -> sid.assertScalepointSupplierVisible(product.getSupplierName()));
     }
 }

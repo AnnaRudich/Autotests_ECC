@@ -1,12 +1,12 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -16,6 +16,7 @@ import static org.testng.Assert.assertTrue;
 public class AddShopDialog extends BaseDialog {
 
     public enum ShopType {
+
         RETAIL,
         RNV
     }
@@ -25,78 +26,86 @@ public class AddShopDialog extends BaseDialog {
     private static final String SUPPLIER_CANCEL_EDIT_SHOP_BTN = "//a[contains(@class,'supplier-cancel-edit-shop-btn')]";
 
     @FindBy(xpath = "//label[contains(text(),'Name:')]")
-    private WebElement nameLabel;
+    private SelenideElement nameLabel;
     @FindBy(name = "shopName")
-    private WebElement nameField;
+    private SelenideElement nameField;
     @FindBy(name = "shopAddress")
-    private WebElement address1Field;
+    private SelenideElement address1Field;
     @FindBy(name = "shopAddress2")
-    private WebElement address2Field;
+    private SelenideElement address2Field;
     @FindBy(name = "shopPostalCode")
-    private WebElement postalCodeField;
+    private SelenideElement postalCodeField;
     @FindBy(name = "shopCity")
-    private WebElement cityField;
+    private SelenideElement cityField;
     @FindBy(name = "shopPhone")
-    private WebElement phoneField;
+    private SelenideElement phoneField;
     @FindBy(name = "portalCode")
-    private WebElement portalCode;
+    private SelenideElement portalCode;
     @FindBy(name = "eVoucherNotificationEmails")
-    private WebElement eVoucherNotificationEmails;
+    private SelenideElement eVoucherNotificationEmails;
     @FindBy(css = "td.x-form-check-group table:nth-child(1) td input")
-    private WebElement retailTypeCheckbox;
+    private SelenideElement retailTypeCheckbox;
     @FindBy(css = "td.x-form-check-group table:nth-child(2) td input")
-    private WebElement rnVTypeCheckbox;
+    private SelenideElement rnVTypeCheckbox;
     @FindBy(id = "cancelCreateSupplierBtnId")
-    private WebElement cancelButton;
-
+    private SelenideElement cancelButton;
     @FindBy(id = "editSupplierShopTabFormId")
-    private WebElement editableShopDialog;
+    private SelenideElement editableShopDialog;
 
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        nameLabel.should(Condition.visible);
     }
 
     public ShopsTab createShop(Shop shop, ShopType shopType, boolean gdpr) {
+
         fillShopForm(shop);
         chooseShopType(shopType);
         hoverAndClick($(By.xpath(SUPPLIER_CREATE_SHOP_BTN)));
+
         if(gdpr){
-            at(GdprConfirmationDialog.class)
+
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
                     .confirm();
         }
-        return at(ShopsTab.class);
+        return BaseDialog.at(ShopsTab.class);
     }
 
     private boolean isShopDataEqualsWith(Shop shop) {
-        return ($(nameField).getValue().contains(shop.getShopName()) &&
-                $(address1Field).getValue().contains(shop.getShopAddress1()) &&
-                $(address2Field).getValue().contains(shop.getShopAddress2()) &&
-                $(postalCodeField).getValue().contains(shop.getPostalCode()) &&
-                $(cityField).getValue().contains(shop.getShopCity()) &&
-                $(phoneField).getValue().contains(shop.getPhone()));
+        return (nameField.getValue().contains(shop.getShopName()) &&
+                address1Field.getValue().contains(shop.getShopAddress1()) &&
+                address2Field.getValue().contains(shop.getShopAddress2()) &&
+                postalCodeField.getValue().contains(shop.getPostalCode()) &&
+                cityField.getValue().contains(shop.getShopCity()) &&
+                phoneField.getValue().contains(shop.getPhone()));
     }
 
 
     public AddShopDialog assertShopDataIsEqualTo(Shop expectedData) {
+
         assertTrue(isShopDataEqualsWith(expectedData));
         return this;
     }
 
     public ShopsTab updateShop(Shop shop) {
+
         clearShopForm();
         fillShopForm(shop);
         hoverAndClick($(By.xpath(SUPPLIER_SAVE_SHOP_BTN)));
-        return at(ShopsTab.class);
+        return BaseDialog.at(ShopsTab.class);
     }
 
     public ShopsTab cancel() {
+
         hoverAndClick($(By.xpath(SUPPLIER_CANCEL_EDIT_SHOP_BTN)));
-        return at(ShopsTab.class);
+        return BaseDialog.at(ShopsTab.class);
     }
 
     private void chooseShopType(ShopType shopType) {
+
         switch (shopType) {
             case RETAIL:
                 retailTypeCheckbox.click();
@@ -108,6 +117,7 @@ public class AddShopDialog extends BaseDialog {
     }
 
     private void clearShopForm() {
+
         nameField.clear();
         address1Field.clear();
         address2Field.clear();
@@ -118,6 +128,7 @@ public class AddShopDialog extends BaseDialog {
     }
 
     private void fillShopForm(Shop shop) {
+
         nameField.sendKeys(shop.getShopName());
         address1Field.sendKeys(shop.getShopAddress1());
         address2Field.sendKeys(shop.getShopAddress2());

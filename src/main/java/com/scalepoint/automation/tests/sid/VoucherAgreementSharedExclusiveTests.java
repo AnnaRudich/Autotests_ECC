@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -15,7 +15,7 @@ import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-548")
-public class VoucherAgreementSharedExclusiveTests extends BaseTest {
+public class VoucherAgreementSharedExclusiveTests extends BaseUITest {
     /**
      * GIVEN: IC1 parent user U1, IC1 child user U2, SP admin user U3, IC2 user U4
      * WHEN: U1 creates supplier S1 and it's voucher V1
@@ -86,7 +86,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
 
         loginAndCheckVoucherPresence(trygUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
 
-        loginToEccAdmin(trygUser)
+        loginFlow.loginToEccAdmin(trygUser)
                 .editSupplier(supplier.getSupplierName())
                 .selectAgreementsTab()
                 .doWithAgreement(voucherName, AgreementsTab.ActionType.LEAVE)
@@ -101,7 +101,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
     }
 
     private void createVoucherAgreement(User user, Supplier supplier, Voucher voucher, PseudoCategory pseudoCategory) {
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
 
         SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier),
                 SharedEccAdminFlows.VoucherAgreementData
@@ -113,7 +113,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
     }
 
     private void loginAndCheckVoucherPresence(User userToLogin, Claim claim, ClaimItem claimItem, String policy, String voucherName, boolean mustBePresent) {
-        loginAndCreateClaim(userToLogin, claim, policy)
+        loginFlow.loginAndCreateClaim(userToLogin, claim, policy)
                 .openSidAndFill(sid -> sid.withCategory(claimItem.getCategoryBabyItems()))
                 .doAssert(sid -> {
                     if (mustBePresent) {

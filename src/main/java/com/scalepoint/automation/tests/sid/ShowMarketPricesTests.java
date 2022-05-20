@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -17,7 +17,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRIC
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-588")
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-public class ShowMarketPricesTests extends BaseTest {
+public class ShowMarketPricesTests extends BaseUITest {
     /**
      * GIVEN: FT "Show Market Price" OFF
      * WHEN: We are on text search page
@@ -31,7 +31,7 @@ public class ShowMarketPricesTests extends BaseTest {
             description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .doAssert(TextSearchPage.Asserts::assertMarketPriceSortingInvisible)
@@ -60,7 +60,7 @@ public class ShowMarketPricesTests extends BaseTest {
             description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
@@ -70,7 +70,7 @@ public class ShowMarketPricesTests extends BaseTest {
                     sid.assertMarketPriceSupplierInvisible();
                 })
                 .valuationGrid()
-                .parseValuationRow(MARKET_PRICE)
+                .getValuationRow(MARKET_PRICE)
                 .backToGrid()
                 .doAssert(asserts ->{
                     asserts.assertMarketPriceVisible();
@@ -91,13 +91,13 @@ public class ShowMarketPricesTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortMarketPricesAscending()
-                .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceAscendant)
+                .doAssert(textsearch -> textsearch.assertSortingMarketPriceAscendant())
                 .sortMarketPricesDescending()
-                .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceDescendant)
+                .doAssert(textsearch -> textsearch.assertSortingMarketPriceDescendant())
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
                 .doAssert(productDetails -> {
@@ -122,7 +122,7 @@ public class ShowMarketPricesTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
     public void charlie_588_5_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()

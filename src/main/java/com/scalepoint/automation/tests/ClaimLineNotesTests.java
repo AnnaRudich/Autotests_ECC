@@ -1,15 +1,12 @@
 package com.scalepoint.automation.tests;
 
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.Test;
 
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-public class ClaimLineNotesTests extends BaseTest {
+public class ClaimLineNotesTests extends BaseUITest {
 
     String firstItemName = "item1";
     String secondItemName = "item2";
@@ -20,7 +17,7 @@ public class ClaimLineNotesTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void editClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, firstItemName)
                 .addLines(claimItem, secondItemName)
                 .getToolBarMenu()
@@ -74,7 +71,7 @@ public class ClaimLineNotesTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void addClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, firstItemName)
                 .addLines(claimItem, secondItemName)
                 .getToolBarMenu()
@@ -118,7 +115,7 @@ public class ClaimLineNotesTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void removeClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .addLines(claimItem, firstItemName)
                 .addLines(claimItem, secondItemName)
                 .getToolBarMenu()

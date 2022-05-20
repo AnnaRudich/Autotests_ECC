@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
@@ -21,104 +22,119 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SettlementGroupDialog extends BaseDialog {
 
-    @FindBy(name = "groupName")
-    private WebElement groupName;
-
-    @FindBy(name = "customerDemand")
-    private WebElement customerDemand;
-
-    @FindBy(name = "newPrice")
-    private WebElement newPrice;
-
-    @FindBy(name = "valuation")
-    private WebElement valuation;
-
-    @FindBy(xpath = "//*[contains(@id, 'show-line-amounts-in-mails-checkbox-inputEl')]")
-    private ExtCheckboxTypeDiv showLineAmountsInMail;
-
-    @FindBy(name = "reason")
-    private ExtComboBoxBoundView reason;
-
-    @FindBy(name = "note")
-    private ExtText note;
-
-    @FindBy(xpath = "//*[contains(@id, 'include-in-claim-checkbox-inputEl')]")
-    private ExtCheckboxTypeDiv includeInClaim;
-
-    @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
-    private WebElement averageAge;
-
-
-    private By saveGroup = By.xpath("//*[contains(@id, 'group-save-button-btnEl')]");
-    private By closeGroup = By.xpath("//*[contains(@id, 'group-close-button-btnInnerEl')]");
-
-
     @Override
     protected void ensureWeAreAt() {
+
         waitForAjaxCompletedAndJsRecalculation();
-        $(saveGroup).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        saveGroup.should(Condition.visible);
     }
 
+    @FindBy(name = "groupName")
+    private SelenideElement groupName;
+    @FindBy(name = "customerDemand")
+    private SelenideElement customerDemand;
+    @FindBy(name = "newPrice")
+    private SelenideElement newPrice;
+    @FindBy(name = "valuation")
+    private SelenideElement valuation;
+    @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
+    private SelenideElement averageAge;
+    @FindBy(xpath = "//*[contains(@id, 'group-save-button-btnEl')]")
+    private SelenideElement saveGroup;
+    @FindBy(xpath = "//*[contains(@id, 'group-close-button-btnInnerEl')]")
+    private SelenideElement closeGroup;
+
+    private ExtCheckboxTypeDiv getShowLineAmountsInMail(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//*[contains(@id, 'show-line-amounts-in-mails-checkbox-inputEl')]")));
+    }
+
+    private ExtComboBoxBoundView getReason(){
+
+        return new ExtComboBoxBoundView($(By.name("reason")));
+    }
+
+    private ExtText getNote(){
+
+        return new ExtText($(By.name("note")));
+    }
+
+    private ExtCheckboxTypeDiv getIncludeInClaim(){
+
+        return new ExtCheckboxTypeDiv($(By.xpath("//*[contains(@id, 'include-in-claim-checkbox-inputEl')]")));
+    }
 
     public SettlementGroupDialog enterGroupName(String name) {
-        $(groupName).setValue(name);
+
+        groupName.setValue(name);
         return this;
     }
 
     public SettlementGroupDialog chooseType(GroupTypes type) {
+
         type.getRadioButton().click();
         return this;
     }
 
     public SettlementGroupDialog enterNewPrice(Double newPrice) {
-        $(this.newPrice).setValue(OperationalUtils.toStringWithComma(newPrice));
+
+        this.newPrice.setValue(OperationalUtils.toStringWithComma(newPrice));
         return this;
     }
 
     public SettlementGroupDialog enterCustomerDemand(Double customerDemand) {
-        $(this.customerDemand).setValue(OperationalUtils.toStringWithComma(customerDemand));
+
+        this.customerDemand.setValue(OperationalUtils.toStringWithComma(customerDemand));
         return this;
     }
 
     public SettlementGroupDialog enterValuation(Double valuation) {
-        $(this.valuation).setValue(OperationalUtils.toStringWithComma(valuation));
+
+        this.valuation.setValue(OperationalUtils.toStringWithComma(valuation));
         return this;
     }
 
     public SettlementGroupDialog enterNote(String note) {
-        this.note.enter(note);
+
+        getNote().enter(note);
         return this;
     }
 
     public SettlementGroupDialog selectFirstReason() {
-        reason.click();
+
+        getReason().click();
         List<WebElement> options = driver.findElements(By.xpath("//li[@class='x-boundlist-item']"));
         options.get(1).click();
         return this;
     }
 
     public SettlementGroupDialog clickSave() {
-        $(saveGroup).click();
+
+        saveGroup.click();
         return this;
     }
 
     public SettlementPage saveGroup() {
-        $(saveGroup).click();
+
+        saveGroup.click();
         waitForAjaxCompleted();
         return BaseClaimPage.at(SettlementPage.class);
     }
 
     public SettlementGroupDialog clearNewPriceField() {
-        $(newPrice).clear();
+
+        newPrice.clear();
         return this;
     }
 
     public SettlementGroupDialog clearCustomerDemand() {
-        $(customerDemand).clear();
+
+        customerDemand.clear();
         return this;
     }
 
     public enum GroupTypes {
+
         VALUATION($(By.xpath("//*[contains(@id, 'valuation-group-type-radio-displayEl')]"))),
         OVERVIEW($(By.xpath("//*[contains(@id, 'overview-group-type-radio-displayEl')]")));
 
@@ -134,6 +150,7 @@ public class SettlementGroupDialog extends BaseDialog {
     }
 
     public SettlementGroupDialog doAssert(Consumer<SettlementGroupDialog.Asserts> func) {
+
         func.accept(new Asserts());
         return SettlementGroupDialog.this;
     }
@@ -141,92 +158,110 @@ public class SettlementGroupDialog extends BaseDialog {
     public class Asserts {
 
         public Asserts assertAverageAgeIs(String age) {
+
             assertThat(averageAge.getText()).isEqualToIgnoringCase(age);
             return this;
         }
 
         public Asserts assertIsOverviewChecked() {
+
             assertThat(GroupTypes.OVERVIEW.getRadioButton().findElement(By.xpath("./../input")).getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsValuationChecked() {
+
             assertThat(GroupTypes.VALUATION.getRadioButton().findElement(By.xpath("./../input")).getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsNewPriceFiledDisabled() {
-            assertThat($(newPrice).attr("aria-disabled")).isEqualToIgnoringCase("true");
+
+            assertThat(newPrice.attr("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsCustomerDemandFiledDisabled() {
-            assertThat($(customerDemand).attr("aria-disabled")).isEqualToIgnoringCase("true");
+
+            assertThat(customerDemand.attr("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsReasonFiledDisabled() {
-            assertThat(reason.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+
+            assertThat(getReason().getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsValuationFiledDisabled() {
-            assertThat($(valuation).attr("aria-disabled")).isEqualToIgnoringCase("true");
+
+            assertThat(valuation.attr("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsNewPriceFiledEnabled() {
-            assertThat($(newPrice).attr("aria-disabled")).isEqualToIgnoringCase("false");
+
+            assertThat(newPrice.attr("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
         public Asserts assertIsCustomerDemandFiledEnabled() {
-            assertThat($(customerDemand).attr("aria-disabled")).isEqualToIgnoringCase("false");
+
+            assertThat(customerDemand.attr("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
         public Asserts assertIsReasonFiledEnabled() {
-            assertThat(reason.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+
+            assertThat(getReason().getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
         public Asserts assertIsValuationFiledEnabled() {
-            assertThat($(valuation).attr("aria-disabled")).isEqualToIgnoringCase("false");
+
+            assertThat(valuation.attr("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
         public Asserts assertIsIncludeInClaimChecked() {
-            assertThat(includeInClaim.isChecked());
+
+            assertThat(getIncludeInClaim().isChecked());
             return this;
         }
 
         public Asserts assertIsShowLineAmountInMailChecked() {
-            assertThat(showLineAmountsInMail.isChecked());
+
+            assertThat(getShowLineAmountsInMail().isChecked());
             return this;
         }
 
         public Asserts assertIsValuationRequired() {
-            assertThat($(valuation).attr("aria-invalid")).isEqualToIgnoringCase("true");
+
+            assertThat(valuation.attr("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsReasonRequired() {
-            assertThat(reason.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+
+            assertThat(getReason().getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertReasonIsNotVisible() {
-            assertThat(isDisplayed(reason)).isFalse();
+
+            assertThat(isDisplayed(getReason())).isFalse();
             return this;
         }
 
         public Asserts assertNewPriceIsRequired() {
-            assertThat($(newPrice).attr("aria-invalid")).isEqualToIgnoringCase("true");
+
+            assertThat(newPrice.attr("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertCustomerDemandIsRequired() {
-            assertThat($(customerDemand).attr("aria-invalid")).isEqualToIgnoringCase("true");
+
+            assertThat(customerDemand.attr("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
     }

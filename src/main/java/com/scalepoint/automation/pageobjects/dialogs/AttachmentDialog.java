@@ -5,13 +5,12 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
-import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
@@ -20,19 +19,18 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.*;
 
-public class AttachmentDialog extends BaseDialog implements Actions {
+public class AttachmentDialog extends BaseDialog {
 
     @FindBy(id = "window-attachment-view_header-title-textEl")
-    private WebElement dialogHeader;
+    private SelenideElement dialogHeader;
 
     @FindBy(id = ".x-toolbar-footer a[role=button]")
-    private WebElement button;
-
+    private SelenideElement button;
 
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
-        $(dialogHeader).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        dialogHeader.should(Condition.visible);
     }
 
     public TreepanelAttachmentView getTreepanelAttachmentView(){
@@ -190,7 +188,7 @@ public class AttachmentDialog extends BaseDialog implements Actions {
             public void select(){
 
                 element.click();
-                element.waitUntil(Condition.attribute("aria-selected", "true"), TIMEOUT);
+                element.should(Condition.attribute("aria-selected", "true"), Duration.ofMillis(TIMEOUT));
             }
         }
     }
@@ -251,7 +249,7 @@ public class AttachmentDialog extends BaseDialog implements Actions {
             elements.shouldHave(CollectionCondition.size(newSize));
             elements.get(newSize - 1)
                     .find(ATTACHMENT_NAME)
-                    .waitUntil(Condition.matchesText(name), TIME_OUT_IN_MILISECONDS);
+                    .should(Condition.matchText(name));
         }
 
         public int attachmentsSize(){
@@ -277,7 +275,7 @@ public class AttachmentDialog extends BaseDialog implements Actions {
             public ListpanelAttachmentView delete(){
 
                 element.find("img[id^=\"img_delete\"]")
-                        .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                        .should(Condition.visible)
                         .click();
 
                 return new ListpanelAttachmentView();
@@ -286,7 +284,7 @@ public class AttachmentDialog extends BaseDialog implements Actions {
             public ListpanelAttachmentView unlink(){
 
                 element.find("img[id^=\"img_link\"]")
-                        .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                        .should(Condition.visible)
                         .click();
 
                 return new ListpanelAttachmentView();
@@ -294,7 +292,7 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
             public Attachment waitForLink(String id){
 
-                element.find("tr > td >.file-name span").waitUntil(Condition.text(id), TIME_OUT_IN_MILISECONDS);
+                element.find("tr > td >.file-name span").should(Condition.text(id));
 
                 return this;
             }

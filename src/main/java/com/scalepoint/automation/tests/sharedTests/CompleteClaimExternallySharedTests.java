@@ -1,15 +1,15 @@
 package com.scalepoint.automation.tests.sharedTests;
 
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL;
 
-public class CompleteClaimExternallySharedTests extends BaseTest {
+public class CompleteClaimExternallySharedTests extends BaseUITest {
 
     public void completeClaimExternallyFromSettlementPageSharedTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .completeClaimWithoutMail(claim)
                 .doAssert(myPage ->
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())

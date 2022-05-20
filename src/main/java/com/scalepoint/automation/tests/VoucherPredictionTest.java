@@ -18,7 +18,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 import static com.scalepoint.automation.utils.Constants.PRICE_100;
 
 @RequiredSetting(type = FTSetting.ENABLE_VOUCHER_PREDICTION)
-public class VoucherPredictionTest extends BaseTest {
+public class VoucherPredictionTest extends BaseUITest {
 
     private static final String lineDescription = "claimLine1";
 
@@ -26,7 +26,7 @@ public class VoucherPredictionTest extends BaseTest {
             description = "MIKE-41 - call Improved voucher match service is SID, manual line")
     public void mike41_improvedVoucherMatchForManualLines(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
                         .withText(lineDescription)
                         .withCategory(claimItem.getCategoryBicycles())
@@ -38,13 +38,12 @@ public class VoucherPredictionTest extends BaseTest {
                         .get(0).getPredictedVoucher().getVoucherName()));
     }
 
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(groups = {TestGroups.VOUCHER_PREDICTION}, dataProvider = "testDataProvider",
             description = "MIKE-42 - call Improved voucher match service in SelfService")
     public void mike41_improvedVoucherMatchForSelfService(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -73,7 +72,7 @@ public class VoucherPredictionTest extends BaseTest {
             description = "MIKE-17 - call Improved voucher match service in excel")
     public void mike41_improvedVoucherMatchForExcelImport(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPathVoucherPrediction())
                 .doAssert(sid -> sid.assertItemIsPresent(lineDescription))
                 .findClaimLine(lineDescription)

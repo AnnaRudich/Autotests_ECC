@@ -16,6 +16,7 @@ public class SelfRiskDialog extends BaseDialog {
     private static final By DIALOG_PATH = By.cssSelector("[role=dialog][aria-hidden=false]");
     private static final By HEADER_PATH = By.cssSelector("[id$=header]");
     private static final By TEXTBOX_PATH = By.cssSelector("input");
+
     @Override
     protected void ensureWeAreAt() {
 
@@ -26,7 +27,6 @@ public class SelfRiskDialog extends BaseDialog {
 
     public SelfRiskDialog setSelfRisk(String value){
 
-
         $(DIALOG_PATH).find(TEXTBOX_PATH)
                 .setValue(value);
         return this;
@@ -34,7 +34,7 @@ public class SelfRiskDialog extends BaseDialog {
 
     public SettlementPage clickOkButton(){
 
-        hoverAndClick(buttons.find(Condition.exactText("OK")));;
+        hoverAndClick(buttons.find(Condition.exactText("OK")));
         return Page.at(SettlementPage.class);
     }
 }

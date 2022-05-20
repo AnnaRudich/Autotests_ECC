@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.testWidget.TestWidgetPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 
-public class FnolReassignTest extends BaseTest {
+public class FnolReassignTest extends BaseUITest {
 
     private String server;
 
@@ -95,7 +95,7 @@ public class FnolReassignTest extends BaseTest {
         new UnifiedIntegrationService()
                 .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), secondCreateClaimRequest);
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2
@@ -121,7 +121,7 @@ public class FnolReassignTest extends BaseTest {
         new UnifiedIntegrationService()
                 .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), secondCreateClaimRequest);
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2
@@ -145,7 +145,7 @@ public class FnolReassignTest extends BaseTest {
                                          ClaimRequest firstCreateClaimRequest, ClaimRequest secondCreateClaimRequest,
                                          FnolReassignTestData fnolReassignTestData) {
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .cancelClaim();
 
@@ -175,7 +175,7 @@ public class FnolReassignTest extends BaseTest {
                                          ClaimRequest firstCreateClaimRequest, ClaimRequest secondCreateClaimRequest,
                                          FnolReassignTestData fnolReassignTestData) {
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2
@@ -205,7 +205,7 @@ public class FnolReassignTest extends BaseTest {
                                         ClaimRequest firstCreateClaimRequest, ClaimRequest secondCreateClaimRequest,
                                         FnolReassignTestData fnolReassignTestData) {
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2

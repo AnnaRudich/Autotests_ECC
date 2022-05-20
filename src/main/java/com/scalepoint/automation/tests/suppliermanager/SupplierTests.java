@@ -11,7 +11,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-521")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-522")
-public class SupplierTests extends BaseTest {
+public class SupplierTests extends BaseUITest {
 
     /**
      * GIVEN: User with Supply Manager credentials
@@ -37,7 +37,7 @@ public class SupplierTests extends BaseTest {
     @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to create new supplier. Suppliers list contains new supplier")
     public void ecc3037_createNewSupplier(User user, Supplier supplier) {
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()));
@@ -52,7 +52,7 @@ public class SupplierTests extends BaseTest {
     @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
         String updatedWebsite = "http://google.com";
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier1)
                 .saveSupplier()
@@ -93,7 +93,7 @@ public class SupplierTests extends BaseTest {
         String webSite = "http://google.com";
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .setWebsite(webSite)
                 .uploadLogo(attachmentImage)
@@ -112,7 +112,7 @@ public class SupplierTests extends BaseTest {
     public void ecc3037_bannerDataAdding(User user, Supplier supplier, AttachmentFiles attachmentFiles) {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .selectBannerTab()
                 .uploadBanner(attachmentImage)
@@ -132,7 +132,7 @@ public class SupplierTests extends BaseTest {
     @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to fill orders tab with valid values")
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
 
         GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .selectOrdersTab()
@@ -218,7 +218,7 @@ public class SupplierTests extends BaseTest {
             description = "Voucher tick should not be visible in supply management, suppliers list")
     public void ecc3039_voucherTickIsNotAvailableInSuppliersList(
             @UserAttributes(company = CompanyCode.SCALEPOINT) User user, @SupplierCompany(areWithVouchers = false) SimpleSupplier simpleSupplier) {
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierNotDisplayed(simpleSupplier.getName()));
     }
 
@@ -230,7 +230,7 @@ public class SupplierTests extends BaseTest {
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .toSuppliersPage()
                 .doAssert(asserts -> asserts.assertsIsExclusiveTickForSupplierDisplayed(supplierName))  // Exclusive tick should be visible in supply management, suppliers list
 
@@ -244,7 +244,7 @@ public class SupplierTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Check if invoiceSetting is set correctly")
     public void contents3950_settingInvoiceSettingTest(@UserAttributes(company = CompanyCode.SCALEPOINT) User user) {
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
         suppliersPage.openFirstSupplier()
                 .selectOrdersTab()
                 .selectInvoiceSetting(0)
@@ -270,7 +270,7 @@ public class SupplierTests extends BaseTest {
         final String scalepointAgreement = simpleSupplier.getScalepointAgreement();
         final String inactiveAgreement = simpleSupplier.getInactiveAgreement();
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .toSuppliersPage()
                 .doAssert(SuppliersPage.Asserts::assertsIsExclusiveColumnNotDisplayed)                          // Exclusive should not be visible in supply management, suppliers list
 
@@ -292,7 +292,7 @@ public class SupplierTests extends BaseTest {
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
 
-        loginToEccAdmin(user)
+        loginFlow.loginToEccAdmin(user)
                 .doAssert(SuppliersPage.Asserts::assertsIsToMatchingEngineLinkDisplayed)                //To matching engine link should be visible in supply management
 
                 .toSuppliersPage()
@@ -318,13 +318,13 @@ public class SupplierTests extends BaseTest {
     }
 
     private void checkVisibility(User userWhoCreates, User userWhoReads, Supplier supplier, boolean mustBeVisible) {
-        SuppliersPage suppliersPage = loginToEccAdmin(userWhoCreates);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(userWhoCreates);
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()))
                 .logout();
 
-        loginToEccAdmin(userWhoReads).doAssert(page -> {
+        loginFlow.loginToEccAdmin(userWhoReads).doAssert(page -> {
             if (mustBeVisible) {
                 page.assertSupplierPresent(supplier.getSupplierName());
             } else {

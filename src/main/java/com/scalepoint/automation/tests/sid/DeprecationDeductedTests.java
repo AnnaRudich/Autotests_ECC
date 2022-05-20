@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
@@ -19,10 +19,9 @@ import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
 @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
-public class DeprecationDeductedTests extends BaseTest {
+public class DeprecationDeductedTests extends BaseUITest {
     /**
      * GIVEN: FT "Display voucher value with depreciation deducted" OFF
      * WHEN: ClaimHandler(CH) created claim
@@ -95,7 +94,7 @@ public class DeprecationDeductedTests extends BaseTest {
 
     private void verify(User user, Claim claim, Double expectedVoucherCashValue, Double expectedVoucherFaceValue, Double customerCashValue,
                         PseudoCategory pseudoCategory, String voucherNameSP) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(pseudoCategory, sidForm -> {
                     sidForm.withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
@@ -111,7 +110,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
-        login(user).openRecentClaim()
+        loginFlow.login(user).openRecentClaim()
                 .doAssert(customerDetailsPage -> {
                     customerDetailsPage.assertCustomerCashValueIs(customerCashValue);
                     customerDetailsPage.assertCustomerFaceValueTooltipIs(expectedVoucherFaceValue);

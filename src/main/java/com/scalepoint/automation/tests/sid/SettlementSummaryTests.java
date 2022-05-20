@@ -4,7 +4,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.BaseUITest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -23,7 +23,7 @@ import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-529")
-public class SettlementSummaryTests extends BaseTest {
+public class SettlementSummaryTests extends BaseUITest {
 
     /**
      * GIVEN: Existing group G1, category C1 and New voucher V1, existing depreciation D1
@@ -39,7 +39,7 @@ public class SettlementSummaryTests extends BaseTest {
     public void ecc3034_setSummaryCheck(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(item.getCategoryBabyItems())
@@ -79,7 +79,7 @@ public class SettlementSummaryTests extends BaseTest {
 
         double totalPrice = BigDecimal.valueOf(voucherValuation.getCashCompensationWithDepreciation() + lowestPrice).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCategory(item.getCategoryBabyItems())
