@@ -191,7 +191,7 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
 
         Test test = report.getTest(testName);
 
-        test.setNode(nodeName, iTestContext);
+        test.setNode(nodeName, iTestContext).setTestResults();
 
         report.flush();
 

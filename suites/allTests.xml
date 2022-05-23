@@ -9,5 +9,6 @@
     </suite-files>
     <listeners>
         <listener class-name="com.scalepoint.automation.utils.testng.HealthCheckListener"/>
+        <listener class-name="com.scalepoint.automation.utils.testng.TestListener"/>
     </listeners>
 </suite>

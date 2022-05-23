@@ -74,5 +74,6 @@
 
     <listeners>
         <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+        <listener class-name="com.scalepoint.automation.utils.testng.TestListener"/>
     </listeners>
 </suite>
