@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureId;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.Configuration;
@@ -14,7 +14,7 @@ public class FeaturesToggleAdministrationService extends BaseService {
 
     private String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
 
-    public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId) {
+    public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureId featureId) {
 
         given().param("op", expectedActionOnToggle.name()).
                 param("uid", featureId.name()).
@@ -28,7 +28,7 @@ public class FeaturesToggleAdministrationService extends BaseService {
         return this;
     }
 
-    private void assertToggleStatus(FeatureIds featureId, Boolean expectedStatus) {
+    private void assertToggleStatus(FeatureId featureId, Boolean expectedStatus) {
         assertThat(getToggleStatus(featureId.name())).
                 as("toggle for featureId: " + featureId + "should be enable: " + expectedStatus.toString()).isEqualTo(expectedStatus);
     }

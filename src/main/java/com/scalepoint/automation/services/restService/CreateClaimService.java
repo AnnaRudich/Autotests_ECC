@@ -21,6 +21,7 @@ public class CreateClaimService extends BaseService {
     private Response response;
 
     public CreateClaimService(Token token) {
+        super();
         this.token = token;
     }
 

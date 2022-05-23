@@ -13,20 +13,18 @@ import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureId;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
-import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
-import com.scalepoint.automation.tests.widget.FeatureToggle;
 import com.scalepoint.automation.tests.widget.LoginFlow;
+import com.scalepoint.automation.utils.FeatureToggle;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
-import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
@@ -93,7 +91,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected String gridNode;
 
-    protected Map<FeatureIds, Boolean> featureTogglesDefaultState = new HashMap<>();
+    protected Map<FeatureId, Boolean> featureTogglesDefaultState = new HashMap<>();
 
     @Autowired
     protected DatabaseApi databaseApi;
@@ -255,20 +253,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-//    protected void rollbackToggleSetting(FeatureToggleSetting toggleSetting) {
-//
-//        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
-//
-//        if (toggleSetting == null) {
-//
-//            return;
-//        }
-//
-//        FeatureIds toggleSettingType = toggleSetting.type();
-//        Boolean initialState = featureTogglesDefaultState.get(toggleSettingType);
-//        featuresToggleAdminApi.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(initialState), toggleSettingType);
-//    }
-
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     protected void takeScreenshot(Method method, ITestResult iTestResult) {
         String fileName = getFileName(method);
@@ -296,33 +280,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return method.getName() + "_" + sdf.format(new Date()) + "_node_" + gridNode.replace("http://", "").replace(":", "")
                 + "_" + Browser.getDriverType();
     }
-
-
-    protected FeatureToggleSetting getToggleSetting(Method method) {
-
-        return method.getDeclaredAnnotation(FeatureToggleSetting.class);
-    }
-
-
-//    protected void updateFeatureToggle(FeatureToggleSetting toggleSetting) {
-//
-//        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
-//
-//        if (toggleSetting == null) {
-//
-//            return;
-//        }
-//
-//        boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
-//        boolean toggleExpectedState = toggleSetting.enabled();
-//
-//        if (toggleActualState != toggleExpectedState) {
-//
-//            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
-//            featureToggleService.updateToggle(FeaturesToggleAdministrationService.ActionsOnToggle.of(toggleExpectedState), toggleSetting.type());
-//        }
-//    }
-
 
     private void updateFunctionalTemplate(List<RequiredSetting> allSettings, User user) {
 

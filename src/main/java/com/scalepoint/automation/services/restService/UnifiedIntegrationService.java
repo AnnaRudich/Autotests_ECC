@@ -37,6 +37,7 @@ public class UnifiedIntegrationService extends BaseService {
     Response response;
 
     public UnifiedIntegrationService() {
+        super();
         this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.PLATFORM_CASE_READ).getToken();
     }
 

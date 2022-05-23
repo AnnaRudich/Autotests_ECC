@@ -9,6 +9,8 @@ import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
@@ -50,7 +52,7 @@ public class TaskWizardPage2 extends Page {
     private void sendTaskAndWaitForStatus(String status){
 
         hoverAndClick($(sendBtn));
-        $(By.xpath("//div[contains(text(), '" + status + "')]")).should(Condition.visible);
+        $(By.xpath("//div[contains(text(), '" + status + "')]")).should(Condition.visible, Duration.ofSeconds(30));
         $("a.tasks-statuses-close-button").click();
     }
 }

@@ -13,6 +13,7 @@ public class FilesServiceService extends BaseService {
     private Response response;
 
     public FilesServiceService(Token token) {
+        super();
         this.token = token;
     }
 

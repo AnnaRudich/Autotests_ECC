@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM;
-import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureId.SCALEPOINTID_LOGIN_ENABLED;
 
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class SidManualItemsForScalepointIdTests extends SidManualItemsSharedTests {

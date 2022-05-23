@@ -24,6 +24,7 @@ public class CaseSettlementDataService extends BaseService {
     }
 
     public CaseSettlementDataService(Token token) {
+        super();
         this.token = token;
     }
 

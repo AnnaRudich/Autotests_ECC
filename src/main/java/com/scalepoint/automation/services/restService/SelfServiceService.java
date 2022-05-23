@@ -37,11 +37,10 @@ public class SelfServiceService extends BaseService {
 
 
     public SelfServiceService(){
-
         super();
     }
     public SelfServiceService(String ssToken){
-
+        super();
         data.setSelfServiceAccessToken(ssToken);
     }
 

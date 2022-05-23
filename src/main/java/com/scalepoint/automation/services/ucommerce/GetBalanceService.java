@@ -1,6 +1,5 @@
 package com.scalepoint.automation.services.ucommerce;
 
-import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.getBalance.GetBalanceRequest;
@@ -21,7 +20,7 @@ public class GetBalanceService extends BaseService {
     private Token token;
 
     public GetBalanceService(Token token){
-
+        super();
         this.token = token;
     }
     public GetBalanceService getBalance(String claimNumber) {
