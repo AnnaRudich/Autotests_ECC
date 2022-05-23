@@ -1,6 +1,5 @@
 package com.scalepoint.automation.services.ucommerce;
 
-import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
@@ -28,7 +27,7 @@ public class CreateOrderService extends BaseService {
     private Token token;
 
     public CreateOrderService(Token token){
-
+        super();
         this.token = token;
     }
 

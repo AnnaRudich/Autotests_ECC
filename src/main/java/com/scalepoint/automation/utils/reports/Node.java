@@ -54,7 +54,7 @@ public class Node {
         return extentTest;
     }
 
-    private void createTest(Set<ITestResult> testResults, Consumer<MethodLog> func){
+    public void createTest(Set<ITestResult> testResults, Consumer<MethodLog> func){
 
         if(testResults.size() > 0) {
 
@@ -99,7 +99,7 @@ public class Node {
         return stream;
     }
 
-    private class MethodLog{
+    public class MethodLog{
 
         ITestResult iTestResult;
         ExtentTest extentTest;
@@ -131,14 +131,23 @@ public class Node {
 
         private String prepareUserLog(){
 
-            return findUserParameter(iTestResult)
-                    .getLogin()
-                    .concat("_")
-                    .concat(Instant
-                            .ofEpochMilli(iTestResult.getEndMillis())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime()
-                            .toString());
+            String log = "_".concat(Instant
+                    .ofEpochMilli(iTestResult.getEndMillis())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+                    .toString());
+            try {
+
+                log = findUserParameter(iTestResult)
+                        .getLogin()
+                        .concat(log);
+
+            }catch (NoSuchElementException e){
+
+                "no_user_found".concat(log);
+            }
+
+            return log;
         }
 
         private User findUserParameter(ITestResult iTestResult) {

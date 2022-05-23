@@ -364,6 +364,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>klov-reporter</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>ru.yandex.qatools.allure</groupId>
             <artifactId>allure-bundle</artifactId>
             <version>${allure.version}</version>
@@ -568,8 +574,8 @@
 
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>3.7.0</version>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.11.3</version>
         </dependency>
 
         <dependency>

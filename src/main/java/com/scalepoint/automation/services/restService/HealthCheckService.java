@@ -25,7 +25,7 @@ public class HealthCheckService extends BaseService {
     private Set<HealthCheck.HealthCheckName> excludedHealthChecks;
 
     public HealthCheckService(String excludedHealthChecks) {
-
+        super();
         this.excludedHealthChecks = Arrays.stream(excludedHealthChecks.split(","))
                 .filter(name -> !name.isEmpty())
                 .map(name -> HealthCheck.HealthCheckName.findByName(name))
