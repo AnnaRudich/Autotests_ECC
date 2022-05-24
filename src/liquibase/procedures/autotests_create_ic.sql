@@ -108,7 +108,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
       INSERT INTO [dbo].[FUNCTEMPLATE]
          ([FTRFNBR]
          ,[FTREDUCFLAGS]
-         ,[FTSHOPMENUFLAGS]
          ,[FTZIPLENGTH]
          ,[FTNOFLAGS]
          ,[FTFUNCTIONFLAGS]
@@ -129,7 +128,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
          ,[ftfunctionflags2]
          ,[ftanswerminvalue]
          ,[ftanswermaxvalue]
-         ,[fttaxmodel]
          ,[ftcatalogflags]
          ,[ftsessioninactive]
          ,[ftQuestionnaire]
@@ -171,7 +169,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
          ,[cwaDuePeriod])
       SELECT @ICRFNBR
           ,[FTREDUCFLAGS]
-          ,[FTSHOPMENUFLAGS]
           ,[FTZIPLENGTH]
           ,[FTNOFLAGS]
           ,[FTFUNCTIONFLAGS]
@@ -192,7 +189,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
           ,[ftfunctionflags2]
           ,[ftanswerminvalue]
           ,[ftanswermaxvalue]
-          ,[fttaxmodel]
           ,[ftcatalogflags]
           ,[ftsessioninactive]
           ,[ftQuestionnaire]
