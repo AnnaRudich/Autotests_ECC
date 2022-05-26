@@ -3,10 +3,10 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.Events;
-import com.codeborne.selenide.impl.StaticDriver;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -927,7 +927,7 @@ public class SettlementDialog extends BaseDialog {
         new Actions(driver).click($(By.id("reject-reason-combobox"))).build().perform();
         $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
         new Actions(driver).click($(By.xpath("//span[text()='" + visibleText + "']"))).build().perform();
-        Events.events.fireEvent(new StaticDriver(), $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)),"focus", "keydown", "keypress", "input", "keyup", "change");
+        Events.events.fireEvent(WebDriverRunner.driver(), $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)),"focus", "keydown", "keypress", "input", "keyup", "change");
         waitForJavascriptRecalculation();
         return this;
     }

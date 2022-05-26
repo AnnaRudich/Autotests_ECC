@@ -39,7 +39,6 @@ public class FilesServiceSystemTest extends BaseUITest {
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
-                .getTreepanelAttachmentView()
                 .selectLine(lineDescriptions[0])
                 .uploadAttachment(attachment1)
                 .doAssert(attachmentDialog ->
@@ -97,7 +96,6 @@ public class FilesServiceSystemTest extends BaseUITest {
                 .doAssert(attachmentDialog ->
                         attachmentDialog
                                 .attachmentExists(attachment1.getName()))
-                .getListpanelAttachmentView()
                 .deleteAttachment(attachment1.getName())
                 .doAssert(attachmentDialog ->
                         attachmentDialog
@@ -119,13 +117,11 @@ public class FilesServiceSystemTest extends BaseUITest {
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
-                .getTreepanelAttachmentView()
                 .selectLine(lineDescriptions[0])
                 .uploadAttachment(attachment1)
                 .doAssert(attachmentDialog ->
                         attachmentDialog
                                 .attachmentExists(attachment1.getName()))
-                .getListpanelAttachmentView()
                 .unlinkAttachment(attachment1.getName())
                 .doAssert(attachmentDialog ->
                         attachmentDialog

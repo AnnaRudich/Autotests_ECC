@@ -12,6 +12,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.zoom;
@@ -109,7 +111,7 @@ public interface Actions {
 
     default boolean isDisplayed(WebElement element) {
         try {
-            return $(element).waitUntil(visible, TIME_OUT_IN_MILISECONDS).isDisplayed();
+            return $(element).should(visible, Duration.ofMillis(TIME_OUT_IN_MILISECONDS)).isDisplayed();
         } catch (Error e) {
             return false;
         }

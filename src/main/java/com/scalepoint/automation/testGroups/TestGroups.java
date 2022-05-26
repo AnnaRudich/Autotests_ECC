@@ -93,4 +93,5 @@ public interface TestGroups {
     String FNOL_CORS_GET = "fnol.CorsGet";
     String FNOL_CORS_WIDGET = "fnol.CorsWidget";
     String WIDGET = "widget";
+    String ATTACHMENTS = "attachments";
 }
