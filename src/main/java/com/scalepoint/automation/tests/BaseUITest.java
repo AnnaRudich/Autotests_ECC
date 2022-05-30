@@ -136,8 +136,15 @@ public class BaseUITest extends BaseTest {
 
     @AfterSuite(alwaysRun = true)
     public void rollbackFeatureToggle(ITestContext context){
+        try {
 
-        featureToggle.rollbackToggleSettingSuiteLevel();
+            featureToggle.rollbackToggleSettingSuiteLevel();
+            log.info(String.format("Rollback completed for %s suite", context.getSuite().getName()));
+
+        }catch (NullPointerException e){
+
+            log.warn(String.format("Rollback is not applicable for %s suite", context.getSuite().getName()));
+        }
     }
 }
 
