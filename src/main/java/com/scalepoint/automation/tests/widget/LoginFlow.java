@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+import static com.scalepoint.automation.pageobjects.pages.Page.at;
+import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
@@ -54,7 +56,7 @@ public class LoginFlow {
             claimApi.createClaim(claim, policyType);
         }
 
-        return myPage.to(SettlementPage.class);
+        return to(SettlementPage.class);
     }
 
     public SettlementPage loginAndCreateClaim(User user, Claim claim) {
@@ -99,7 +101,7 @@ public class LoginFlow {
 
         if(user.getType().equals(SCALEPOINT_ID)){
 
-            Page.to(LoginPage.class)
+            to(LoginPage.class)
                     .loginViaScalepointId()
                     .login(user.getLogin(), user.getPassword(), MyPage.class);
 
@@ -110,14 +112,14 @@ public class LoginFlow {
 
         Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
 
-        return new SettlementPage();
+        return at(SettlementPage.class);
     }
 
     public  <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
 
         if(user.getType().equals(SCALEPOINT_ID)){
 
-            Page.to(LoginPage.class)
+            to(LoginPage.class)
                     .loginViaScalepointId()
                     .login(user.getLogin(), user.getPassword(), MyPage.class);
         }else {
@@ -127,7 +129,7 @@ public class LoginFlow {
 
         Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
 
-        return Page.at(returnPageClass);
+        return at(returnPageClass);
     }
 
     public MyPage login(User user) {
@@ -136,12 +138,12 @@ public class LoginFlow {
 
         if(user.getType().equals(SCALEPOINT_ID)){
 
-            myPage = Page.to(LoginPage.class)
+            myPage = to(LoginPage.class)
                     .loginViaScalepointId()
                     .login(user);
         } else{
 
-            Page.to(LoginPage.class);
+            to(LoginPage.class);
             myPage = AuthenticationApi.createServerApi().login(user, MyPage.class);
         }
 
@@ -153,12 +155,12 @@ public class LoginFlow {
 
         if(user.getType().equals(SCALEPOINT_ID)){
 
-            page = Page.to(LoginPage.class)
+            page = to(LoginPage.class)
                     .loginViaScalepointId()
                     .login(user.getLogin(), user.getPassword(), returnPageClass);
         } else{
 
-            Page.to(LoginPage.class);
+            to(LoginPage.class);
             page = AuthenticationApi
                     .createServerApi()
                     .login(user, returnPageClass);
@@ -169,7 +171,7 @@ public class LoginFlow {
 
     public  <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
 
-        Page.to(LoginPage.class);
+        to(LoginPage.class);
         return AuthenticationApi.createServerApi().login(user, returnPageClass, parameters);
     }
 
